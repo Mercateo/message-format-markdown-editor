@@ -1,0 +1,32 @@
+{
+  "name": "messageFormatPreview",
+  "version": "0.1",
+  "description": "Generates sample strings from MessageFormat markup",
+  "main": "messageFormatPreview.js",
+  "keywords": [
+    "messageformat",
+    "message-format",
+    "preview",
+    "generator"
+  ],
+  "authors": [
+    "Robert Bastian"
+  ],
+  "license": "BSD",
+  "homepage": "http://github.com/mercateo",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "messageformat": "~0.2.2"
+  },
+  "devDependencies": {
+    "codemirror": "~",
+    "codemirror.messageformat": "~",
+    "marked":"~"
+  },
+}

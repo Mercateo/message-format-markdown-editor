@@ -1,0 +1,122 @@
+<!doctype html>
+<head>
+  <meta charset="UTF-8">
+	<title>MessageFormat Live Preview</title>
+  <!--Messageformat-->
+	<script src='../bower_components/messageformat/messageformat.js'></script>
+  <script src='../bower_components/messageformat/locale/de.js'></script>
+  <script src='../bower_components/messageformat/locale/en.js'></script>
+	<script src='../messageFormatPreview.js'></script>
+  <!--Codemirror-->
+	<script src="../bower_components/codemirror/lib/codemirror.js"></script>
+	<link rel="stylesheet" href="../bower_components/codemirror/lib/codemirror.css">
+	<script src="../bower_components/messageformat.codemirror/messageformat-mode.js"></script>
+  <script src="../bower_components/codemirror/addon/lint/lint.js"></script>
+  <script src="../bower_components/messageformat.codemirror/forgiving-messageformat-parser.js"></script>
+  <script src="../bower_components/messageformat.codemirror/messageformat-lint.js"></script>
+  <link rel="stylesheet" href="../bower_components/codemirror/addon/lint/lint.css">
+  <!--Markdown-->
+  <script src="../bower_components/marked/marked.min.js"></script>
+  <!---JQuery & Bootstrap-->
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <div class='container-fluid' style='width:80%'>
+    <div class='row'>
+      <div class='col-md-6'>
+        <div class='row'>
+          <div class='col-md-12'>
+          	<h1>Reference language</h1>
+          	<textarea id="sourceLang">Hallo 
+{USER_GENDER, select,
+  male  {lieber User!}
+  other {liebe Userin!}
+}
+
+Dies hier  ist ein ziemlich komplexer
+Satz. Ich versuche hier mal *alle* [Features]({FEATURES_URL})
+zu testen.
+
+Wie viele Features haben wir? Ich glaube es  
+{FEATURES_COUNT, plural,
+    =0      {sind gar keine Features...}
+    one   {ist nur ein einziges.}
+    other {sind # insgesamt!}
+}
+
+Das ist ja schon mal ganz cool. Hier binden wir noch eine {VARIABLE} und noch eine {ANDERE_VARIABLE} ein.
+</textarea>
+          </div>
+          <div class='col-md-12'>
+            <h1>Kommentar</h1>
+            <code><pre id='comment'>FEATURES_URL: [http://mercateo.de/features]
+VARIABLE:   Diese Variable ist zum einbinden [Variable] 
+USER_GENDER:  [male|female]</pre></code>
+          </div>
+        </div>
+      </div>
+      <div class='col-md-6'>
+        <div class='row'>
+          <div class='col-md-12'>
+            <h1>Target language</h1>
+            <textarea id="targetLang">Hi dear user!
+
+This is a pretty complex sentence. I'm trying to test *all* [features]({FEATURES_URL}). 
+
+How many features do we have? I think  
+{FEATURES_COUNT, plural,
+    =0      {we don't have any...}
+    one   {it's just a single one.}
+    other {we have # in total!}
+}
+
+That's already pretty cool. Here we're referencing a {VARIABLE} and another {ANDERE_VARIABLE}.</textarea>
+          </div>
+          <div class='col-md-12'>
+            <h1>Examples</h1>
+            <div id='examples'></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+	<script type="text/javascript">
+    var locale = 'de'
+    $(function(){
+      var sourceLang = CodeMirror.fromTextArea($('#sourceLang')[0], {
+        mode: "messageformat.js",
+        lineNumbers: true,
+        lineWrapping: true
+      });
+      var targetLang = CodeMirror.fromTextArea($('#targetLang')[0], {
+        mode: "messageformat.js",
+        lineNumbers: true,
+        styleActiveLine: true,
+        lint: true,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-lint-markers"],
+        lineWrapping: true
+      });
+      targetLang.focus()
+      var delay;
+      targetLang.on("change", function() {
+        clearTimeout(delay);
+        delay = setTimeout(updatePreview, 300);
+      });
+
+      var updatePreview = function(){
+        var whitespace = (sourceLang.getValue()+'\n\n'+targetLang.getValue()).replace(/\n\n/g,'<br/>').replace(/\s+/g,' ');
+        var renderer = new marked.Renderer();
+        renderer.paragraph = function(string){return string.replace(/&#/g,'&\\#')+"<br/>\n"};
+        var md = marked(whitespace,{renderer: renderer});
+        // remove trailing <br/> 
+        md = md.substring(0,md.length-6);
+        var samples = generateSamples(locale,md,$('#comment').html());
+        $('#examples').html(samples.length > 1 ? "<ul><li>"+samples.join("</li><li>")+"</li></ul>" : samples[0]);
+      }
+      updatePreview();
+    })
+  </script>    
+</body>
+</html>
