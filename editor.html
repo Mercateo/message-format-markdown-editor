@@ -6,6 +6,7 @@
 	<script src='bower_components/messageformat/messageformat.js'></script>
   <script src='bower_components/messageformat/locale/de.js'></script>
   <script src='bower_components/messageformat/locale/en.js'></script>
+  <script src='bower_components/messageformat/locale/fr.js'></script>
 	<script src='messageFormatPreview.js'></script>
   <!--Codemirror-->
 	<script src="bower_components/codemirror/lib/codemirror.js"></script>
@@ -25,171 +26,138 @@
   <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
   <link  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css" rel="stylesheet">
+  <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
   <style>
     .CodeMirror {
-      position: relative;
-      overflow: hidden;
-      height: 100% !important;
+      max-height: 150px; /* the minimum height */
+    }
+    .toggle.btn {
+      float:right;
+      margin-top:10px;
+    }
+    .well {
+      margin: 20px;
     }
   </style>
 </head>
 <body>
-  <div class='container-fluid' style='width:80%'>
-    <div class='row'>
-      <div class='col-md-6'>
-      	<h1>Reference language</h1>
-      	<textarea id="sourceLang">Hi dear user!
-
-You can use *italics* and **bold** like this, and you
-can create links like this:
-[features]({FEATURES_URL}).
-You can either link to a variable or to a URL like this:
-[another link here](http://example.com).
-
-
-Whitespace is mostly ignored and replaced by a single
-space at every 
-occurence. If you want a hard line break, you can do it like
-
-this (by leaving a line blank). If you actually want to leave
-a blank line, use two blank lines.
-
-
-Of course you can also use all the MessageFormat syntax
-like this:
-
-How many **features** do we have? I think  
-{FEATURES_COUNT, plural,
-    =0      {we don't have any...}
-    one   {it's just a single one.}
-    other {we have # in total!}
-}
-
-Wow! Here's a select statement:
-
-Dear 
-{USER_GENDER, select,
-  male {Sir}
-    other {Madam}
-}
-
-
-You can also include variables like this number: {CUSTOMER_NUMBER}.
-
-
-At the bottom of the page you will see an automatically generated
-preview. There will be several ones actually, to have one preview
-with each case of each plural- or select-statement at least. The
-preview also replaces variables by the example values provided in
-the comment, or, if there are none, tries to guess what a variable
-could contain (like the customer number).
-In the preview the source and target text are always right next to
-each other, so that they can be easily compared for each case.</textarea>
-        <h1>Comment</h1>
-        <pre id='comment'>FEATURES_URL: [http://mercateo.de/features]
-VARIABLE:   Diese Variable ist zum einbinden [Variable] 
-USER_GENDER:  [male|female]</pre>
-      </div>
-      <div class='col-md-6'>
-        <h1>Target language</h1>
-        <textarea id="targetLang">Hallo 
-{GENDER, select,
-    male {lieber User!}
-    other {liebe Userin!}
-}
-
-Du kannst so *kursiv* und **fett** benutzen, und wie
-folgt Links erstellen:
-[features]({FEATURES_URL}).
-Du kannst entweder auf eine Variable linken, oder auf
-eine URL, ungefähr so:
-[noch ein link](http://example.com).
-
-
-Leerzeichen und Zeilenumbrüche werden meistens ignoriert
-und jedes mal durch ein einziges Leerzeich ersetzt. Wenn
-du eine neue Zeile anfangen möchtest, kannst du das
-
-so machen (indem du eine Zeile frei lässt). Wenn du wirklich
-eine Zeile leer lassen möchtest, musst du zwei Leerzeilen 
-benutzen.
-
-
-Natürlich kannst du auch die komplette MessageFormat Syntax
-benutzen, zum Beispiel so:
-
-Wie viele **Features** haben wir? Ich glaube  
-{FEATURES_COUNT, plural,
-    =0      {wir haben gar keins...}
-    one   {nur ein einziges.}
-    other {wir haben # insgesamt!}
-}
-
-Wow! Hier noch ein select-Block:
-
-{USER_GENDER, select,
-  male {Lieber Herr}
-    other {Liebe Frau}
-} {LAST_NAME}
-
-
-Du kannst auch Variablen, so wie diese Nummer einbinden: {CUSTOMER_NUMBER}.
-
-Unten auf dieser Seite wirst du eine automatisch generierte Vorschau
-sehen. In diesem Fall werden es sogar mehrere Vorschauen sein, so dass
-es mindestens eine Vorschau gibt die jeden Fall der select- und
-plural-statements demonstriert.
-Die Vorschau ersetzt auch die Variablen mit Beispielwerten die im Kommentar
-angegeben werden können, oder, wenn dort nichts steht, versucht sie zu raten,
-welchen Wert diese Variable annehmen könnte.
-In den Vorschau stehen immer die gleichen Texte in der Quell- und Zielsprache
-zusammen, sodass die einzelnen Fälle einfach verglichen werden können.
-
-</textarea>
-      </div>
-    </div>
-    <h1>Examples</h1>
-    <div class='row' id='examples'></div>
-  </div>
+  <div class='container-fluid'>
+    <table class='table table-bordered' style='table-layout:fixed'>
+      <tr class='info'>
+        <th width='25%'>Info</th>
+        <th width='25%'>DE</th>
+        <th width='25%'>EN</th>
+        <th width='25%'>FR</th>
+      </tr>
+      <tr class='0'>
+        <td style="height:150px">
+          <div class ='row'>
+            <div class ='col-md-9'>
+              <h4>basket.cluster_badge_description&nbsp;<small>basket-strings</small></h4>
+              <h5><small>Zuletzt geändert: <span class='lastChanged'>07.07.15</span></small></h5><br>
+            </div>
+            <div class='col-md-3'>
+              <input type="checkbox" id='toggle-0' data-toggle="toggle" data-on='Vorschau' data-off='Vorschau' data-onstyle='success' data-offstyle='default'>
+            </div>
+          </div>
+          <pre class='comment'>COLOR: [weiß|schwarz]</pre>
+        </td>
+        <td style='padding:0px'>
+      	   <textarea class="de 0">Ein Cluster enthält alle Artikel, die bestimmte Anforderungen erfüllen (z. B. Kopierpapier, DIN A4, 80 g/m², weiß).</textarea>    
+           <div class='preview de 0'></div>
+        </td>
+        <td style='padding:0px'>
+             <textarea class="en 0">A Cluster contains all items that fulfil certain requirements (e. g. copy paper, DIN A4, 80 g/m², 
+{COLOR, select,
+  weiß {white}
+    other {black}
+}).</textarea>      
+           <div class='preview en 0'></div>
+        </td>
+        <td style='padding:0px'>
+             <textarea class="fr 0">Un cluster contient tous les produits répondant à des besoins spécifiques (papier pour imprimante, format A4, 80g/m2, 
+{COLOR, select,
+  weiß {blanc}
+    other {noir}
+}).</textarea>      
+           <div class='preview fr 0'></div>
+        </td>
+      </tr>
+      <tr class='1'>
+        <td>
+          <div class ='row'>
+            <div class ='col-md-9'>
+              <h4>basket.cluster_badge_description&nbsp;<small>basket-strings</small></h4>
+              <h5><small>Zuletzt geändert: <span class='lastChanged'>07.07.15</span></small></h5><br>
+            </div>
+            <div class='col-md-3'>
+              <input type="checkbox" id='toggle-1' data-toggle="toggle" data-on='Vorschau' data-off='Vorschau' data-onstyle='success' data-offstyle='default'>
+            </div>
+          </div>
+          <pre class='comment'>AGB_URL
+DSE_LINK: Datenschutzerklärung</pre>
+        </td>
+        <td style='padding:0px'>
+           <textarea class="de 1">Ja, ich bestätige die [AGB]({AGB_URL}) und die [Datenschutzerklärung]({DSE_LINK}) der Mercateo AG.</textarea>      
+           <div class='preview de 1'></div>
+        </td>
+        <td style='padding:0px'>
+             <textarea class="en 1">Yes, I confirm the [General Terms and Conditions]({AGB_URL}) and the [data protection notice]({DSE_LINK}) of Mercateo</textarea>      
+           <div class='preview en 1'></div>
+        </td>
+        <td style='padding:0px'>
+             <textarea class="fr 1">Oui, j'accepte les [conditions générales de vente]({AGB_URL}) et la [déclaration de confidentialité]({DSE_LINK}) de Mercateo France SAS</textarea>      
+           <div class='preview fr 1'></div>
+        </td>
+      </tr>
+    </table>
 	<script type="text/javascript">
-    var locale = 'de'
+    var locales = ['de','en','fr'];
+    var editorInstances;
     $(function(){
-      var sourceLang = CodeMirror.fromTextArea($('#sourceLang')[0], {
-        mode: "messageformat.js",
-        lineNumbers: true,
-        styleActiveLine: true,
-        readOnly: true,
-        gutters: ["CodeMirror-linenumbers", "CodeMirror-lint-markers"],
-        lineWrapping: true,
-        viewportMargin: Infinity
-      });
-      var targetLang = CodeMirror.fromTextArea($('#targetLang')[0], {
-        mode: {name: "messageformat.js", underscoresBreakWords: false},
-        lineNumbers: true,
-        styleActiveLine: true,
-        lint: true,
-        gutters: ["CodeMirror-linenumbers", "CodeMirror-lint-markers"],
-        lineWrapping: true,
-        viewportMargin: Infinity
-      });
-      targetLang.focus()
-      var delay;
-      targetLang.on("change", function() {
-        clearTimeout(delay);
-        delay = setTimeout(updatePreview, 300);
-      });
 
-      var updatePreview = function(){
-        var whitespace = (sourceLang.getValue()+'\n<hr/>\n'+targetLang.getValue()).replace(/\n\n\n/g,'<br/></br>').replace(/\n\n/g,'<br/>').replace(/\s+/g,' ');
+      editorInstances = $('textarea').map(function(index,ta){
+        return CodeMirror.fromTextArea(ta, {
+          mode: "messageformat.js",
+          lineNumbers: true,
+          styleActiveLine: true,
+          lint: true,
+          gutters: ["CodeMirror-linenumbers", "CodeMirror-lint-markers"],
+          lineWrapping: true,
+          viewportMargin: Infinity
+        });
+      })
+
+      $("[type=checkbox]").change(function(){
+        var row = $(this).parent().parent().parent().parent().parent()
+
+        var editors = row.find('.CodeMirror')
+        var previews = row.find('.preview')
+
+        for (var i = 0; i < 3; i++){
+          if (this.checked){
+            renderPreview(editorInstances[parseInt(row.attr('class'))*3+i].getValue(),previews[i],row.find('.comment').html(), locales[i]);
+            $(editors[i]).hide();
+            $(previews[i]).show();
+          }
+          else {
+            $(editors[i]).show();
+            $(previews[i]).hide();
+          }
+        }
+      })
+
+      var renderPreview = function(from,to,comment, locale){
+        var whitespace = from.replace(/\n\n\n/g,'<br/></br>').replace(/\n\n/g,'<br/>').replace(/\s+/g,' ');
         var renderer = new marked.Renderer();
         renderer.paragraph = function(string){return string.replace(/&#/g,'&\\#')+"<br/>\n"};
         var md = marked(whitespace,{renderer: renderer});
         // remove trailing <br/> 
         md = md.substring(0,md.length-6);
-        var samples = generateSamples(locale,md,$('#comment').html());
-        $('#examples').html("<div class='col-md-6'><div class='well'>"+samples.join("</div></div><div class='col-md-6'><div class='well'>")+"</div></div>");
+        var samples = generateSamples(locale,md,comment);
+        $(to).html("<div class='well'>"+samples.join("</div><div class='well'>")+"</div>");
       }
-      updatePreview();
     })
   </script>    
 </body>

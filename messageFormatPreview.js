@@ -23,15 +23,11 @@ var generateSamples = function(locale, mf, comment, options){
   // generate the default. If the user hasn't supplied their own rules, there are some 
   // predefined rules that will be used.
   function defaultValueFor(string, rules){
-    console.log('looking up default for %s',string)
-    console.log(rules)
     for (var i = 0; i < rules.length; i++){
       if (rules[i][0].test(string)){
-        console.log(rules[i][1](string))
         return rules[i][1](string);
       }
     }
-    console.log(string)
     return string;
   }
 
