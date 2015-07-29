@@ -9,17 +9,21 @@
 	<script src='messageFormatPreview.js'></script>
   <!--Codemirror-->
 	<script src="bower_components/codemirror/lib/codemirror.js"></script>
-	<link rel="stylesheet" href="bower_components/codemirror/lib/codemirror.css">
-	<script src="bower_components/messageformat.codemirror/messageformat-mode.js"></script>
+	<link  href="bower_components/codemirror/lib/codemirror.css" rel="stylesheet">
+	<script src="messageformat.js"></script>
+
+  <script src="bower_components/codemirror/addon/edit/matchbrackets.js"></script>
+  <script src="bower_components/codemirror/addon/edit/closebrackets.js"></script>
+
   <script src="bower_components/codemirror/addon/lint/lint.js"></script>
-  <script src="bower_components/messageformat.codemirror/forgiving-messageformat-parser.js"></script>
-  <script src="bower_components/messageformat.codemirror/messageformat-lint.js"></script>
   <link rel="stylesheet" href="bower_components/codemirror/addon/lint/lint.css">
+  <script src="bower_components/codemirror.messageformat/forgiving-messageformat-parser.js"></script>
+  <script src="bower_components/codemirror.messageformat/messageformat-lint.js"></script>
   <!--Markdown-->
   <script src="bower_components/marked/marked.min.js"></script>
   <!---JQuery & Bootstrap-->
   <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <style>
     .CodeMirror {
@@ -34,25 +38,53 @@
     <div class='row'>
       <div class='col-md-6'>
       	<h1>Reference language</h1>
-      	<textarea id="sourceLang">Hallo 
-{USER_GENDER, select,
-  male  {lieber User!}
-  other {liebe Userin!}
-}
+      	<textarea id="sourceLang">Hi dear user!
 
-Dies hier  ist ein ziemlich komplexer
-Satz. Ich versuche hier mal *alle* [Features]({FEATURES_URL})
-zu testen.
+You can use *italics* and **bold** like this, and you
+can create links like this:
+[features]({FEATURES_URL}).
+You can either link to a variable or to a URL like this:
+[another link here](http://example.com).
 
-Wie viele Features haben wir? Ich glaube es  
+
+Whitespace is mostly ignored and replaced by a single
+space at every 
+occurence. If you want a hard line break, you can do it like
+
+this (by leaving a line blank). If you actually want to leave
+a blank line, use two blank lines.
+
+
+Of course you can also use all the MessageFormat syntax
+like this:
+
+How many **features** do we have? I think  
 {FEATURES_COUNT, plural,
-    =0      {sind gar keine Features...}
-    one   {ist nur ein einziges.}
-    other {sind # insgesamt!}
+    =0      {we don't have any...}
+    one   {it's just a single one.}
+    other {we have # in total!}
 }
 
-Das ist ja schon mal ganz cool. Hier binden wir noch eine {VARIABLE} und noch eine {ANDERE_VARIABLE} ein.
-</textarea>
+Wow! Here's a select statement:
+
+Dear 
+{USER_GENDER, select,
+  male {Sir}
+    other {Madam}
+}
+
+
+You can also include variables like this number: {CUSTOMER_NUMBER}.
+
+
+At the bottom of the page you will see an automatically generated
+preview. There will be several ones actually, to have one preview
+with each case of each plural- or select-statement at least. The
+preview also replaces variables by the example values provided in
+the comment, or, if there are none, tries to guess what a variable
+could contain (like the customer number).
+In the preview the source and target text are always right next to
+each other, so that they can be easily compared for each case.</textarea>
         <h1>Comment</h1>
         <pre id='comment'>FEATURES_URL: [http://mercateo.de/features]
 VARIABLE:   Diese Variable ist zum einbinden [Variable] 
@@ -60,18 +92,60 @@ USER_GENDER:  [male|female]</pre>
       </div>
       <div class='col-md-6'>
         <h1>Target language</h1>
-        <textarea id="targetLang">Hi dear user!
-
-This is a pretty complex sentence. I'm trying to test *all* [features]({FEATURES_URL}). 
-
-How many features do we have? I think  
-{FEATURES_COUNT, plural,
-    =0      {we don't have any...}
-    one   {it's just a single one.}
-    other {we have # in total!}
+        <textarea id="targetLang">Hallo 
+{GENDER, select,
+    male {lieber User!}
+    other {liebe Userin!}
 }
 
-That's already pretty cool. Here we're referencing a {VARIABLE} and another {ANDERE_VARIABLE}.</textarea>
+Du kannst so *kursiv* und **fett** benutzen, und wie
+folgt Links erstellen:
+[features]({FEATURES_URL}).
+Du kannst entweder auf eine Variable linken, oder auf
+eine URL, ungefähr so:
+[noch ein link](http://example.com).
+
+
+Leerzeichen und Zeilenumbrüche werden meistens ignoriert
+und jedes mal durch ein einziges Leerzeich ersetzt. Wenn
+du eine neue Zeile anfangen möchtest, kannst du das
+
+so machen (indem du eine Zeile frei lässt). Wenn du wirklich
+eine Zeile leer lassen möchtest, musst du zwei Leerzeilen 
+benutzen.
+
+
+Natürlich kannst du auch die komplette MessageFormat Syntax
+benutzen, zum Beispiel so:
+
+Wie viele **Features** haben wir? Ich glaube  
+{FEATURES_COUNT, plural,
+    =0      {wir haben gar keins...}
+    one   {nur ein einziges.}
+    other {wir haben # insgesamt!}
+}
+
+Wow! Hier noch ein select-Block:
+
+{USER_GENDER, select,
+  male {Lieber Herr}
+    other {Liebe Frau}
+} {LAST_NAME}
+
+
+Du kannst auch Variablen, so wie diese Nummer einbinden: {CUSTOMER_NUMBER}.
+
+Unten auf dieser Seite wirst du eine automatisch generierte Vorschau
+sehen. In diesem Fall werden es sogar mehrere Vorschauen sein, so dass
+es mindestens eine Vorschau gibt die jeden Fall der select- und
+plural-statements demonstriert.
+Die Vorschau ersetzt auch die Variablen mit Beispielwerten die im Kommentar
+angegeben werden können, oder, wenn dort nichts steht, versucht sie zu raten,
+welchen Wert diese Variable annehmen könnte.
+In den Vorschau stehen immer die gleichen Texte in der Quell- und Zielsprache
+zusammen, sodass die einzelnen Fälle einfach verglichen werden können.
+
+</textarea>
       </div>
     </div>
     <h1>Examples</h1>
@@ -83,11 +157,14 @@ That's already pretty cool. Here we're referencing a {VARIABLE} and another {AND
       var sourceLang = CodeMirror.fromTextArea($('#sourceLang')[0], {
         mode: "messageformat.js",
         lineNumbers: true,
+        styleActiveLine: true,
+        readOnly: true,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-lint-markers"],
         lineWrapping: true,
         viewportMargin: Infinity
       });
       var targetLang = CodeMirror.fromTextArea($('#targetLang')[0], {
-        mode: "messageformat.js",
+        mode: {name: "messageformat.js", underscoresBreakWords: false},
         lineNumbers: true,
         styleActiveLine: true,
         lint: true,
@@ -103,7 +180,7 @@ That's already pretty cool. Here we're referencing a {VARIABLE} and another {AND
       });
 
       var updatePreview = function(){
-        var whitespace = (sourceLang.getValue()+'\n<hr/>\n'+targetLang.getValue()).replace(/\n\n/g,'<br/>').replace(/\s+/g,' ');
+        var whitespace = (sourceLang.getValue()+'\n<hr/>\n'+targetLang.getValue()).replace(/\n\n\n/g,'<br/></br>').replace(/\n\n/g,'<br/>').replace(/\s+/g,' ');
         var renderer = new marked.Renderer();
         renderer.paragraph = function(string){return string.replace(/&#/g,'&\\#')+"<br/>\n"};
         var md = marked(whitespace,{renderer: renderer});

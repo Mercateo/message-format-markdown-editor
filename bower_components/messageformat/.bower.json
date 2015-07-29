@@ -17,6 +17,5 @@
   },
   "_source": "git://github.com/SlexAxton/messageformat.js.git",
   "_target": "~0.2.2",
-  "_originalSource": "messageformat",
-  "_direct": true
+  "_originalSource": "messageformat"
 }

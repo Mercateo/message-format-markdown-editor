@@ -11,7 +11,8 @@ var generateSamples = function(locale, mf, comment, options){
   options = options || {};
   options.simpleRules = options.simpleRules || [
     [/URL|LINK/i, function(string){ return '#'}],
-    [/NUM/i, function(string){ return Math.floor(Math.random()*20)}]
+    [/NUM/i, function(string){ return Math.floor(Math.random()*20)}],
+    [/NAME/i, function(string){ return 'Mustermann'}]
   ];
   options.selectRules = options.selectRules || [
     [/GENDER/i, function(string){ return 'male|female'}]
@@ -22,10 +23,15 @@ var generateSamples = function(locale, mf, comment, options){
   // generate the default. If the user hasn't supplied their own rules, there are some 
   // predefined rules that will be used.
   function defaultValueFor(string, rules){
-    for (var i = 0; i < rules.length -1; i++){
-      if (rules[i][0].test(string))
+    console.log('looking up default for %s',string)
+    console.log(rules)
+    for (var i = 0; i < rules.length; i++){
+      if (rules[i][0].test(string)){
+        console.log(rules[i][1](string))
         return rules[i][1](string);
+      }
     }
+    console.log(string)
     return string;
   }
 
@@ -167,7 +173,7 @@ var generateSamples = function(locale, mf, comment, options){
   // the specified value occurs in at least one combination
   for (var i = 0; i < selectVars.length; i++){
     // The cases are either from the example, or from the rules
-    var cases = (examples[selectVars[i]] || selectDefaults(selectVars[i],selectRules))
+    var cases = (examples[selectVars[i]] || defaultValueFor(selectVars[i],options.selectRules))
       .split('|');
     addCasesToCombinations(selectVars[i],cases);
   }
