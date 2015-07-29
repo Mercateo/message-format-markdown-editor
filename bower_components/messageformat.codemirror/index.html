@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf8">
+    <title>Codemirror: Messageformat</title>
+    <link rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css">
+    <script src="node_modules/codemirror/lib/codemirror.js"></script>
+    <script src="node_modules/codemirror/addon/fold/foldcode.js"></script>
+    <script src="node_modules/codemirror/addon/fold/foldgutter.js"></script>
+    <script src="node_modules/codemirror/addon/fold/brace-fold.js"></script>
+    <script src="node_modules/codemirror/addon/lint/lint.js"></script>
+    <script src="messageformat-mode.js"></script>
+    <script src="forgiving-messageformat-parser.js"></script>
+    <script src="messageformat-lint.js"></script>
+    <link rel="stylesheet" href="node_modules/codemirror/addon/fold/foldgutter.css">
+    <link rel="stylesheet" href="node_modules/codemirror/addon/lint/lint.css">
+    <style type="text/css" media="screen">
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .container {
+        max-width: 50em;
+        margin: auto;
+      }
+      .CodeMirror {
+        height: auto;
+        font-size: 1.2em;
+        line-height: 1.4;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+      }
+      .cm-suspicious-space {
+        text-decoration: line-through;
+        text-decoration-color: blue;
+        text-decoration-style: wavy;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Messageformat editor</h1>
+
+      <p>
+        <a href="https://github.com/vogelsgesang/messageformat.codemirror">Github project</a>
+      </p>
+
+      <textarea id="editor">The syntax highlighter is able to handle plain strings,
+escaped characters \{ \# \u1234,
+wrongly escaped characters \u12z1 \u123 \ } and it recovers from errors.
+
+It highlights multiple consecutive  space characters,
+tabs	and trailing space 
+
+An interpolated {VAR} variable
+A missing {} variable name
+A trailing comma {VAR,} after the variable name
+SelectFormat: {VAR, select,
+  a {a}
+  =0 {equal sign in keys is not allowed for selects}
+  {missing key}
+  x {and the syntax highlighter recovers}
+}
+PluralFormat: {NUM, plural,
+  one {a}
+  two {b}
+  =10 {10}
+  some {another string}
+  other {x}
+}
+selectordinal {NUM, selectordinal,
+  other {x}
+  =10 {10}
+}
+user defined functions: {NOW, date} and {NOW, date, full}
+The linter marks PluralFormats and SelectFormats without "other" key:
+{VAR, select,
+  male {He}
+  female {She}
+} and it marks duplicate keys.
+nesting: {PERSON_CNT, select,
+  unknown {an unknown number of persons}
+  other {{PERSON_CNT, plural,
+    =0 {no one}
+    =0 {noone}
+    =2 {two persons}
+    one {one person}
+    =2 {2 persons}
+    other {# persons}
+  }}
+}</textarea>
+    </div>
+
+    <script>
+      var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+        mode: "messageformat.js",
+        lineNumbers: true,
+        styleActiveLine: true,
+        foldOptions: {minFoldSize: 1},
+        foldGutter: true,
+        lint: true,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-lint-markers", "CodeMirror-foldgutter"]
+      });
+      editor.focus();
+    </script>
+  </body>
+</html>
