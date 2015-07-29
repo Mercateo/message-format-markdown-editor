@@ -22,11 +22,9 @@
     "tests"
   ],
   "dependencies": {
-    "messageformat": "~0.2.2"
-  },
-  "devDependencies": {
-    "codemirror": "~",
-    "codemirror.messageformat": "~",
-    "marked":"~"
-  },
+    "messageformat": "~0.2.2",
+    "codemirror.messageformat": "vogelsgesang/messageformat.codemirror#v0.0.1",
+    "codemirror": "~5.1.0",
+    "marked": "~0.3.3"
+  }
 }
