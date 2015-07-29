@@ -75,7 +75,7 @@ var generateSamples = function(locale, mf, comment, options){
   // Finds all the simple variables (variables that aren't appearing in a control structure)
   var simpleVars = mf.match(/\{\s*([^\s,\}]+)\s*\}/g);
   // Regex ~ { WORD }                                  stripping bracket and whitespace
-  simpleVars = (simpleVars) ? simpleVars.map(function(x){return x.match(/[^\{,\s\}]+/)[0];}) : [];
+  simpleVars = (simpleVars) ? simpleVars.map(function(x){return x.match(/[^\{,\s\}]+/)[0];}).unique() : [];
 
   // This loop generates the one combination of variables which are used in none of the constructs
   // ('simple variables')
@@ -101,6 +101,19 @@ var generateSamples = function(locale, mf, comment, options){
       else
         pluralVars.push([matches[i].match(/[^\{ ,]+/)[0]]);
     }
+    // Remove duplicate values but keep potentially distinct constants
+    pluralVars = pluralVars.sort();
+    var n = [pluralVars[0]]
+    for (var i = 1; i < pluralVars.length; i++){
+      // Same variable
+      if (pluralVars[i-1][0] === pluralVars[i][0]){
+        // Add constants to the other variable
+        n[n.length-1] = n[n.length-1].concat(pluralVars[i].slice(1)).unique();
+      }
+      else
+        n.push(pluralVars[i]);
+    }
+    pluralVars = n;
   }
 
   // This loop extends and replicates the single combination from above such that for every 
@@ -118,13 +131,13 @@ var generateSamples = function(locale, mf, comment, options){
     var groups;
     switch (locale) {
       case 'cs':; case 'sk':; case 'pl':
-        groups = [[1,1],[2,4],[5,20]];
+        groups = [[1,1],[2,4],[5,20]]; break;
       case 'de':; case 'en':; case 'es':; case 'it':; case 'nl': 
-        groups = [[1,1],[2,20]];
+        groups = [[1,1],[2,20]]; break;
       case 'fr': 
-        groups = [[0,1],[2,19]];
+        groups = [[0,1],[2,19]]; break;
       case 'hu': 
-        groups = [[1,20]];
+        groups = [[1,20]]; break;
     }
 
     // Take the constants out of the intervals
@@ -143,8 +156,6 @@ var generateSamples = function(locale, mf, comment, options){
 
     addCasesToCombinations(pluralVars[i][0],numbers);
   }
-
-  
 
 
   // Finds all the variables that have been used within a 'select' control structure
@@ -181,4 +192,9 @@ Array.prototype.shuffled = function() {
     this[randomIndex] = temporaryValue;
   }
   return this;
-}
+};
+
+// Source: http://stackoverflow.com/questions/1960473/unique-values-in-an-array
+Array.prototype.unique = function() {
+  return this.filter(function(value, index, self){ return self.indexOf(value) === index; });
+};
