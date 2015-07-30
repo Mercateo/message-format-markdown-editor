@@ -81,11 +81,11 @@ var generateSamples = function(locale, mf, comment, options){
 
   // This loop generates the one combination of variables which are used in none of the constructs
   // ('simple variables')
-  var standardCombination = {}
+  var combinations = [{}];
   for (var i = 0; i < simpleVars.length; i++){
     // If the comment specified a sample value, use that, otherwise generate it using this function
-    standardCombination[simpleVars[i]] = 
-      examples[simpleVars[i]] || defaultValueFor(simpleVars[i],options.simpleRules);
+    var cases = (examples[simpleVars[i]] || defaultValueFor(simpleVars[i],options.simpleRules)).split('|');
+    addCasesToCombinations(simpleVars[i],cases)
   }
 
 
@@ -121,7 +121,6 @@ var generateSamples = function(locale, mf, comment, options){
   // This loop extends and replicates the single combination from above such that for every 
   // 'plural variable' there is at least one combination in which it takes each of the values
   // necessary for the current local (one+other in English, one+few+many+other in Polish, etc.)
-  var combinations = [standardCombination];
   // For every plural variable ...
   for (var i = 0; i < pluralVars.length; i++){
     // ... generate the necessary cases by combining the specified constants and this language.
