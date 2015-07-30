@@ -1,3 +1,4 @@
+
 <!doctype html>
 <head>
   <meta charset="UTF-8">
@@ -6,6 +7,7 @@
 	<script src='bower_components/messageformat/messageformat.js'></script>
   <script src='bower_components/messageformat/locale/de.js'></script>
   <script src='bower_components/messageformat/locale/en.js'></script>
+  <script src='bower_components/messageformat/locale/fr.js'></script>
 	<script src='messageFormatPreview.js'></script>
   <!--Codemirror-->
 	<script src="bower_components/codemirror/lib/codemirror.js"></script>
@@ -25,171 +27,703 @@
   <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
   <link  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css" rel="stylesheet">
+  <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
   <style>
     .CodeMirror {
+      height: 100%;
+    }
+    .toggle.btn {
+      margin:5px 0px;
+    }
+    .progress {
+      margin: 12px 10px;
+      height: 30px;
+    }
+    .progress-bar {
+      padding: 5px;
+    }
+    .well {
+      margin: 20px;
+    }
+    .limit{
+      overflow-x: hidden;
+      overflow-y: auto;
+      height: 200px;
+      margin: 0px;
+      padding: 0px;
       position: relative;
+      width: 100%;
+    }
+    tbody > tr:first-child > th:first-child {
+      width: 500px;
+    }
+    /* First column */
+    .table > tbody > tr > td:first-child > .limit { 
       overflow: hidden;
-      height: 100% !important;
+      padding: 8px;
+    }
+    .comment {
+      max-height: 90px;
+      overflow-y: auto;
+      margin: 0px 0px 10px 0px;
+      position: absolute;
+      bottom: 0px;
+      width: 480px;
+    }
+    .table> tbody > tr > td {
+      padding: 0px;
+    }
+    table {
+      table-layout: fixed;
+      width: 100px;
     }
   </style>
 </head>
 <body>
-  <div class='container-fluid' style='width:80%'>
-    <div class='row'>
-      <div class='col-md-6'>
-      	<h1>Reference language</h1>
-      	<textarea id="sourceLang">Hi dear user!
-
-You can use *italics* and **bold** like this, and you
-can create links like this:
-[features]({FEATURES_URL}).
-You can either link to a variable or to a URL like this:
-[another link here](http://example.com).
-
-
-Whitespace is mostly ignored and replaced by a single
-space at every 
-occurence. If you want a hard line break, you can do it like
-
-this (by leaving a line blank). If you actually want to leave
-a blank line, use two blank lines.
-
-
-Of course you can also use all the MessageFormat syntax
-like this:
-
-How many **features** do we have? I think  
-{FEATURES_COUNT, plural,
-    =0      {we don't have any...}
-    one   {it's just a single one.}
-    other {we have # in total!}
-}
-
-Wow! Here's a select statement:
-
-Dear 
-{USER_GENDER, select,
-  male {Sir}
-    other {Madam}
-}
-
-
-You can also include variables like this number: {CUSTOMER_NUMBER}.
-
-
-At the bottom of the page you will see an automatically generated
-preview. There will be several ones actually, to have one preview
-with each case of each plural- or select-statement at least. The
-preview also replaces variables by the example values provided in
-the comment, or, if there are none, tries to guess what a variable
-could contain (like the customer number).
-In the preview the source and target text are always right next to
-each other, so that they can be easily compared for each case.</textarea>
-        <h1>Comment</h1>
-        <pre id='comment'>FEATURES_URL: [http://mercateo.de/features]
-VARIABLE:   Diese Variable ist zum einbinden [Variable] 
-USER_GENDER:  [male|female]</pre>
-      </div>
-      <div class='col-md-6'>
-        <h1>Target language</h1>
-        <textarea id="targetLang">Hallo 
-{GENDER, select,
-    male {lieber User!}
-    other {liebe Userin!}
-}
-
-Du kannst so *kursiv* und **fett** benutzen, und wie
-folgt Links erstellen:
-[features]({FEATURES_URL}).
-Du kannst entweder auf eine Variable linken, oder auf
-eine URL, ungefähr so:
-[noch ein link](http://example.com).
-
-
-Leerzeichen und Zeilenumbrüche werden meistens ignoriert
-und jedes mal durch ein einziges Leerzeich ersetzt. Wenn
-du eine neue Zeile anfangen möchtest, kannst du das
-
-so machen (indem du eine Zeile frei lässt). Wenn du wirklich
-eine Zeile leer lassen möchtest, musst du zwei Leerzeilen 
-benutzen.
-
-
-Natürlich kannst du auch die komplette MessageFormat Syntax
-benutzen, zum Beispiel so:
-
-Wie viele **Features** haben wir? Ich glaube  
-{FEATURES_COUNT, plural,
-    =0      {wir haben gar keins...}
-    one   {nur ein einziges.}
-    other {wir haben # insgesamt!}
-}
-
-Wow! Hier noch ein select-Block:
-
-{USER_GENDER, select,
-  male {Lieber Herr}
-    other {Liebe Frau}
-} {LAST_NAME}
-
-
-Du kannst auch Variablen, so wie diese Nummer einbinden: {CUSTOMER_NUMBER}.
-
-Unten auf dieser Seite wirst du eine automatisch generierte Vorschau
-sehen. In diesem Fall werden es sogar mehrere Vorschauen sein, so dass
-es mindestens eine Vorschau gibt die jeden Fall der select- und
-plural-statements demonstriert.
-Die Vorschau ersetzt auch die Variablen mit Beispielwerten die im Kommentar
-angegeben werden können, oder, wenn dort nichts steht, versucht sie zu raten,
-welchen Wert diese Variable annehmen könnte.
-In den Vorschau stehen immer die gleichen Texte in der Quell- und Zielsprache
-zusammen, sodass die einzelnen Fälle einfach verglichen werden können.
-
-</textarea>
-      </div>
-    </div>
-    <h1>Examples</h1>
-    <div class='row' id='examples'></div>
-  </div>
+  <div class='container-fluid'>
+    <table class='table table-bordered'>
+      <tr class='info'>
+        <th></th>
+                  <th class='text-center'>DE</th>
+                  <th class='text-center'>EN</th>
+                  <th class='text-center'>FR</th>
+              </tr>
+              <tr class='0'>
+          <td>
+            <div class='limit'>
+              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.cluster_badge_description'>basket.cluster_badge_description</h4>
+              <h4 style='float:left;margin:0px'>
+                <small>basket-strings</small><br/><small>Zuletzt geändert: 20.03.13</small>
+              </h4>
+              <div style='float:right;'><input type="checkbox" id='toggle-0' data-toggle="toggle" data-on='Test' data-off='Code' data-onstyle='primary' data-offstyle='default'></div>
+              <pre class='well well-sm comment'>COLOR: [weiß|schwarz]</pre>
+            </div>
+          </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='de'>Ein Cluster enthält alle Artikel, die bestimmte Anforderungen erfüllen (z. B. Kopierpapier, DIN A4, 80 g/m², {COLOR}).</textarea>    
+               <div class='preview de'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='en'>A Cluster contains all items that fulfil certain requirements (e. g. copy paper, DIN A4, 80 g/m², 
+{COLOR, select,
+  weiß {white}
+    other {black}
+}).</textarea>    
+               <div class='preview en'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='fr'>Un cluster contient tous les produits répondant à des besoins spécifiques (papier pour imprimante, format A4, 80g/m2, 
+{COLOR, select,
+  weiß {blanc}
+    other {noir}
+}).</textarea>    
+               <div class='preview fr'></div>
+             </div>
+            </td>
+                  </tr>
+              <tr class='1'>
+          <td>
+            <div class='limit'>
+              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.commit.general_terms_and_privacy'>basket.commit.general_terms_and_privacy</h4>
+              <h4 style='float:left;margin:0px'>
+                <small>basket-strings</small><br/><small>Zuletzt geändert: 21.04.13</small>
+              </h4>
+              <div style='float:right;'><input type="checkbox" id='toggle-0' data-toggle="toggle" data-on='Test' data-off='Code' data-onstyle='primary' data-offstyle='default'></div>
+              <pre class='well well-sm comment'>AGB_URL
+DSE_LINK</pre>
+            </div>
+          </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='de'>Ja, ich bestätige die [AGB]({AGB_URL}) und die [Datenschutzerklärung]({DSE_LINK}) der Mercateo AG.</textarea>    
+               <div class='preview de'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='en'>Yes, I confirm the [General Terms and Conditions]({AGB_URL}) and the [data protection notice]({DSE_LINK}) of Mercateo</textarea>    
+               <div class='preview en'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='fr'>Oui, j'accepte les [conditions générales de vente]({AGB_URL}) et la [déclaration de confidentialité]({DSE_LINK}) de Mercateo France SAS</textarea>    
+               <div class='preview fr'></div>
+             </div>
+            </td>
+                  </tr>
+              <tr class='2'>
+          <td>
+            <div class='limit'>
+              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='placedorder.print.hint.printing_guide'>placedorder.print.hint.printing_guide</h4>
+              <h4 style='float:left;margin:0px'>
+                <small>basket-strings</small><br/><small>Zuletzt geändert: 30.04.13</small>
+              </h4>
+              <div style='float:right;'><input type="checkbox" id='toggle-0' data-toggle="toggle" data-on='Test' data-off='Code' data-onstyle='primary' data-offstyle='default'></div>
+              <pre class='well well-sm comment'>OS: [mac|windows]</pre>
+            </div>
+          </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='de'>Sie können diese Seite ausdrucken, indem Sie die Druckfunktion Ihres Browsers verwenden ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+               <div class='preview de'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='en'>You can print out this page by using the printing function of your browser ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+               <div class='preview en'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='fr'>Vous pouvez imprimer cette page en utilisant la fonction impression de votre navigateur ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+               <div class='preview fr'></div>
+             </div>
+            </td>
+                  </tr>
+              <tr class='3'>
+          <td>
+            <div class='limit'>
+              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was'>load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was</h4>
+              <h4 style='float:left;margin:0px'>
+                <small>basket-strings</small><br/><small>Zuletzt geändert: 16.05.13</small>
+              </h4>
+              <div style='float:right;'><input type="checkbox" id='toggle-0' data-toggle="toggle" data-on='Test' data-off='Code' data-onstyle='primary' data-offstyle='default'></div>
+              <pre class='well well-sm comment'> </pre>
+            </div>
+          </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='de'>Lieferzeit&auml;nderung! Die urspr&uuml;ngliche Lieferzeit des gespeicherten Artikels war</textarea>    
+               <div class='preview de'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='en'></textarea>    
+               <div class='preview en'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='fr'></textarea>    
+               <div class='preview fr'></div>
+             </div>
+            </td>
+                  </tr>
+              <tr class='4'>
+          <td>
+            <div class='limit'>
+              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.cluster_badge_description'>basket.cluster_badge_description</h4>
+              <h4 style='float:left;margin:0px'>
+                <small>basket-strings</small><br/><small>Zuletzt geändert: 20.03.13</small>
+              </h4>
+              <div style='float:right;'><input type="checkbox" id='toggle-0' data-toggle="toggle" data-on='Test' data-off='Code' data-onstyle='primary' data-offstyle='default'></div>
+              <pre class='well well-sm comment'>COLOR: [weiß|schwarz]</pre>
+            </div>
+          </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='de'>Ein Cluster enthält alle Artikel, die bestimmte Anforderungen erfüllen (z. B. Kopierpapier, DIN A4, 80 g/m², {COLOR}).</textarea>    
+               <div class='preview de'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='en'>A Cluster contains all items that fulfil certain requirements (e. g. copy paper, DIN A4, 80 g/m², 
+{COLOR, select,
+  weiß {white}
+    other {black}
+}).</textarea>    
+               <div class='preview en'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='fr'>Un cluster contient tous les produits répondant à des besoins spécifiques (papier pour imprimante, format A4, 80g/m2, 
+{COLOR, select,
+  weiß {blanc}
+    other {noir}
+}).</textarea>    
+               <div class='preview fr'></div>
+             </div>
+            </td>
+                  </tr>
+              <tr class='5'>
+          <td>
+            <div class='limit'>
+              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.commit.general_terms_and_privacy'>basket.commit.general_terms_and_privacy</h4>
+              <h4 style='float:left;margin:0px'>
+                <small>basket-strings</small><br/><small>Zuletzt geändert: 21.04.13</small>
+              </h4>
+              <div style='float:right;'><input type="checkbox" id='toggle-0' data-toggle="toggle" data-on='Test' data-off='Code' data-onstyle='primary' data-offstyle='default'></div>
+              <pre class='well well-sm comment'>AGB_URL
+DSE_LINK</pre>
+            </div>
+          </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='de'>Ja, ich bestätige die [AGB]({AGB_URL}) und die [Datenschutzerklärung]({DSE_LINK}) der Mercateo AG.</textarea>    
+               <div class='preview de'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='en'>Yes, I confirm the [General Terms and Conditions]({AGB_URL}) and the [data protection notice]({DSE_LINK}) of Mercateo</textarea>    
+               <div class='preview en'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='fr'>Oui, j'accepte les [conditions générales de vente]({AGB_URL}) et la [déclaration de confidentialité]({DSE_LINK}) de Mercateo France SAS</textarea>    
+               <div class='preview fr'></div>
+             </div>
+            </td>
+                  </tr>
+              <tr class='6'>
+          <td>
+            <div class='limit'>
+              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='placedorder.print.hint.printing_guide'>placedorder.print.hint.printing_guide</h4>
+              <h4 style='float:left;margin:0px'>
+                <small>basket-strings</small><br/><small>Zuletzt geändert: 30.04.13</small>
+              </h4>
+              <div style='float:right;'><input type="checkbox" id='toggle-0' data-toggle="toggle" data-on='Test' data-off='Code' data-onstyle='primary' data-offstyle='default'></div>
+              <pre class='well well-sm comment'>OS: [mac|windows]</pre>
+            </div>
+          </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='de'>Sie können diese Seite ausdrucken, indem Sie die Druckfunktion Ihres Browsers verwenden ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+               <div class='preview de'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='en'>You can print out this page by using the printing function of your browser ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+               <div class='preview en'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='fr'>Vous pouvez imprimer cette page en utilisant la fonction impression de votre navigateur ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+               <div class='preview fr'></div>
+             </div>
+            </td>
+                  </tr>
+              <tr class='7'>
+          <td>
+            <div class='limit'>
+              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was'>load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was</h4>
+              <h4 style='float:left;margin:0px'>
+                <small>basket-strings</small><br/><small>Zuletzt geändert: 16.05.13</small>
+              </h4>
+              <div style='float:right;'><input type="checkbox" id='toggle-0' data-toggle="toggle" data-on='Test' data-off='Code' data-onstyle='primary' data-offstyle='default'></div>
+              <pre class='well well-sm comment'> </pre>
+            </div>
+          </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='de'>Lieferzeit&auml;nderung! Die urspr&uuml;ngliche Lieferzeit des gespeicherten Artikels war</textarea>    
+               <div class='preview de'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='en'></textarea>    
+               <div class='preview en'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='fr'></textarea>    
+               <div class='preview fr'></div>
+             </div>
+            </td>
+                  </tr>
+              <tr class='8'>
+          <td>
+            <div class='limit'>
+              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.cluster_badge_description'>basket.cluster_badge_description</h4>
+              <h4 style='float:left;margin:0px'>
+                <small>basket-strings</small><br/><small>Zuletzt geändert: 20.03.13</small>
+              </h4>
+              <div style='float:right;'><input type="checkbox" id='toggle-0' data-toggle="toggle" data-on='Test' data-off='Code' data-onstyle='primary' data-offstyle='default'></div>
+              <pre class='well well-sm comment'>COLOR: [weiß|schwarz]</pre>
+            </div>
+          </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='de'>Ein Cluster enthält alle Artikel, die bestimmte Anforderungen erfüllen (z. B. Kopierpapier, DIN A4, 80 g/m², {COLOR}).</textarea>    
+               <div class='preview de'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='en'>A Cluster contains all items that fulfil certain requirements (e. g. copy paper, DIN A4, 80 g/m², 
+{COLOR, select,
+  weiß {white}
+    other {black}
+}).</textarea>    
+               <div class='preview en'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='fr'>Un cluster contient tous les produits répondant à des besoins spécifiques (papier pour imprimante, format A4, 80g/m2, 
+{COLOR, select,
+  weiß {blanc}
+    other {noir}
+}).</textarea>    
+               <div class='preview fr'></div>
+             </div>
+            </td>
+                  </tr>
+              <tr class='9'>
+          <td>
+            <div class='limit'>
+              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.commit.general_terms_and_privacy'>basket.commit.general_terms_and_privacy</h4>
+              <h4 style='float:left;margin:0px'>
+                <small>basket-strings</small><br/><small>Zuletzt geändert: 21.04.13</small>
+              </h4>
+              <div style='float:right;'><input type="checkbox" id='toggle-0' data-toggle="toggle" data-on='Test' data-off='Code' data-onstyle='primary' data-offstyle='default'></div>
+              <pre class='well well-sm comment'>AGB_URL
+DSE_LINK</pre>
+            </div>
+          </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='de'>Ja, ich bestätige die [AGB]({AGB_URL}) und die [Datenschutzerklärung]({DSE_LINK}) der Mercateo AG.</textarea>    
+               <div class='preview de'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='en'>Yes, I confirm the [General Terms and Conditions]({AGB_URL}) and the [data protection notice]({DSE_LINK}) of Mercateo</textarea>    
+               <div class='preview en'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='fr'>Oui, j'accepte les [conditions générales de vente]({AGB_URL}) et la [déclaration de confidentialité]({DSE_LINK}) de Mercateo France SAS</textarea>    
+               <div class='preview fr'></div>
+             </div>
+            </td>
+                  </tr>
+              <tr class='10'>
+          <td>
+            <div class='limit'>
+              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='placedorder.print.hint.printing_guide'>placedorder.print.hint.printing_guide</h4>
+              <h4 style='float:left;margin:0px'>
+                <small>basket-strings</small><br/><small>Zuletzt geändert: 30.04.13</small>
+              </h4>
+              <div style='float:right;'><input type="checkbox" id='toggle-0' data-toggle="toggle" data-on='Test' data-off='Code' data-onstyle='primary' data-offstyle='default'></div>
+              <pre class='well well-sm comment'>OS: [mac|windows]</pre>
+            </div>
+          </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='de'>Sie können diese Seite ausdrucken, indem Sie die Druckfunktion Ihres Browsers verwenden ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+               <div class='preview de'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='en'>You can print out this page by using the printing function of your browser ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+               <div class='preview en'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='fr'>Vous pouvez imprimer cette page en utilisant la fonction impression de votre navigateur ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+               <div class='preview fr'></div>
+             </div>
+            </td>
+                  </tr>
+              <tr class='11'>
+          <td>
+            <div class='limit'>
+              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was'>load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was</h4>
+              <h4 style='float:left;margin:0px'>
+                <small>basket-strings</small><br/><small>Zuletzt geändert: 16.05.13</small>
+              </h4>
+              <div style='float:right;'><input type="checkbox" id='toggle-0' data-toggle="toggle" data-on='Test' data-off='Code' data-onstyle='primary' data-offstyle='default'></div>
+              <pre class='well well-sm comment'> </pre>
+            </div>
+          </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='de'>Lieferzeit&auml;nderung! Die urspr&uuml;ngliche Lieferzeit des gespeicherten Artikels war</textarea>    
+               <div class='preview de'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='en'></textarea>    
+               <div class='preview en'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='fr'></textarea>    
+               <div class='preview fr'></div>
+             </div>
+            </td>
+                  </tr>
+              <tr class='12'>
+          <td>
+            <div class='limit'>
+              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.cluster_badge_description'>basket.cluster_badge_description</h4>
+              <h4 style='float:left;margin:0px'>
+                <small>basket-strings</small><br/><small>Zuletzt geändert: 20.03.13</small>
+              </h4>
+              <div style='float:right;'><input type="checkbox" id='toggle-0' data-toggle="toggle" data-on='Test' data-off='Code' data-onstyle='primary' data-offstyle='default'></div>
+              <pre class='well well-sm comment'>COLOR: [weiß|schwarz]</pre>
+            </div>
+          </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='de'>Ein Cluster enthält alle Artikel, die bestimmte Anforderungen erfüllen (z. B. Kopierpapier, DIN A4, 80 g/m², {COLOR}).</textarea>    
+               <div class='preview de'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='en'>A Cluster contains all items that fulfil certain requirements (e. g. copy paper, DIN A4, 80 g/m², 
+{COLOR, select,
+  weiß {white}
+    other {black}
+}).</textarea>    
+               <div class='preview en'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='fr'>Un cluster contient tous les produits répondant à des besoins spécifiques (papier pour imprimante, format A4, 80g/m2, 
+{COLOR, select,
+  weiß {blanc}
+    other {noir}
+}).</textarea>    
+               <div class='preview fr'></div>
+             </div>
+            </td>
+                  </tr>
+              <tr class='13'>
+          <td>
+            <div class='limit'>
+              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.commit.general_terms_and_privacy'>basket.commit.general_terms_and_privacy</h4>
+              <h4 style='float:left;margin:0px'>
+                <small>basket-strings</small><br/><small>Zuletzt geändert: 21.04.13</small>
+              </h4>
+              <div style='float:right;'><input type="checkbox" id='toggle-0' data-toggle="toggle" data-on='Test' data-off='Code' data-onstyle='primary' data-offstyle='default'></div>
+              <pre class='well well-sm comment'>AGB_URL
+DSE_LINK</pre>
+            </div>
+          </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='de'>Ja, ich bestätige die [AGB]({AGB_URL}) und die [Datenschutzerklärung]({DSE_LINK}) der Mercateo AG.</textarea>    
+               <div class='preview de'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='en'>Yes, I confirm the [General Terms and Conditions]({AGB_URL}) and the [data protection notice]({DSE_LINK}) of Mercateo</textarea>    
+               <div class='preview en'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='fr'>Oui, j'accepte les [conditions générales de vente]({AGB_URL}) et la [déclaration de confidentialité]({DSE_LINK}) de Mercateo France SAS</textarea>    
+               <div class='preview fr'></div>
+             </div>
+            </td>
+                  </tr>
+              <tr class='14'>
+          <td>
+            <div class='limit'>
+              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='placedorder.print.hint.printing_guide'>placedorder.print.hint.printing_guide</h4>
+              <h4 style='float:left;margin:0px'>
+                <small>basket-strings</small><br/><small>Zuletzt geändert: 30.04.13</small>
+              </h4>
+              <div style='float:right;'><input type="checkbox" id='toggle-0' data-toggle="toggle" data-on='Test' data-off='Code' data-onstyle='primary' data-offstyle='default'></div>
+              <pre class='well well-sm comment'>OS: [mac|windows]</pre>
+            </div>
+          </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='de'>Sie können diese Seite ausdrucken, indem Sie die Druckfunktion Ihres Browsers verwenden ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+               <div class='preview de'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='en'>You can print out this page by using the printing function of your browser ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+               <div class='preview en'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='fr'>Vous pouvez imprimer cette page en utilisant la fonction impression de votre navigateur ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+               <div class='preview fr'></div>
+             </div>
+            </td>
+                  </tr>
+              <tr class='15'>
+          <td>
+            <div class='limit'>
+              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was'>load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was</h4>
+              <h4 style='float:left;margin:0px'>
+                <small>basket-strings</small><br/><small>Zuletzt geändert: 16.05.13</small>
+              </h4>
+              <div style='float:right;'><input type="checkbox" id='toggle-0' data-toggle="toggle" data-on='Test' data-off='Code' data-onstyle='primary' data-offstyle='default'></div>
+              <pre class='well well-sm comment'> </pre>
+            </div>
+          </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='de'>Lieferzeit&auml;nderung! Die urspr&uuml;ngliche Lieferzeit des gespeicherten Artikels war</textarea>    
+               <div class='preview de'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='en'></textarea>    
+               <div class='preview en'></div>
+             </div>
+            </td>
+                      <td>
+              <div class='limit'>
+          	   <textarea class='fr'></textarea>    
+               <div class='preview fr'></div>
+             </div>
+            </td>
+                  </tr>
+            <tr class='info'>
+        <td></td>
+                  <td>
+            <div class="progress">
+              <div class="progress-bar de" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:0%; min-width: 2em;">
+              </div>
+            </div>
+          </td>
+                  <td>
+            <div class="progress">
+              <div class="progress-bar en" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:0%; min-width: 2em;">
+              </div>
+            </div>
+          </td>
+                  <td>
+            <div class="progress">
+              <div class="progress-bar fr" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:0%; min-width: 2em;">
+              </div>
+            </div>
+          </td>
+              </tr>
+    </table>
+    <div class='text-center'>
+      <input type="checkbox" id='toggleAll' data-toggle="toggle" data-on='Alle Tests' data-off='Alle Tests' data-onstyle='primary' data-offstyle='default' data-size="large">
+      <a class='btn btn-primary btn-lg' style='width:127px' href='#'>Speichern</a><br/>
+      <nav>
+        <ul class="pagination">
+          <li>
+            <a href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class='active'><a href="#">1</a></li>
+          <li><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li><a href="#">4</a></li>
+          <li><a href="#">5</a></li>
+          <li>
+            <a href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
 	<script type="text/javascript">
-    var locale = 'de'
+    var locales = ['de','en','fr'];
+    var editorInstances;
+    var previewCount = 0;
     $(function(){
-      var sourceLang = CodeMirror.fromTextArea($('#sourceLang')[0], {
-        mode: "messageformat.js",
-        lineNumbers: true,
-        styleActiveLine: true,
-        readOnly: true,
-        gutters: ["CodeMirror-linenumbers", "CodeMirror-lint-markers"],
-        lineWrapping: true,
-        viewportMargin: Infinity
-      });
-      var targetLang = CodeMirror.fromTextArea($('#targetLang')[0], {
-        mode: {name: "messageformat.js", underscoresBreakWords: false},
-        lineNumbers: true,
-        styleActiveLine: true,
-        lint: true,
-        gutters: ["CodeMirror-linenumbers", "CodeMirror-lint-markers"],
-        lineWrapping: true,
-        viewportMargin: Infinity
-      });
-      targetLang.focus()
-      var delay;
-      targetLang.on("change", function() {
-        clearTimeout(delay);
-        delay = setTimeout(updatePreview, 300);
-      });
 
-      var updatePreview = function(){
-        var whitespace = (sourceLang.getValue()+'\n<hr/>\n'+targetLang.getValue()).replace(/\n\n\n/g,'<br/></br>').replace(/\n\n/g,'<br/>').replace(/\s+/g,' ');
+      editorInstances = $('textarea').map(function(index,ta){
+        return CodeMirror.fromTextArea(ta, {
+          mode: "messageformat.js",
+          lineNumbers: true,
+          styleActiveLine: true,
+          lint: true,
+          gutters: ["CodeMirror-linenumbers", "CodeMirror-lint-markers"],
+          lineWrapping: true,
+          viewportMargin: Infinity
+        });
+      })
+
+      $("[type=checkbox]").not(':last').change(function(){
+        var row = $(this).closest('tr')
+        console.log(this)
+        var editors = row.find('.CodeMirror')
+        var previews = row.find('.preview')
+
+        for (var i = 0; i < 3; i++){
+          if (this.checked){
+            renderPreview(editorInstances[parseInt(row.attr('class'))*3+i].getValue(),previews[i],row.find('.comment').html(), locales[i]);
+            $(editors[i]).hide();
+            $(previews[i]).show();
+            previewCount++;
+          }
+          else {
+            $(editors[i]).show();
+            $(previews[i]).hide();
+          }
+        }
+      })
+
+      $('#toggleAll').change(function(){
+        $("[type=checkbox]").not(":last").bootstrapToggle(this.checked ? "on" : "off")
+      })
+
+      var renderPreview = function(from,to,comment, locale){
+        var whitespace = from.replace(/\n\n\n/g,'<br/></br>').replace(/\n\n/g,'<br/>').replace(/\s+/g,' ');
         var renderer = new marked.Renderer();
         renderer.paragraph = function(string){return string.replace(/&#/g,'&\\#')+"<br/>\n"};
         var md = marked(whitespace,{renderer: renderer});
         // remove trailing <br/> 
         md = md.substring(0,md.length-6);
-        var samples = generateSamples(locale,md,$('#comment').html());
-        $('#examples').html("<div class='col-md-6'><div class='well'>"+samples.join("</div></div><div class='col-md-6'><div class='well'>")+"</div></div>");
+        var samples = generateSamples(locale,md,comment);
+        $(to).html("<div class='well well-sm'>"+samples.join("</div><div class='well well-sm'>")+"</div>");
       }
-      updatePreview();
+
+      function update(){
+        for (var i = 0; i < locales.length; i++){
+          var total = 0, finished = 0;
+          for (var j = i; j < editorInstances.length; j += locales.length){
+            console.log(editorInstances[j])
+            total += 1;
+            // If contains text, consider done
+            if (!editorInstances[j].getValue().match(/^\s*$/))
+              finished += 1;
+          }
+          var pb = $('.progress-bar.'+locales[i]);
+          pb.removeClass('progress-bar-success');
+          if (total == finished)
+            pb.addClass('progress-bar-success');
+          pb.html(finished+'/'+total);
+          pb.css('width',finished/total*100+'%');
+        }
+      }
+      update();
+      for (var i = 0; i < editorInstances.length; i++)
+        editorInstances[i].on("blur",update);
+
     })
   </script>    
 </body>
