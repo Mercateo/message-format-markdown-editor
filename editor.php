@@ -132,13 +132,11 @@
       margin: 20px;
     }
     .limit{
-      overflow-x: hidden;
       overflow-y: auto;
-      height: 200px;
+      height: 192px;
       margin: 0px;
       padding: 0px;
       position: relative;
-      width: 100%;
     }
     tbody > tr:first-child > th:first-child {
       width: 500px;
@@ -162,7 +160,7 @@
     }
     table {
       table-layout: fixed;
-      width: 100px;
+      min-width: 1200px;
     }
     .progress {
       margin: 7px;
@@ -170,82 +168,138 @@
     .text-center > .label {
       margin: 7px;
     }
+    body {
+      /*min-width:<?=(1+count($entries[0]['langs']))*500?>px;*/
+    }
+    .btn-active-danger.active {
+      color: #fff;
+      background-color: #c9302c;
+      border-color: #ac2925;
+    }
+    .btn-active-danger.active:hover {
+      color: #fff;
+      background-color: #ac2925;
+      border-color: #761c19;
+    }
+    .btn-active-success.active {
+      color: #fff;
+      background-color: #449d44;
+      border-color: #398439;
+    }
+    .btn-active-success.active:hover {
+      color: #fff;
+      background-color: #398439;
+      border-color: #255625;
+    }
+    .limit > div > .btn-group > label {
+      width: 22px;
+      padding: 0px;
+      margin: 2px;
+    }
+    .infoButtons {
+      position: absolute;
+      bottom: 4px;
+      left: 4px;
+      z-index:5;
+      background: #f7f7f7;
+      width:24px;
+      height: 80px;
+      padding-top:10px;
+    }
   </style>
 </head>
 <body>
-  <table class='table table-bordered' style="table-layout:fixed;position:fixed;top:0px;z-index:101"><thead>
-    <tr class='info'>
-      <th>
-        <!-- <ul class="pagination pagination-sm">
-          <li>
-            <a href="#" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-          <li class='active'><a href="#">1</a></li>
-          <li><a href="#">2</a></li>
-          <li><a href="#">3</a></li>
-          <li><a href="#">4</a></li>
-          <li><a href="#">5</a></li>
-          <li>
-            <a href="#" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-        </ul> -->
-        <div style='float:left;'>
-          <button class='btn btn-primary'><i class="fa fa-save"></i> Speichern</button>
-        </div>
-        <div style='float:right;'>
-          <input type="checkbox" id='toggleAll' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
-        </div>
-      </th>
-      <? foreach($entries[0]['langs'] as $locale => $_): ?>
-        <th class='text-center'>
-          <span class='label label-default' style='float:left; margin-right: 1em; padding:5px;'>
-            <?=strtoupper($locale)?>
-          </span>
-          <div class="progress">
-            <div class="progress-bar progress-bar-warning <?=$locale?>" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:0%; min-width: 2em;">
+  <form action="/" method="POST">
+    <table class='table table-bordered' style="table-layout:fixed;position:fixed;top:0px;z-index:101"><thead>
+      <tr class='info'>
+        <th>
+          <!-- <ul class="pagination pagination-sm">
+            <li>
+              <a href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class='active'><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li>
+              <a href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul> -->
+          <div style='float:left;'>
+            <input type='submit' class='btn btn-primary' value='Speichern'></input>
+          </div>
+          <div style='float:right;'>
+            <input type="checkbox" id='toggleAll' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
           </div>
         </th>
-      <? endforeach; ?>
-    </tr>
-    </thead>
-  </table>
-  <div style='height:100%;margin-top:53px;'>
-    <table class='table table-bordered' style="table-layout:fixed"><tbody>
-      <? foreach($entries as $index => $current): ?>
-        <tr class='<?=$index?>'>
-          <td>
-            <div class='limit'>
-              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='<?=$current["id"]?>'><?=$current['id']?></h4>
-              <h4 style='float:left;margin:0px'>
-                <small><?=$current['group']?></small>
-              </h4>
-              <div style='float:right;'>
-<!--                 <button class='btn btn-default'><i class="fa fa-trash"></i> Löschen</button>
-                <button class='btn btn-default'><i class="fa fa-check"></i> Geprüft</button>
- -->                <input type="checkbox" data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
-              </div>
-              <pre class='well well-sm comment'><?=($current["comment"] == null || $current["comment"] == "") ? "-\n" : $current["comment"]?></pre>
+        <? foreach($entries[0]['langs'] as $locale => $_): ?>
+          <th class='text-center'>
+            <span class='label label-default' style='float:left; margin-right: 1em; padding:5px;'>
+              <?=strtoupper($locale)?>
+            </span>
+            <div class="progress">
+              <div class="progress-bar progress-bar-warning <?=$locale?>" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:0%; min-width: 2em;">
             </div>
-          </td>
-          <? foreach($current['langs'] as $locale => $content): ?>
+          </th>
+        <? endforeach; ?>
+      </tr>
+      </thead>
+    </table>
+    <div style='height:100%;margin-top:53px;'>
+      <table class='table table-bordered' style="table-layout:fixed"><tbody>
+        <? foreach($entries as $index => $current): ?>
+          <tr class='<?=$index?>'>
             <td>
               <div class='limit'>
-          	   <textarea class='<?=$locale?>'><?=$content['text'] ? $content['text'] : ""?></textarea>    
-               <div class='preview <?=$locale?>'></div>
-               <? if ($content['lastAuthor'] != null): ?>
-                 <i class="fa fa-info-circle" title="<?=$content['lastAuthor']?><br/><?=$content['lastChanged']?>" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-               <? endif; ?>
-             </div>
+                <h4 style='overflow:hidden;text-overflow: ellipsis;' name='<?=$current["id"]?>'><?=$current['id']?></h4>
+                <h4 style='float:left;margin:0px'>
+                  <small><?=$current['group']?></small>
+                </h4>
+                <div style='float:right;'>
+                  <input type="checkbox" class='toggleCheckbox' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                </div>
+                <pre class='well well-sm comment'><?=($current["comment"] == null || $current["comment"] == "") ? "-\n" : $current["comment"]?></pre>
+              </div>
             </td>
-          <? endforeach; ?>
-        </tr>
-      <? endforeach; ?>
-    </tbody></table>
-  </div>
+            <? foreach($current['langs'] as $locale => $content): ?>
+              <td>
+                <div class='limit'>
+            	    <textarea name ='<?=$current['id']?>[<?=$locale?>][text]' class='<?=$locale?>' style='width:100%;height:100%'><?=$content['text'] ? $content['text'] : ""?></textarea>    
+                  <div class='preview <?=$locale?>'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='<?=$current['id']?>[<?=$locale?>][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='<?=$current['id']?>[<?=$locale?>][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/><?= ($content['lastAuthor'] != null) ? ($content['lastChanged']."<br/>".$content['lastAuthor']) : "-" ?>" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+            <? endforeach; ?>
+          </tr>
+        <? endforeach; ?>
+      </tbody></table>
+    </div>
+  </form>
 	<script type="text/javascript">
     var locales = ['de','en','fr'];
     var editorInstances;
@@ -265,35 +319,31 @@
         });
       })
 
-      $(function () {
-        $('[data-toggle="tooltip"]').tooltip({html: true,container: "body"})
-      })
-      $(':checkbox').checkboxpicker();
-      $(':checkbox').focus(function(){
+      $('[data-toggle="tooltip"]').tooltip()
+
+      $('.toggleCheckbox, #toggleAll').checkboxpicker();
+      $('.toggleCheckbox, #toggleAll').focus(function(){
         $(this).blur();
       })
 
-      $("[type=checkbox]").not('#toggleAll').change(function(){
+      $('.toggleCheckbox').change(function(){
         var row = $(this).closest('tr')
-        var editors = row.find('.CodeMirror')
+        var editors = row.find('.CodeMirror, .infoButtons')
         var previews = row.find('.preview')
-
-        for (var i = 0; i < 3; i++){
-          if (this.checked){
-            renderPreview(editorInstances[parseInt(row.attr('class'))*3+i].getValue(),previews[i],row.find('.comment').html(), locales[i]);
-            $(editors[i]).hide();
-            $(previews[i]).show();
-            previewCount++;
-          }
-          else {
-            $(editors[i]).show();
-            $(previews[i]).hide();
-          }
+        if (this.checked){
+          for (var i = 0; i < 3; i++)
+          renderPreview(editorInstances[parseInt(row.attr('class'))*3+i].getValue(),previews[i],row.find('.comment').html(), locales[i]);
+          $(editors).hide();
+          $(previews).show();
+        }
+        else {
+          $(editors).show();
+          $(previews).hide();
         }
       })
 
       $('#toggleAll').change(function(){
-        $("[type=checkbox]").not("#toggleAll").prop('checked',this.checked)
+        $(".toggleCheckbox").prop('checked',this.checked)
       })
 
       var renderPreview = function(from,to,comment, locale){
@@ -330,6 +380,12 @@
       update();
       for (var i = 0; i < editorInstances.length; i++)
         editorInstances[i].on("blur",update);
+
+      $("form").submit(function() {
+        for (var i =0; i < editorInstances.length; i++)
+          editorInstances[i].toTextArea()
+        return true;
+     });
 
     })
   </script>    
