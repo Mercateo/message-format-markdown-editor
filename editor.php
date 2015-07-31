@@ -1,4 +1,5 @@
 <?php 
+  $locales = ['de','en','fr'];
   $entries = [
     [
       "id" => "basket.cluster_badge_description",
@@ -170,7 +171,7 @@
       margin: 7px;
     }
     body {
-      /*min-width:<?=(1+count($entries[0]['langs']))*500?>px;*/
+      /*min-width:<?=(1+count($locales))*500?>px;*/
     }
     .btn-active-danger.active {
       color: #fff;
@@ -202,18 +203,24 @@
       bottom: 4px;
       left: 4px;
       z-index:5;
-      background: #f7f7f7;
       width:24px;
-      height: 80px;
-      padding-top:10px;
-    }
-    .pagination {
-      margin: 0;
-      margin-bottom: -4px;
+      vertical-align: bottom;
     }
     .dark > th {
       background-color: #666;
-      box-shadow: 0px 0px 15px #888888;
+    }
+    .CodeMirror-linenumber {
+      visibility: hidden;
+    }
+    .btn-default.nohover:hover {
+      color: #333;
+      background-color: #fff;
+      border-color: #ccc;
+    }
+    .btn-default.nohover.active:hover {
+      color: #333;
+      background-color: #e6e6e6;
+      border-color: #adadad;
     }
   </style>
 </head>
@@ -221,33 +228,21 @@
   <form action="/" method="POST">
     <table class='table' style="table-layout:fixed;position:fixed;top:0px;z-index:101"><thead>
       <tr class='dark'>
-        <th class='text-center' style='border-bottom:none'>
-          <ul class="pagination pagination-sm">
-            <li class='<?= ($currentPage == 0) ? "disabled" : "" ?>'>
-              <a href="/<?= ($currentPage - 1)?>" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-            <? for ($i = max(1,$currentPage-5); $i < min($totalPages,$currentPage+5); $i++): ?>
-              <li class='<?= ($i == $currentPage) ? "active" : ""?>'><a href="/<?= ($currentPage - 1)?>"><?=$i?></a></li>
-            <? endfor; ?>
-            <li class='<?= ($currentPage == $totalPages) ? "disabled" : "" ?>'>
-              <a href="/<?= ($currentPage + 1)?>" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          </ul>
+        <th class='text-center' style='border-bottom:none;'>
           <div style='float:left;'>
             <input type='submit' class='btn btn-default' value='Speichern'></input>
           </div>
           <div style='float:right;'>
-            <input type="checkbox" id='toggleAll' data-on-class="btn-default" data-off-class="btn-default" data-on-label='Test' data-off-label='Code'>
-          </div>
+              <div class="btn-group" id='toggleAll'> 
+                <a class="btn btn-default nohover code active">Code</a>
+                <a class="btn btn-default nohover test">Test</a>
+              </div>          
+            </div>
         </th>
-        <? foreach($entries[0]['langs'] as $locale => $_): ?>
+        <? foreach($locales as $locale): ?>
           <th class='text-center' style='border-bottom:none'>
-            <span class='label label-info' style='float:left; margin-right: 1em; padding:5px;'>
-              <?=strtoupper($locale)?>
+            <span style='float:left; padding-right: 10px; color: white; font-size:24px;'>
+              <?=strtoupper($locale)?> 
             </span>
             <div class="progress">
               <div class="progress-bar progress-bar-warning <?=$locale?>" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:0%; min-width: 2em;">
@@ -268,7 +263,10 @@
                   <small><?=$current['group']?></small>
                 </h4>
                 <div style='float:right;'>
-                  <input type="checkbox" class='toggleCheckbox' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                  <div class="btn-group btn-toggle"> 
+                    <a class="btn btn-xs btn-default nohover code active">Code</a>
+                    <a class="btn btn-xs btn-default nohover test">Test</a>
+                  </div>
                 </div>
                 <pre class='well well-sm comment'><?=($current["comment"] == null || $current["comment"] == "") ? "-\n" : $current["comment"]?></pre>
               </div>
@@ -294,7 +292,7 @@
                     </div>
                     <br>
                     <div class='btn-group'>                   
-                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/><?= ($content['lastAuthor'] != null) ? ($content['lastChanged']."<br/>".$content['lastAuthor']) : "-" ?>" data-html="true" data-placement="right">
+                      <label class='btn btn-sm btn-default nohover' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/><?= ($content['lastAuthor'] != null) ? ($content['lastChanged']."<br/>".$content['lastAuthor']) : "-" ?>" data-html="true" data-placement="right">
                         <i class='fa fa-info-circle'></i>
                       </label>  
                     </div>
@@ -305,10 +303,29 @@
           </tr>
         <? endforeach; ?>
       </tbody></table>
+      <ul class="pagination pagination-sm">
+            <li class='<?= ($currentPage == 0) ? "disabled" : "" ?>'>
+              <a href="/<?= ($currentPage - 1)?>" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <? for ($i = max(1,$currentPage-5); $i < min($totalPages,$currentPage+5); $i++): ?>
+              <? if ($i == $currentPage): ?>
+                <li class='active'><a href="#"><?=$i?></a>
+              <? else: ?>
+                <li><a href="/<?= ($currentPage - 1)?>"><?=$i?></a></li>
+              <? endif; ?>
+            <? endfor; ?>
+            <li class='<?= ($currentPage == $totalPages) ? "disabled" : "" ?>'>
+              <a href="/<?= ($currentPage + 1)?>" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
     </div>
   </form>
 	<script type="text/javascript">
-    var locales = ['de','en','fr'];
+    var locales = <?= json_encode($locales)?>;
     var editorInstances;
     var previewCount = 0;
     $(function(){
@@ -328,16 +345,24 @@
 
       $('[data-toggle="tooltip"]').tooltip()
 
-      $('.toggleCheckbox, #toggleAll').checkboxpicker();
-      $('.toggleCheckbox, #toggleAll').focus(function(){
-        $(this).blur();
+      $('#toggleAll').click(function(){
+        $(this).find('.btn').toggleClass('active');
+        // These toggles are set differently
+        var opp = $(this).find('.active').hasClass('test') ? 'code' : 'test'
+        $('.btn-toggle').filter(function(index, element){ return $(element).find('.'+opp).hasClass('active')}).each(function(index,el){ toggleTestForButton($(el).parent()); });
       })
 
-      $('.toggleCheckbox').change(function(){
-        var row = $(this).closest('tr')
+
+      $('.btn-toggle').click(function() {
+        toggleTestForButton($(this))
+      });
+
+      function toggleTestForButton(btnToggle){
+        btnToggle.find('.btn').toggleClass('active');  
+        var row = btnToggle.closest('tr')
         var editors = row.find('.CodeMirror, .infoButtons')
         var previews = row.find('.preview')
-        if (this.checked){
+        if (btnToggle.find('.active').hasClass('test')){
           for (var i = 0; i < 3; i++)
           renderPreview(editorInstances[parseInt(row.attr('class'))*3+i].getValue(),previews[i],row.find('.comment').html(), locales[i]);
           $(editors).hide();
@@ -347,11 +372,8 @@
           $(editors).show();
           $(previews).hide();
         }
-      })
-
-      $('#toggleAll').change(function(){
-        $(".toggleCheckbox").prop('checked',this.checked)
-      })
+          
+      }
 
       var renderPreview = function(from,to,comment, locale){
         var whitespace = from.replace(/\n\n\n/g,'<br/></br>').replace(/\n\n/g,'<br/>').replace(/\s+/g,' ');
