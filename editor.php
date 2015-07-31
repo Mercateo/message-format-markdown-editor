@@ -92,8 +92,9 @@
   ];
   for ($i = 0; $i < 2; $i++)
     $entries = array_merge($entries,$entries);
+  $currentPage = 10;
+  $totalPages = 17;
 ?>
-
 <!doctype html>
 <head>
   <meta charset="UTF-8">
@@ -206,40 +207,46 @@
       height: 80px;
       padding-top:10px;
     }
+    .pagination {
+      margin: 0;
+      margin-bottom: -4px;
+    }
+    .dark > th {
+      background-color: #666;
+      box-shadow: 0px 0px 15px #888888;
+    }
   </style>
 </head>
 <body>
   <form action="/" method="POST">
-    <table class='table table-bordered' style="table-layout:fixed;position:fixed;top:0px;z-index:101"><thead>
-      <tr class='info'>
-        <th>
-          <!-- <ul class="pagination pagination-sm">
-            <li>
-              <a href="#" aria-label="Previous">
+    <table class='table' style="table-layout:fixed;position:fixed;top:0px;z-index:101"><thead>
+      <tr class='dark'>
+        <th class='text-center' style='border-bottom:none'>
+          <ul class="pagination pagination-sm">
+            <li class='<?= ($currentPage == 0) ? "disabled" : "" ?>'>
+              <a href="/<?= ($currentPage - 1)?>" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
               </a>
             </li>
-            <li class='active'><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li>
-              <a href="#" aria-label="Next">
+            <? for ($i = max(1,$currentPage-5); $i < min($totalPages,$currentPage+5); $i++): ?>
+              <li class='<?= ($i == $currentPage) ? "active" : ""?>'><a href="/<?= ($currentPage - 1)?>"><?=$i?></a></li>
+            <? endfor; ?>
+            <li class='<?= ($currentPage == $totalPages) ? "disabled" : "" ?>'>
+              <a href="/<?= ($currentPage + 1)?>" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
               </a>
             </li>
-          </ul> -->
+          </ul>
           <div style='float:left;'>
-            <input type='submit' class='btn btn-primary' value='Speichern'></input>
+            <input type='submit' class='btn btn-default' value='Speichern'></input>
           </div>
           <div style='float:right;'>
-            <input type="checkbox" id='toggleAll' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+            <input type="checkbox" id='toggleAll' data-on-class="btn-default" data-off-class="btn-default" data-on-label='Test' data-off-label='Code'>
           </div>
         </th>
         <? foreach($entries[0]['langs'] as $locale => $_): ?>
-          <th class='text-center'>
-            <span class='label label-default' style='float:left; margin-right: 1em; padding:5px;'>
+          <th class='text-center' style='border-bottom:none'>
+            <span class='label label-info' style='float:left; margin-right: 1em; padding:5px;'>
               <?=strtoupper($locale)?>
             </span>
             <div class="progress">
@@ -250,7 +257,7 @@
       </tr>
       </thead>
     </table>
-    <div style='height:100%;margin-top:53px;'>
+    <div style='height:100%;margin-top:51px;'>
       <table class='table table-bordered' style="table-layout:fixed"><tbody>
         <? foreach($entries as $index => $current): ?>
           <tr class='<?=$index?>'>
