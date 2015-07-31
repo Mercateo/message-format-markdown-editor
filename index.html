@@ -37,13 +37,11 @@
       margin: 20px;
     }
     .limit{
-      overflow-x: hidden;
       overflow-y: auto;
-      height: 200px;
+      height: 192px;
       margin: 0px;
       padding: 0px;
       position: relative;
-      width: 100%;
     }
     tbody > tr:first-child > th:first-child {
       width: 500px;
@@ -67,7 +65,7 @@
     }
     table {
       table-layout: fixed;
-      width: 100px;
+      min-width: 1200px;
     }
     .progress {
       margin: 7px;
@@ -75,704 +73,1680 @@
     .text-center > .label {
       margin: 7px;
     }
+    body {
+      /*min-width:2000px;*/
+    }
+    .btn-active-danger.active {
+      color: #fff;
+      background-color: #c9302c;
+      border-color: #ac2925;
+    }
+    .btn-active-danger.active:hover {
+      color: #fff;
+      background-color: #ac2925;
+      border-color: #761c19;
+    }
+    .btn-active-success.active {
+      color: #fff;
+      background-color: #449d44;
+      border-color: #398439;
+    }
+    .btn-active-success.active:hover {
+      color: #fff;
+      background-color: #398439;
+      border-color: #255625;
+    }
+    .limit > div > .btn-group > label {
+      width: 22px;
+      padding: 0px;
+      margin: 2px;
+    }
+    .infoButtons {
+      position: absolute;
+      bottom: 4px;
+      left: 4px;
+      z-index:5;
+      background: #f7f7f7;
+      width:24px;
+      height: 80px;
+      padding-top:10px;
+    }
   </style>
 </head>
 <body>
-  <table class='table table-bordered' style="table-layout:fixed;position:fixed;top:0px;z-index:101"><thead>
-    <tr class='info'>
-      <th>
-        <!-- <ul class="pagination pagination-sm">
-          <li>
-            <a href="#" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-          <li class='active'><a href="#">1</a></li>
-          <li><a href="#">2</a></li>
-          <li><a href="#">3</a></li>
-          <li><a href="#">4</a></li>
-          <li><a href="#">5</a></li>
-          <li>
-            <a href="#" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-        </ul> -->
-        <div style='float:left;'>
-          <button class='btn btn-primary'><i class="fa fa-save"></i> Speichern</button>
-        </div>
-        <div style='float:right;'>
-          <input type="checkbox" id='toggleAll' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
-        </div>
-      </th>
-              <th class='text-center'>
-          <span class='label label-default' style='float:left; margin-right: 1em; padding:5px;'>
-            DE          </span>
-          <div class="progress">
-            <div class="progress-bar progress-bar-warning de" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:0%; min-width: 2em;">
+  <form action="/" method="POST">
+    <table class='table table-bordered' style="table-layout:fixed;position:fixed;top:0px;z-index:101"><thead>
+      <tr class='info'>
+        <th>
+          <!-- <ul class="pagination pagination-sm">
+            <li>
+              <a href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class='active'><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li>
+              <a href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul> -->
+          <div style='float:left;'>
+            <input type='submit' class='btn btn-primary' value='Speichern'></input>
+          </div>
+          <div style='float:right;'>
+            <input type="checkbox" id='toggleAll' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
           </div>
         </th>
-              <th class='text-center'>
-          <span class='label label-default' style='float:left; margin-right: 1em; padding:5px;'>
-            EN          </span>
-          <div class="progress">
-            <div class="progress-bar progress-bar-warning en" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:0%; min-width: 2em;">
-          </div>
-        </th>
-              <th class='text-center'>
-          <span class='label label-default' style='float:left; margin-right: 1em; padding:5px;'>
-            FR          </span>
-          <div class="progress">
-            <div class="progress-bar progress-bar-warning fr" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:0%; min-width: 2em;">
-          </div>
-        </th>
-          </tr>
-    </thead>
-  </table>
-  <div style='height:100%;margin-top:53px;'>
-    <table class='table table-bordered' style="table-layout:fixed"><tbody>
-              <tr class='0'>
-          <td>
-            <div class='limit'>
-              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.cluster_badge_description'>basket.cluster_badge_description</h4>
-              <h4 style='float:left;margin:0px'>
-                <small>basket-strings</small>
-              </h4>
-              <div style='float:right;'>
-<!--                 <button class='btn btn-default'><i class="fa fa-trash"></i> Löschen</button>
-                <button class='btn btn-default'><i class="fa fa-check"></i> Geprüft</button>
- -->                <input type="checkbox" data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
-              </div>
-              <pre class='well well-sm comment'>COLOR: [weiß|schwarz]</pre>
+                  <th class='text-center'>
+            <span class='label label-default' style='float:left; margin-right: 1em; padding:5px;'>
+              DE            </span>
+            <div class="progress">
+              <div class="progress-bar progress-bar-warning de" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:0%; min-width: 2em;">
             </div>
-          </td>
-                      <td>
+          </th>
+                  <th class='text-center'>
+            <span class='label label-default' style='float:left; margin-right: 1em; padding:5px;'>
+              EN            </span>
+            <div class="progress">
+              <div class="progress-bar progress-bar-warning en" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:0%; min-width: 2em;">
+            </div>
+          </th>
+                  <th class='text-center'>
+            <span class='label label-default' style='float:left; margin-right: 1em; padding:5px;'>
+              FR            </span>
+            <div class="progress">
+              <div class="progress-bar progress-bar-warning fr" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:0%; min-width: 2em;">
+            </div>
+          </th>
+              </tr>
+      </thead>
+    </table>
+    <div style='height:100%;margin-top:53px;'>
+      <table class='table table-bordered' style="table-layout:fixed"><tbody>
+                  <tr class='0'>
+            <td>
               <div class='limit'>
-          	   <textarea class='de'>Ein Cluster enthält alle Artikel, die bestimmte Anforderungen erfüllen (z. B. Kopierpapier, DIN A4, 80 g/m², {COLOR}).</textarea>    
-               <div class='preview de'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>20.03.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
+                <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.cluster_badge_description'>basket.cluster_badge_description</h4>
+                <h4 style='float:left;margin:0px'>
+                  <small>basket-strings</small>
+                </h4>
+                <div style='float:right;'>
+                  <input type="checkbox" class='toggleCheckbox' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                </div>
+                <pre class='well well-sm comment'>COLOR: [weiß|schwarz]</pre>
+              </div>
             </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='en'>A Cluster contains all items that fulfil certain requirements (e. g. copy paper, DIN A4, 80 g/m², 
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.cluster_badge_description[de][text]' class='de' style='width:100%;height:100%'>Ein Cluster enthält alle Artikel, die bestimmte Anforderungen erfüllen (z. B. Kopierpapier, DIN A4, 80 g/m², {COLOR}).</textarea>    
+                  <div class='preview de'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[de][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[de][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>20.03.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.cluster_badge_description[en][text]' class='en' style='width:100%;height:100%'>A Cluster contains all items that fulfil certain requirements (e. g. copy paper, DIN A4, 80 g/m², 
 {COLOR, select,
   weiß {white}
     other {black}
 }).</textarea>    
-               <div class='preview en'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>20.03.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='fr'>Un cluster contient tous les produits répondant à des besoins spécifiques (papier pour imprimante, format A4, 80g/m2, 
+                  <div class='preview en'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[en][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[en][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>20.03.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.cluster_badge_description[fr][text]' class='fr' style='width:100%;height:100%'>Un cluster contient tous les produits répondant à des besoins spécifiques (papier pour imprimante, format A4, 80g/m2, 
 {COLOR, select,
   weiß {blanc}
     other {noir}
 }).</textarea>    
-               <div class='preview fr'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>20.03.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                  </tr>
-              <tr class='1'>
-          <td>
-            <div class='limit'>
-              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.commit.general_terms_and_privacy'>basket.commit.general_terms_and_privacy</h4>
-              <h4 style='float:left;margin:0px'>
-                <small>basket-strings</small>
-              </h4>
-              <div style='float:right;'>
-<!--                 <button class='btn btn-default'><i class="fa fa-trash"></i> Löschen</button>
-                <button class='btn btn-default'><i class="fa fa-check"></i> Geprüft</button>
- -->                <input type="checkbox" data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
-              </div>
-              <pre class='well well-sm comment'>AGB_URL
+                  <div class='preview fr'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[fr][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[fr][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>20.03.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                      </tr>
+                  <tr class='1'>
+            <td>
+              <div class='limit'>
+                <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.commit.general_terms_and_privacy'>basket.commit.general_terms_and_privacy</h4>
+                <h4 style='float:left;margin:0px'>
+                  <small>basket-strings</small>
+                </h4>
+                <div style='float:right;'>
+                  <input type="checkbox" class='toggleCheckbox' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                </div>
+                <pre class='well well-sm comment'>AGB_URL
 DSE_LINK
 DSE_LINK
 DSE_LINK
 DSE_LINK
 DSE_LINK</pre>
-            </div>
-          </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='de'>Ja, ich bestätige die [AGB]({AGB_URL}) und die [Datenschutzerklärung]({DSE_LINK}) der Mercateo AG.</textarea>    
-               <div class='preview de'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>21.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='en'>Yes, I confirm the [General Terms and Conditions]({AGB_URL}) and the [data protection notice]({DSE_LINK}) of Mercateo</textarea>    
-               <div class='preview en'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>21.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='fr'>Oui, j'accepte les [conditions générales de vente]({AGB_URL}) et la [déclaration de confidentialité]({DSE_LINK}) de Mercateo France SAS</textarea>    
-               <div class='preview fr'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>21.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                  </tr>
-              <tr class='2'>
-          <td>
-            <div class='limit'>
-              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='placedorder.print.hint.printing_guide'>placedorder.print.hint.printing_guide</h4>
-              <h4 style='float:left;margin:0px'>
-                <small>basket-strings</small>
-              </h4>
-              <div style='float:right;'>
-<!--                 <button class='btn btn-default'><i class="fa fa-trash"></i> Löschen</button>
-                <button class='btn btn-default'><i class="fa fa-check"></i> Geprüft</button>
- -->                <input type="checkbox" data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
               </div>
-              <pre class='well well-sm comment'>OS: [mac|windows]</pre>
-            </div>
-          </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='de'>Sie können diese Seite ausdrucken, indem Sie die Druckfunktion Ihres Browsers verwenden ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
-               <div class='preview de'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>30.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
             </td>
-                      <td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.commit.general_terms_and_privacy[de][text]' class='de' style='width:100%;height:100%'>Ja, ich bestätige die [AGB]({AGB_URL}) und die [Datenschutzerklärung]({DSE_LINK}) der Mercateo AG.</textarea>    
+                  <div class='preview de'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[de][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[de][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>21.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.commit.general_terms_and_privacy[en][text]' class='en' style='width:100%;height:100%'>Yes, I confirm the [General Terms and Conditions]({AGB_URL}) and the [data protection notice]({DSE_LINK}) of Mercateo</textarea>    
+                  <div class='preview en'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[en][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[en][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>21.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.commit.general_terms_and_privacy[fr][text]' class='fr' style='width:100%;height:100%'>Oui, j'accepte les [conditions générales de vente]({AGB_URL}) et la [déclaration de confidentialité]({DSE_LINK}) de Mercateo France SAS</textarea>    
+                  <div class='preview fr'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[fr][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[fr][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>21.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                      </tr>
+                  <tr class='2'>
+            <td>
               <div class='limit'>
-          	   <textarea class='en'>You can print out this page by using the printing function of your browser ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
-               <div class='preview en'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>30.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='fr'>Vous pouvez imprimer cette page en utilisant la fonction impression de votre navigateur ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
-               <div class='preview fr'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>30.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                  </tr>
-              <tr class='3'>
-          <td>
-            <div class='limit'>
-              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was'>load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was</h4>
-              <h4 style='float:left;margin:0px'>
-                <small>basket-strings</small>
-              </h4>
-              <div style='float:right;'>
-<!--                 <button class='btn btn-default'><i class="fa fa-trash"></i> Löschen</button>
-                <button class='btn btn-default'><i class="fa fa-check"></i> Geprüft</button>
- -->                <input type="checkbox" data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                <h4 style='overflow:hidden;text-overflow: ellipsis;' name='placedorder.print.hint.printing_guide'>placedorder.print.hint.printing_guide</h4>
+                <h4 style='float:left;margin:0px'>
+                  <small>basket-strings</small>
+                </h4>
+                <div style='float:right;'>
+                  <input type="checkbox" class='toggleCheckbox' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                </div>
+                <pre class='well well-sm comment'>OS: [mac|windows]</pre>
               </div>
-              <pre class='well well-sm comment'>-
+            </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='placedorder.print.hint.printing_guide[de][text]' class='de' style='width:100%;height:100%'>Sie können diese Seite ausdrucken, indem Sie die Druckfunktion Ihres Browsers verwenden ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+                  <div class='preview de'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[de][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[de][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>30.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='placedorder.print.hint.printing_guide[en][text]' class='en' style='width:100%;height:100%'>You can print out this page by using the printing function of your browser ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+                  <div class='preview en'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[en][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[en][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>30.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='placedorder.print.hint.printing_guide[fr][text]' class='fr' style='width:100%;height:100%'>Vous pouvez imprimer cette page en utilisant la fonction impression de votre navigateur ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+                  <div class='preview fr'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[fr][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[fr][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>30.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                      </tr>
+                  <tr class='3'>
+            <td>
+              <div class='limit'>
+                <h4 style='overflow:hidden;text-overflow: ellipsis;' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was'>load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was</h4>
+                <h4 style='float:left;margin:0px'>
+                  <small>basket-strings</small>
+                </h4>
+                <div style='float:right;'>
+                  <input type="checkbox" class='toggleCheckbox' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                </div>
+                <pre class='well well-sm comment'>-
 </pre>
-            </div>
-          </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='de'>Lieferzeit&auml;nderung! Die urspr&uuml;ngliche Lieferzeit des gespeicherten Artikels war</textarea>    
-               <div class='preview de'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>16.05.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='en'></textarea>    
-               <div class='preview en'></div>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='fr'></textarea>    
-               <div class='preview fr'></div>
-                            </div>
-            </td>
-                  </tr>
-              <tr class='4'>
-          <td>
-            <div class='limit'>
-              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.cluster_badge_description'>basket.cluster_badge_description</h4>
-              <h4 style='float:left;margin:0px'>
-                <small>basket-strings</small>
-              </h4>
-              <div style='float:right;'>
-<!--                 <button class='btn btn-default'><i class="fa fa-trash"></i> Löschen</button>
-                <button class='btn btn-default'><i class="fa fa-check"></i> Geprüft</button>
- -->                <input type="checkbox" data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
               </div>
-              <pre class='well well-sm comment'>COLOR: [weiß|schwarz]</pre>
-            </div>
-          </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='de'>Ein Cluster enthält alle Artikel, die bestimmte Anforderungen erfüllen (z. B. Kopierpapier, DIN A4, 80 g/m², {COLOR}).</textarea>    
-               <div class='preview de'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>20.03.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
             </td>
-                      <td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[de][text]' class='de' style='width:100%;height:100%'>Lieferzeit&auml;nderung! Die urspr&uuml;ngliche Lieferzeit des gespeicherten Artikels war</textarea>    
+                  <div class='preview de'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[de][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[de][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>16.05.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[en][text]' class='en' style='width:100%;height:100%'></textarea>    
+                  <div class='preview en'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[en][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[en][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>-" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[fr][text]' class='fr' style='width:100%;height:100%'></textarea>    
+                  <div class='preview fr'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[fr][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[fr][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>-" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                      </tr>
+                  <tr class='4'>
+            <td>
               <div class='limit'>
-          	   <textarea class='en'>A Cluster contains all items that fulfil certain requirements (e. g. copy paper, DIN A4, 80 g/m², 
+                <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.cluster_badge_description'>basket.cluster_badge_description</h4>
+                <h4 style='float:left;margin:0px'>
+                  <small>basket-strings</small>
+                </h4>
+                <div style='float:right;'>
+                  <input type="checkbox" class='toggleCheckbox' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                </div>
+                <pre class='well well-sm comment'>COLOR: [weiß|schwarz]</pre>
+              </div>
+            </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.cluster_badge_description[de][text]' class='de' style='width:100%;height:100%'>Ein Cluster enthält alle Artikel, die bestimmte Anforderungen erfüllen (z. B. Kopierpapier, DIN A4, 80 g/m², {COLOR}).</textarea>    
+                  <div class='preview de'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[de][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[de][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>20.03.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.cluster_badge_description[en][text]' class='en' style='width:100%;height:100%'>A Cluster contains all items that fulfil certain requirements (e. g. copy paper, DIN A4, 80 g/m², 
 {COLOR, select,
   weiß {white}
     other {black}
 }).</textarea>    
-               <div class='preview en'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>20.03.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='fr'>Un cluster contient tous les produits répondant à des besoins spécifiques (papier pour imprimante, format A4, 80g/m2, 
+                  <div class='preview en'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[en][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[en][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>20.03.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.cluster_badge_description[fr][text]' class='fr' style='width:100%;height:100%'>Un cluster contient tous les produits répondant à des besoins spécifiques (papier pour imprimante, format A4, 80g/m2, 
 {COLOR, select,
   weiß {blanc}
     other {noir}
 }).</textarea>    
-               <div class='preview fr'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>20.03.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                  </tr>
-              <tr class='5'>
-          <td>
-            <div class='limit'>
-              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.commit.general_terms_and_privacy'>basket.commit.general_terms_and_privacy</h4>
-              <h4 style='float:left;margin:0px'>
-                <small>basket-strings</small>
-              </h4>
-              <div style='float:right;'>
-<!--                 <button class='btn btn-default'><i class="fa fa-trash"></i> Löschen</button>
-                <button class='btn btn-default'><i class="fa fa-check"></i> Geprüft</button>
- -->                <input type="checkbox" data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
-              </div>
-              <pre class='well well-sm comment'>AGB_URL
+                  <div class='preview fr'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[fr][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[fr][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>20.03.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                      </tr>
+                  <tr class='5'>
+            <td>
+              <div class='limit'>
+                <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.commit.general_terms_and_privacy'>basket.commit.general_terms_and_privacy</h4>
+                <h4 style='float:left;margin:0px'>
+                  <small>basket-strings</small>
+                </h4>
+                <div style='float:right;'>
+                  <input type="checkbox" class='toggleCheckbox' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                </div>
+                <pre class='well well-sm comment'>AGB_URL
 DSE_LINK
 DSE_LINK
 DSE_LINK
 DSE_LINK
 DSE_LINK</pre>
-            </div>
-          </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='de'>Ja, ich bestätige die [AGB]({AGB_URL}) und die [Datenschutzerklärung]({DSE_LINK}) der Mercateo AG.</textarea>    
-               <div class='preview de'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>21.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='en'>Yes, I confirm the [General Terms and Conditions]({AGB_URL}) and the [data protection notice]({DSE_LINK}) of Mercateo</textarea>    
-               <div class='preview en'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>21.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='fr'>Oui, j'accepte les [conditions générales de vente]({AGB_URL}) et la [déclaration de confidentialité]({DSE_LINK}) de Mercateo France SAS</textarea>    
-               <div class='preview fr'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>21.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                  </tr>
-              <tr class='6'>
-          <td>
-            <div class='limit'>
-              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='placedorder.print.hint.printing_guide'>placedorder.print.hint.printing_guide</h4>
-              <h4 style='float:left;margin:0px'>
-                <small>basket-strings</small>
-              </h4>
-              <div style='float:right;'>
-<!--                 <button class='btn btn-default'><i class="fa fa-trash"></i> Löschen</button>
-                <button class='btn btn-default'><i class="fa fa-check"></i> Geprüft</button>
- -->                <input type="checkbox" data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
               </div>
-              <pre class='well well-sm comment'>OS: [mac|windows]</pre>
-            </div>
-          </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='de'>Sie können diese Seite ausdrucken, indem Sie die Druckfunktion Ihres Browsers verwenden ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
-               <div class='preview de'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>30.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
             </td>
-                      <td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.commit.general_terms_and_privacy[de][text]' class='de' style='width:100%;height:100%'>Ja, ich bestätige die [AGB]({AGB_URL}) und die [Datenschutzerklärung]({DSE_LINK}) der Mercateo AG.</textarea>    
+                  <div class='preview de'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[de][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[de][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>21.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.commit.general_terms_and_privacy[en][text]' class='en' style='width:100%;height:100%'>Yes, I confirm the [General Terms and Conditions]({AGB_URL}) and the [data protection notice]({DSE_LINK}) of Mercateo</textarea>    
+                  <div class='preview en'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[en][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[en][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>21.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.commit.general_terms_and_privacy[fr][text]' class='fr' style='width:100%;height:100%'>Oui, j'accepte les [conditions générales de vente]({AGB_URL}) et la [déclaration de confidentialité]({DSE_LINK}) de Mercateo France SAS</textarea>    
+                  <div class='preview fr'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[fr][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[fr][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>21.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                      </tr>
+                  <tr class='6'>
+            <td>
               <div class='limit'>
-          	   <textarea class='en'>You can print out this page by using the printing function of your browser ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
-               <div class='preview en'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>30.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='fr'>Vous pouvez imprimer cette page en utilisant la fonction impression de votre navigateur ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
-               <div class='preview fr'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>30.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                  </tr>
-              <tr class='7'>
-          <td>
-            <div class='limit'>
-              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was'>load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was</h4>
-              <h4 style='float:left;margin:0px'>
-                <small>basket-strings</small>
-              </h4>
-              <div style='float:right;'>
-<!--                 <button class='btn btn-default'><i class="fa fa-trash"></i> Löschen</button>
-                <button class='btn btn-default'><i class="fa fa-check"></i> Geprüft</button>
- -->                <input type="checkbox" data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                <h4 style='overflow:hidden;text-overflow: ellipsis;' name='placedorder.print.hint.printing_guide'>placedorder.print.hint.printing_guide</h4>
+                <h4 style='float:left;margin:0px'>
+                  <small>basket-strings</small>
+                </h4>
+                <div style='float:right;'>
+                  <input type="checkbox" class='toggleCheckbox' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                </div>
+                <pre class='well well-sm comment'>OS: [mac|windows]</pre>
               </div>
-              <pre class='well well-sm comment'>-
+            </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='placedorder.print.hint.printing_guide[de][text]' class='de' style='width:100%;height:100%'>Sie können diese Seite ausdrucken, indem Sie die Druckfunktion Ihres Browsers verwenden ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+                  <div class='preview de'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[de][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[de][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>30.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='placedorder.print.hint.printing_guide[en][text]' class='en' style='width:100%;height:100%'>You can print out this page by using the printing function of your browser ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+                  <div class='preview en'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[en][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[en][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>30.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='placedorder.print.hint.printing_guide[fr][text]' class='fr' style='width:100%;height:100%'>Vous pouvez imprimer cette page en utilisant la fonction impression de votre navigateur ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+                  <div class='preview fr'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[fr][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[fr][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>30.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                      </tr>
+                  <tr class='7'>
+            <td>
+              <div class='limit'>
+                <h4 style='overflow:hidden;text-overflow: ellipsis;' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was'>load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was</h4>
+                <h4 style='float:left;margin:0px'>
+                  <small>basket-strings</small>
+                </h4>
+                <div style='float:right;'>
+                  <input type="checkbox" class='toggleCheckbox' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                </div>
+                <pre class='well well-sm comment'>-
 </pre>
-            </div>
-          </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='de'>Lieferzeit&auml;nderung! Die urspr&uuml;ngliche Lieferzeit des gespeicherten Artikels war</textarea>    
-               <div class='preview de'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>16.05.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='en'></textarea>    
-               <div class='preview en'></div>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='fr'></textarea>    
-               <div class='preview fr'></div>
-                            </div>
-            </td>
-                  </tr>
-              <tr class='8'>
-          <td>
-            <div class='limit'>
-              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.cluster_badge_description'>basket.cluster_badge_description</h4>
-              <h4 style='float:left;margin:0px'>
-                <small>basket-strings</small>
-              </h4>
-              <div style='float:right;'>
-<!--                 <button class='btn btn-default'><i class="fa fa-trash"></i> Löschen</button>
-                <button class='btn btn-default'><i class="fa fa-check"></i> Geprüft</button>
- -->                <input type="checkbox" data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
               </div>
-              <pre class='well well-sm comment'>COLOR: [weiß|schwarz]</pre>
-            </div>
-          </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='de'>Ein Cluster enthält alle Artikel, die bestimmte Anforderungen erfüllen (z. B. Kopierpapier, DIN A4, 80 g/m², {COLOR}).</textarea>    
-               <div class='preview de'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>20.03.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
             </td>
-                      <td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[de][text]' class='de' style='width:100%;height:100%'>Lieferzeit&auml;nderung! Die urspr&uuml;ngliche Lieferzeit des gespeicherten Artikels war</textarea>    
+                  <div class='preview de'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[de][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[de][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>16.05.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[en][text]' class='en' style='width:100%;height:100%'></textarea>    
+                  <div class='preview en'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[en][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[en][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>-" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[fr][text]' class='fr' style='width:100%;height:100%'></textarea>    
+                  <div class='preview fr'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[fr][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[fr][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>-" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                      </tr>
+                  <tr class='8'>
+            <td>
               <div class='limit'>
-          	   <textarea class='en'>A Cluster contains all items that fulfil certain requirements (e. g. copy paper, DIN A4, 80 g/m², 
+                <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.cluster_badge_description'>basket.cluster_badge_description</h4>
+                <h4 style='float:left;margin:0px'>
+                  <small>basket-strings</small>
+                </h4>
+                <div style='float:right;'>
+                  <input type="checkbox" class='toggleCheckbox' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                </div>
+                <pre class='well well-sm comment'>COLOR: [weiß|schwarz]</pre>
+              </div>
+            </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.cluster_badge_description[de][text]' class='de' style='width:100%;height:100%'>Ein Cluster enthält alle Artikel, die bestimmte Anforderungen erfüllen (z. B. Kopierpapier, DIN A4, 80 g/m², {COLOR}).</textarea>    
+                  <div class='preview de'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[de][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[de][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>20.03.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.cluster_badge_description[en][text]' class='en' style='width:100%;height:100%'>A Cluster contains all items that fulfil certain requirements (e. g. copy paper, DIN A4, 80 g/m², 
 {COLOR, select,
   weiß {white}
     other {black}
 }).</textarea>    
-               <div class='preview en'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>20.03.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='fr'>Un cluster contient tous les produits répondant à des besoins spécifiques (papier pour imprimante, format A4, 80g/m2, 
+                  <div class='preview en'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[en][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[en][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>20.03.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.cluster_badge_description[fr][text]' class='fr' style='width:100%;height:100%'>Un cluster contient tous les produits répondant à des besoins spécifiques (papier pour imprimante, format A4, 80g/m2, 
 {COLOR, select,
   weiß {blanc}
     other {noir}
 }).</textarea>    
-               <div class='preview fr'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>20.03.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                  </tr>
-              <tr class='9'>
-          <td>
-            <div class='limit'>
-              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.commit.general_terms_and_privacy'>basket.commit.general_terms_and_privacy</h4>
-              <h4 style='float:left;margin:0px'>
-                <small>basket-strings</small>
-              </h4>
-              <div style='float:right;'>
-<!--                 <button class='btn btn-default'><i class="fa fa-trash"></i> Löschen</button>
-                <button class='btn btn-default'><i class="fa fa-check"></i> Geprüft</button>
- -->                <input type="checkbox" data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
-              </div>
-              <pre class='well well-sm comment'>AGB_URL
+                  <div class='preview fr'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[fr][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[fr][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>20.03.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                      </tr>
+                  <tr class='9'>
+            <td>
+              <div class='limit'>
+                <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.commit.general_terms_and_privacy'>basket.commit.general_terms_and_privacy</h4>
+                <h4 style='float:left;margin:0px'>
+                  <small>basket-strings</small>
+                </h4>
+                <div style='float:right;'>
+                  <input type="checkbox" class='toggleCheckbox' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                </div>
+                <pre class='well well-sm comment'>AGB_URL
 DSE_LINK
 DSE_LINK
 DSE_LINK
 DSE_LINK
 DSE_LINK</pre>
-            </div>
-          </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='de'>Ja, ich bestätige die [AGB]({AGB_URL}) und die [Datenschutzerklärung]({DSE_LINK}) der Mercateo AG.</textarea>    
-               <div class='preview de'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>21.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='en'>Yes, I confirm the [General Terms and Conditions]({AGB_URL}) and the [data protection notice]({DSE_LINK}) of Mercateo</textarea>    
-               <div class='preview en'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>21.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='fr'>Oui, j'accepte les [conditions générales de vente]({AGB_URL}) et la [déclaration de confidentialité]({DSE_LINK}) de Mercateo France SAS</textarea>    
-               <div class='preview fr'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>21.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                  </tr>
-              <tr class='10'>
-          <td>
-            <div class='limit'>
-              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='placedorder.print.hint.printing_guide'>placedorder.print.hint.printing_guide</h4>
-              <h4 style='float:left;margin:0px'>
-                <small>basket-strings</small>
-              </h4>
-              <div style='float:right;'>
-<!--                 <button class='btn btn-default'><i class="fa fa-trash"></i> Löschen</button>
-                <button class='btn btn-default'><i class="fa fa-check"></i> Geprüft</button>
- -->                <input type="checkbox" data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
               </div>
-              <pre class='well well-sm comment'>OS: [mac|windows]</pre>
-            </div>
-          </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='de'>Sie können diese Seite ausdrucken, indem Sie die Druckfunktion Ihres Browsers verwenden ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
-               <div class='preview de'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>30.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
             </td>
-                      <td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.commit.general_terms_and_privacy[de][text]' class='de' style='width:100%;height:100%'>Ja, ich bestätige die [AGB]({AGB_URL}) und die [Datenschutzerklärung]({DSE_LINK}) der Mercateo AG.</textarea>    
+                  <div class='preview de'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[de][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[de][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>21.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.commit.general_terms_and_privacy[en][text]' class='en' style='width:100%;height:100%'>Yes, I confirm the [General Terms and Conditions]({AGB_URL}) and the [data protection notice]({DSE_LINK}) of Mercateo</textarea>    
+                  <div class='preview en'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[en][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[en][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>21.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.commit.general_terms_and_privacy[fr][text]' class='fr' style='width:100%;height:100%'>Oui, j'accepte les [conditions générales de vente]({AGB_URL}) et la [déclaration de confidentialité]({DSE_LINK}) de Mercateo France SAS</textarea>    
+                  <div class='preview fr'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[fr][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[fr][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>21.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                      </tr>
+                  <tr class='10'>
+            <td>
               <div class='limit'>
-          	   <textarea class='en'>You can print out this page by using the printing function of your browser ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
-               <div class='preview en'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>30.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='fr'>Vous pouvez imprimer cette page en utilisant la fonction impression de votre navigateur ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
-               <div class='preview fr'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>30.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                  </tr>
-              <tr class='11'>
-          <td>
-            <div class='limit'>
-              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was'>load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was</h4>
-              <h4 style='float:left;margin:0px'>
-                <small>basket-strings</small>
-              </h4>
-              <div style='float:right;'>
-<!--                 <button class='btn btn-default'><i class="fa fa-trash"></i> Löschen</button>
-                <button class='btn btn-default'><i class="fa fa-check"></i> Geprüft</button>
- -->                <input type="checkbox" data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                <h4 style='overflow:hidden;text-overflow: ellipsis;' name='placedorder.print.hint.printing_guide'>placedorder.print.hint.printing_guide</h4>
+                <h4 style='float:left;margin:0px'>
+                  <small>basket-strings</small>
+                </h4>
+                <div style='float:right;'>
+                  <input type="checkbox" class='toggleCheckbox' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                </div>
+                <pre class='well well-sm comment'>OS: [mac|windows]</pre>
               </div>
-              <pre class='well well-sm comment'>-
+            </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='placedorder.print.hint.printing_guide[de][text]' class='de' style='width:100%;height:100%'>Sie können diese Seite ausdrucken, indem Sie die Druckfunktion Ihres Browsers verwenden ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+                  <div class='preview de'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[de][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[de][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>30.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='placedorder.print.hint.printing_guide[en][text]' class='en' style='width:100%;height:100%'>You can print out this page by using the printing function of your browser ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+                  <div class='preview en'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[en][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[en][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>30.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='placedorder.print.hint.printing_guide[fr][text]' class='fr' style='width:100%;height:100%'>Vous pouvez imprimer cette page en utilisant la fonction impression de votre navigateur ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+                  <div class='preview fr'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[fr][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[fr][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>30.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                      </tr>
+                  <tr class='11'>
+            <td>
+              <div class='limit'>
+                <h4 style='overflow:hidden;text-overflow: ellipsis;' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was'>load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was</h4>
+                <h4 style='float:left;margin:0px'>
+                  <small>basket-strings</small>
+                </h4>
+                <div style='float:right;'>
+                  <input type="checkbox" class='toggleCheckbox' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                </div>
+                <pre class='well well-sm comment'>-
 </pre>
-            </div>
-          </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='de'>Lieferzeit&auml;nderung! Die urspr&uuml;ngliche Lieferzeit des gespeicherten Artikels war</textarea>    
-               <div class='preview de'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>16.05.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='en'></textarea>    
-               <div class='preview en'></div>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='fr'></textarea>    
-               <div class='preview fr'></div>
-                            </div>
-            </td>
-                  </tr>
-              <tr class='12'>
-          <td>
-            <div class='limit'>
-              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.cluster_badge_description'>basket.cluster_badge_description</h4>
-              <h4 style='float:left;margin:0px'>
-                <small>basket-strings</small>
-              </h4>
-              <div style='float:right;'>
-<!--                 <button class='btn btn-default'><i class="fa fa-trash"></i> Löschen</button>
-                <button class='btn btn-default'><i class="fa fa-check"></i> Geprüft</button>
- -->                <input type="checkbox" data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
               </div>
-              <pre class='well well-sm comment'>COLOR: [weiß|schwarz]</pre>
-            </div>
-          </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='de'>Ein Cluster enthält alle Artikel, die bestimmte Anforderungen erfüllen (z. B. Kopierpapier, DIN A4, 80 g/m², {COLOR}).</textarea>    
-               <div class='preview de'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>20.03.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
             </td>
-                      <td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[de][text]' class='de' style='width:100%;height:100%'>Lieferzeit&auml;nderung! Die urspr&uuml;ngliche Lieferzeit des gespeicherten Artikels war</textarea>    
+                  <div class='preview de'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[de][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[de][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>16.05.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[en][text]' class='en' style='width:100%;height:100%'></textarea>    
+                  <div class='preview en'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[en][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[en][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>-" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[fr][text]' class='fr' style='width:100%;height:100%'></textarea>    
+                  <div class='preview fr'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[fr][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[fr][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>-" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                      </tr>
+                  <tr class='12'>
+            <td>
               <div class='limit'>
-          	   <textarea class='en'>A Cluster contains all items that fulfil certain requirements (e. g. copy paper, DIN A4, 80 g/m², 
+                <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.cluster_badge_description'>basket.cluster_badge_description</h4>
+                <h4 style='float:left;margin:0px'>
+                  <small>basket-strings</small>
+                </h4>
+                <div style='float:right;'>
+                  <input type="checkbox" class='toggleCheckbox' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                </div>
+                <pre class='well well-sm comment'>COLOR: [weiß|schwarz]</pre>
+              </div>
+            </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.cluster_badge_description[de][text]' class='de' style='width:100%;height:100%'>Ein Cluster enthält alle Artikel, die bestimmte Anforderungen erfüllen (z. B. Kopierpapier, DIN A4, 80 g/m², {COLOR}).</textarea>    
+                  <div class='preview de'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[de][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[de][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>20.03.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.cluster_badge_description[en][text]' class='en' style='width:100%;height:100%'>A Cluster contains all items that fulfil certain requirements (e. g. copy paper, DIN A4, 80 g/m², 
 {COLOR, select,
   weiß {white}
     other {black}
 }).</textarea>    
-               <div class='preview en'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>20.03.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='fr'>Un cluster contient tous les produits répondant à des besoins spécifiques (papier pour imprimante, format A4, 80g/m2, 
+                  <div class='preview en'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[en][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[en][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>20.03.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.cluster_badge_description[fr][text]' class='fr' style='width:100%;height:100%'>Un cluster contient tous les produits répondant à des besoins spécifiques (papier pour imprimante, format A4, 80g/m2, 
 {COLOR, select,
   weiß {blanc}
     other {noir}
 }).</textarea>    
-               <div class='preview fr'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>20.03.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                  </tr>
-              <tr class='13'>
-          <td>
-            <div class='limit'>
-              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.commit.general_terms_and_privacy'>basket.commit.general_terms_and_privacy</h4>
-              <h4 style='float:left;margin:0px'>
-                <small>basket-strings</small>
-              </h4>
-              <div style='float:right;'>
-<!--                 <button class='btn btn-default'><i class="fa fa-trash"></i> Löschen</button>
-                <button class='btn btn-default'><i class="fa fa-check"></i> Geprüft</button>
- -->                <input type="checkbox" data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
-              </div>
-              <pre class='well well-sm comment'>AGB_URL
+                  <div class='preview fr'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[fr][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.cluster_badge_description[fr][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>20.03.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                      </tr>
+                  <tr class='13'>
+            <td>
+              <div class='limit'>
+                <h4 style='overflow:hidden;text-overflow: ellipsis;' name='basket.commit.general_terms_and_privacy'>basket.commit.general_terms_and_privacy</h4>
+                <h4 style='float:left;margin:0px'>
+                  <small>basket-strings</small>
+                </h4>
+                <div style='float:right;'>
+                  <input type="checkbox" class='toggleCheckbox' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                </div>
+                <pre class='well well-sm comment'>AGB_URL
 DSE_LINK
 DSE_LINK
 DSE_LINK
 DSE_LINK
 DSE_LINK</pre>
-            </div>
-          </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='de'>Ja, ich bestätige die [AGB]({AGB_URL}) und die [Datenschutzerklärung]({DSE_LINK}) der Mercateo AG.</textarea>    
-               <div class='preview de'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>21.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='en'>Yes, I confirm the [General Terms and Conditions]({AGB_URL}) and the [data protection notice]({DSE_LINK}) of Mercateo</textarea>    
-               <div class='preview en'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>21.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='fr'>Oui, j'accepte les [conditions générales de vente]({AGB_URL}) et la [déclaration de confidentialité]({DSE_LINK}) de Mercateo France SAS</textarea>    
-               <div class='preview fr'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>21.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                  </tr>
-              <tr class='14'>
-          <td>
-            <div class='limit'>
-              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='placedorder.print.hint.printing_guide'>placedorder.print.hint.printing_guide</h4>
-              <h4 style='float:left;margin:0px'>
-                <small>basket-strings</small>
-              </h4>
-              <div style='float:right;'>
-<!--                 <button class='btn btn-default'><i class="fa fa-trash"></i> Löschen</button>
-                <button class='btn btn-default'><i class="fa fa-check"></i> Geprüft</button>
- -->                <input type="checkbox" data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
               </div>
-              <pre class='well well-sm comment'>OS: [mac|windows]</pre>
-            </div>
-          </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='de'>Sie können diese Seite ausdrucken, indem Sie die Druckfunktion Ihres Browsers verwenden ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
-               <div class='preview de'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>30.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
             </td>
-                      <td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.commit.general_terms_and_privacy[de][text]' class='de' style='width:100%;height:100%'>Ja, ich bestätige die [AGB]({AGB_URL}) und die [Datenschutzerklärung]({DSE_LINK}) der Mercateo AG.</textarea>    
+                  <div class='preview de'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[de][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[de][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>21.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.commit.general_terms_and_privacy[en][text]' class='en' style='width:100%;height:100%'>Yes, I confirm the [General Terms and Conditions]({AGB_URL}) and the [data protection notice]({DSE_LINK}) of Mercateo</textarea>    
+                  <div class='preview en'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[en][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[en][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>21.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='basket.commit.general_terms_and_privacy[fr][text]' class='fr' style='width:100%;height:100%'>Oui, j'accepte les [conditions générales de vente]({AGB_URL}) et la [déclaration de confidentialité]({DSE_LINK}) de Mercateo France SAS</textarea>    
+                  <div class='preview fr'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[fr][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='basket.commit.general_terms_and_privacy[fr][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>21.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                      </tr>
+                  <tr class='14'>
+            <td>
               <div class='limit'>
-          	   <textarea class='en'>You can print out this page by using the printing function of your browser ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
-               <div class='preview en'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>30.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='fr'>Vous pouvez imprimer cette page en utilisant la fonction impression de votre navigateur ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
-               <div class='preview fr'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>30.04.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
-            </td>
-                  </tr>
-              <tr class='15'>
-          <td>
-            <div class='limit'>
-              <h4 style='overflow:hidden;text-overflow: ellipsis;' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was'>load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was</h4>
-              <h4 style='float:left;margin:0px'>
-                <small>basket-strings</small>
-              </h4>
-              <div style='float:right;'>
-<!--                 <button class='btn btn-default'><i class="fa fa-trash"></i> Löschen</button>
-                <button class='btn btn-default'><i class="fa fa-check"></i> Geprüft</button>
- -->                <input type="checkbox" data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                <h4 style='overflow:hidden;text-overflow: ellipsis;' name='placedorder.print.hint.printing_guide'>placedorder.print.hint.printing_guide</h4>
+                <h4 style='float:left;margin:0px'>
+                  <small>basket-strings</small>
+                </h4>
+                <div style='float:right;'>
+                  <input type="checkbox" class='toggleCheckbox' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                </div>
+                <pre class='well well-sm comment'>OS: [mac|windows]</pre>
               </div>
-              <pre class='well well-sm comment'>-
+            </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='placedorder.print.hint.printing_guide[de][text]' class='de' style='width:100%;height:100%'>Sie können diese Seite ausdrucken, indem Sie die Druckfunktion Ihres Browsers verwenden ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+                  <div class='preview de'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[de][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[de][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>30.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='placedorder.print.hint.printing_guide[en][text]' class='en' style='width:100%;height:100%'>You can print out this page by using the printing function of your browser ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+                  <div class='preview en'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[en][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[en][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>30.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='placedorder.print.hint.printing_guide[fr][text]' class='fr' style='width:100%;height:100%'>Vous pouvez imprimer cette page en utilisant la fonction impression de votre navigateur ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+                  <div class='preview fr'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[fr][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='placedorder.print.hint.printing_guide[fr][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>30.04.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                      </tr>
+                  <tr class='15'>
+            <td>
+              <div class='limit'>
+                <h4 style='overflow:hidden;text-overflow: ellipsis;' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was'>load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was</h4>
+                <h4 style='float:left;margin:0px'>
+                  <small>basket-strings</small>
+                </h4>
+                <div style='float:right;'>
+                  <input type="checkbox" class='toggleCheckbox' data-on-class="btn-primary" data-off-class="btn-primary" data-on-label='Test' data-off-label='Code'>
+                </div>
+                <pre class='well well-sm comment'>-
 </pre>
-            </div>
-          </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='de'>Lieferzeit&auml;nderung! Die urspr&uuml;ngliche Lieferzeit des gespeicherten Artikels war</textarea>    
-               <div class='preview de'></div>
-                                <i class="fa fa-info-circle" title="Robert Bastian<br/>16.05.13" data-toggle="tooltip" data-placement="right"  style='position:absolute; bottom:10px; left: 8px;z-index:100;color:gray'></i>
-                            </div>
+              </div>
             </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='en'></textarea>    
-               <div class='preview en'></div>
-                            </div>
-            </td>
-                      <td>
-              <div class='limit'>
-          	   <textarea class='fr'></textarea>    
-               <div class='preview fr'></div>
-                            </div>
-            </td>
-                  </tr>
-          </tbody></table>
-  </div>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[de][text]' class='de' style='width:100%;height:100%'>Lieferzeit&auml;nderung! Die urspr&uuml;ngliche Lieferzeit des gespeicherten Artikels war</textarea>    
+                  <div class='preview de'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[de][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[de][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>16.05.13<br/>Robert Bastian" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[en][text]' class='en' style='width:100%;height:100%'></textarea>    
+                  <div class='preview en'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[en][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[en][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>-" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                          <td>
+                <div class='limit'>
+            	    <textarea name ='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[fr][text]' class='fr' style='width:100%;height:100%'></textarea>    
+                  <div class='preview fr'></div>
+                  <div class='infoButtons'>
+                    <div class='btn-group' data-toggle='buttons'>
+                      <label class='btn btn-sm btn-default btn-active-success' data-toggle="tooltip" title="Geprüft" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[fr][confirm]' autocomplete='off'> 
+                        <i class='fa fa-check'></i>
+                      </label> 
+                    </div>
+                    <br>
+                    <div class='btn-group' data-toggle='buttons'>                   
+                      <label class='btn btn-sm btn-default btn-active-danger' data-toggle="tooltip" title="Entfernen" data-placement="right">
+                        <input type='checkbox' name='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[fr][delete]' autocomplete='off'> 
+                        <i class='fa fa-trash'></i>
+                      </label>  
+                    </div>
+                    <br>
+                    <div class='btn-group'>                   
+                      <label class='btn btn-sm btn-default' data-toggle="tooltip" data-container="body" title="Letze Änderung:<br/>-" data-html="true" data-placement="right">
+                        <i class='fa fa-info-circle'></i>
+                      </label>  
+                    </div>
+                  </div>
+               </div>
+              </td>
+                      </tr>
+              </tbody></table>
+    </div>
+  </form>
 	<script type="text/javascript">
     var locales = ['de','en','fr'];
     var editorInstances;
@@ -792,35 +1766,31 @@ DSE_LINK</pre>
         });
       })
 
-      $(function () {
-        $('[data-toggle="tooltip"]').tooltip({html: true,container: "body"})
-      })
-      $(':checkbox').checkboxpicker();
-      $(':checkbox').focus(function(){
+      $('[data-toggle="tooltip"]').tooltip()
+
+      $('.toggleCheckbox, #toggleAll').checkboxpicker();
+      $('.toggleCheckbox, #toggleAll').focus(function(){
         $(this).blur();
       })
 
-      $("[type=checkbox]").not('#toggleAll').change(function(){
+      $('.toggleCheckbox').change(function(){
         var row = $(this).closest('tr')
-        var editors = row.find('.CodeMirror')
+        var editors = row.find('.CodeMirror, .infoButtons')
         var previews = row.find('.preview')
-
-        for (var i = 0; i < 3; i++){
-          if (this.checked){
-            renderPreview(editorInstances[parseInt(row.attr('class'))*3+i].getValue(),previews[i],row.find('.comment').html(), locales[i]);
-            $(editors[i]).hide();
-            $(previews[i]).show();
-            previewCount++;
-          }
-          else {
-            $(editors[i]).show();
-            $(previews[i]).hide();
-          }
+        if (this.checked){
+          for (var i = 0; i < 3; i++)
+          renderPreview(editorInstances[parseInt(row.attr('class'))*3+i].getValue(),previews[i],row.find('.comment').html(), locales[i]);
+          $(editors).hide();
+          $(previews).show();
+        }
+        else {
+          $(editors).show();
+          $(previews).hide();
         }
       })
 
       $('#toggleAll').change(function(){
-        $("[type=checkbox]").not("#toggleAll").prop('checked',this.checked)
+        $(".toggleCheckbox").prop('checked',this.checked)
       })
 
       var renderPreview = function(from,to,comment, locale){
@@ -857,6 +1827,12 @@ DSE_LINK</pre>
       update();
       for (var i = 0; i < editorInstances.length; i++)
         editorInstances[i].on("blur",update);
+
+      $("form").submit(function() {
+        for (var i =0; i < editorInstances.length; i++)
+          editorInstances[i].toTextArea()
+        return true;
+     });
 
     })
   </script>    
