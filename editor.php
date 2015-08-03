@@ -1,5 +1,10 @@
 <?php 
   $locales = ['de','en','fr'];
+  $progress = [
+    'de' => [50,50],
+    'en' => [41,50],
+    'fr' => [48,50]
+  ];
   $entries = [
     [
       "id" => "basket.cluster_badge_description",
@@ -12,12 +17,12 @@
           "lastChanged" => "20.03.13"
         ],
         "en" => [
-          "text" => "A Cluster contains all items that fulfil certain requirements (e. g. copy paper, DIN A4, 80 g/m², \n{COLOR, select,\n  weiß {white}\n    other {black}\n}).",
+          "text" => "A Cluster contains all items that fulfil certain requirements (e. g. copy paper, DIN A4, 80 g/m², \n{COLOR, select,\n  weiß {white}\n  other {black}\n}).",
           "lastAuthor" => "Robert Bastian",
           "lastChanged" => "20.03.13"
         ],
         "fr" => [
-          "text" => "Un cluster contient tous les produits répondant à des besoins spécifiques (papier pour imprimante, format A4, 80g/m2, \n{COLOR, select,\n  weiß {blanc}\n    other {noir}\n}).",
+          "text" => "Un cluster contient tous les produits répondant à des besoins spécifiques (papier pour imprimante, format A4, 80g/m2, \n{COLOR, select,\n  weiß {blanc}\n  other {noir}\n}).",
           "lastAuthor" => "Robert Bastian",
           "lastChanged" => "20.03.13"
         ]
@@ -60,11 +65,7 @@
           "lastAuthor" => "Robert Bastian",
           "lastChanged" => "30.04.13"
         ],
-        "fr" => [
-          "text" => "Vous pouvez imprimer cette page en utilisant la fonction impression de votre navigateur ({OS, select, mac {CMD} other {STRG}}+P).",
-          "lastAuthor" => "Robert Bastian",
-          "lastChanged" => "30.04.13"
-        ]
+        "fr" => null
       ]
     ],
     [
@@ -77,22 +78,11 @@
           "lastAuthor" => "Robert Bastian",
           "lastChanged" => "16.05.13"
         ],
-        "en" => [
-          "text" => null,
-          "lastAuthor" => null,
-          "lastChanged" => null
-        ],
-        "fr" => [
-          "text" => null,
-          "lastAuthor" => null,
-          "lastChanged" => null
-        ]
+        "en" => null,
+        "fr" => null
       ]
     ]
-
   ];
-  for ($i = 0; $i < 2; $i++)
-    $entries = array_merge($entries,$entries);
   $currentPage = 10;
   $totalPages = 17;
 ?>
@@ -214,8 +204,10 @@
         <th class='text-center' style='border-bottom:none;'>
           <div style='float:left;'>
             <input type='submit' class='btn btn-default' value='Speichern'></input>
+            <button class='btn btn-default' id='close'>Schließen</button>
           </div>
           <div style='float:right;'>
+            <button class='btn btn-default' id='showAll'>Alle einblenden</button>
             <div class="btn-group" id='toggleAll'> 
               <a class="btn btn-default nohover code active">Code</a>
               <a class="btn btn-default nohover test">Test</a>
@@ -228,7 +220,7 @@
               <?=strtoupper($locale)?> 
             </span>
             <div class="progress" style='margin:7px;'>
-              <div class="progress-bar progress-bar-warning <?=$locale?>" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:0%; min-width: 2em;">
+              <div class="progress-bar progress-bar-warning <?=$locale?>" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:<?=$progress[$locale][0]/$progress[$locale][1]*100?>%; min-width: 2em;">
             </div>
           </th>
         <? endforeach; ?>
@@ -245,19 +237,19 @@
                 <small><?=$current['group']?></small>
               </h4>
               <div style='float:right;'>
+                <button class='btn btn-xs btn-default hideThis'>Ausblenden</button>
                 <div class="btn-group btn-toggle"> 
                   <a class="btn btn-xs btn-default nohover code active">Code</a>
                   <a class="btn btn-xs btn-default nohover test">Test</a>
                 </div>
               </div>
-              <button class='btn hideThis'>Ausblenden</button>
               <pre class='well well-sm comment'><?=($current["comment"] == null || $current["comment"] == "") ? "-\n" : $current["comment"]?></pre>
             </div>
           </td>
           <? $col = 0; foreach($current['langs'] as $locale => $content):?>
-            <td data-editor='<?= $row*count($locales)+$col ?>'>
+            <td data-editor='<?= $row*count($locales)+$col ?>' data-locale='<?=$locale?>'>
               <div class='limit editor'>
-          	    <textarea name ='<?=$current['id']?>[<?=$locale?>][text]' class='<?=$locale?>' style='width:100%;height:100%'><?=$content['text'] ? $content['text'] : ""?></textarea>    
+          	    <textarea name ='<?=$current['id']?>[<?=$locale?>]' class='<?=$locale?>' style='width:100%;height:100%'><?=$content ? $content['text'] : ""?></textarea>    
                 <div class='actionButtons'>
                   <div class='btn-group' data-toggle='buttons'>
                     <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig" data-placement="right">
@@ -265,10 +257,24 @@
                     </button> 
                   </div>
                   <br>
+                  <div class='btn-group' data-toggle='buttons'>
+                    <button class='btn btn-sm btn-default insertPlural <?= ($locale == 'hu') ? 'disabled' : ''?>' data-toggle="tooltip" title="Plural Syntax einfügen" data-placement="right">
+                      P
+                    </button> 
+                  </div>
+                  <br>
+                  <div class='btn-group' data-toggle='buttons'>
+                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen" data-placement="right">
+                      S
+                    </button> 
+                  </div>
+                  <br>
+                  <? /* Entfernen und Geprüft Checkboxes werden nicht benötigt
                   <div class='btn-group' data-toggle='buttons'>    
-                    <button class='btn btn-sm btn-default remove' data-toggle="tooltip" title="Löschen" data-placement="right">
+                    <label class='btn btn-sm btn-default' data-toggle="tooltip" title="Löschen" data-placement="right">
+                      <input type='checkbox' name='<?=$current['id']?>[<?=$locale?>][remove]' autocomplete='off'> 
                       <i class='fa fa-trash'></i>
-                    </button>
+                    </label>
                   </div>
                   <br>
                  <? if ($content['lastAuthor'] != null) :?>
@@ -279,7 +285,7 @@
                       </label> 
                     </div>
                     <br>
-                  <? endif;?>
+                  <? endif; */ ?>
                   <? if ($locale != 'de'): ?>
                     <div class='btn-group' data-toggle='buttons'>
                       <button class='btn btn-sm btn-default copyGerman' data-toggle="tooltip" title="Deutsch&nbsp;übernehmen" data-placement="right">
@@ -290,7 +296,9 @@
                   <? endif; ?>
                 </div>
                 <div style='position:absolute; left:0px; bottom: 0px; z-index:5; color: #999;'>
-                  <? if ($content['lastAuthor'] != null) :?>
+                  <i class='fa fa-edit' style='padding:10px 8px; display:none' data-toggle="tooltip" title="Geändert" data-placement="top"></i>
+                  <br>
+                  <? if ($content != null) :?>
                     <i class='fa fa-info-circle' style='padding:10px 8px;' data-toggle="tooltip" title="Letze Änderung am <?=$content['lastChanged']?> von <?=$content['lastAuthor']?>" data-placement="top"></i>
                   <? endif;?>
                 </div>
@@ -329,7 +337,6 @@
     var changed = {}
     $(function(){
 
-      var editorIndex = 0;
       editorInstances = $('textarea').map(function(index,ta){
         var ta = CodeMirror.fromTextArea(ta, {
           mode: "messageformat.js",
@@ -349,13 +356,19 @@
 
         });
         ta.on('changes',function(ta){
-          if (ta.getValue() == ta.getTextArea().value)
+          var td = $(ta.getTextArea()).closest('td');
+          var id = td.data('editor');
+          if (ta.getValue() == ta.getTextArea().value){
             ta.markClean();
-          changed[editorIndex] = !ta.isClean()
+            td.find('.fa-edit').hide();
+          }
+          else {
+            td.find('.fa-edit').show();
+          }
+          changed[id] = !ta.isClean()
           $('[type=submit]').removeClass('btn-default').removeClass('btn-warning')
           $('[type=submit]').addClass(needsSave() ? 'btn-warning' : 'btn-default')
         })
-        editorIndex++;
         return ta;
       });
 
@@ -373,7 +386,7 @@
         $(this).find('.btn').toggleClass('active');
         // These toggles are set differently
         var opp = $(this).find('.active').hasClass('test') ? 'code' : 'test';
-        $('.btn-toggle').filter(function(i, e){ return $(e).find('.'+opp).hasClass('active'); }).each(function(i,e){ toggleTestForButton($(e).parent()); });
+        $('.btn-toggle').filter(function(i, e){ return $(e).find('.'+opp).hasClass('active'); }).each(function(i,e){ toggleTestForButton($(e)); });
       })
 
       $('.btn-toggle').click(function() {
@@ -414,9 +427,22 @@
         }
       }
 
+      var otherProgress = <?=json_encode($progress)?>;
+      for (var i = 0; i < locales.length; i++){
+        var total = 0, finished = 0;
+        for (var j = i; j < editorInstances.length; j += locales.length){
+          total += 1;
+          // If contains text, consider done
+          if (!editorInstances[j].getValue().match(/^\s*$/))
+            finished += 1;
+        }
+        otherProgress[locales[i]][0] -= finished;
+        otherProgress[locales[i]][1] -= total;
+      }
+
       function update(){
         for (var i = 0; i < locales.length; i++){
-          var total = 0, finished = 0;
+          var total = otherProgress[locales[i]][1], finished = otherProgress[locales[i]][0];
           for (var j = i; j < editorInstances.length; j += locales.length){
             total += 1;
             // If contains text, consider done
@@ -439,9 +465,15 @@
         editorInstances[i].on("blur",update);
 
       $('form').submit(function() {
-        for (var i in changed)
+        for (var i = 0; i < editorInstances.length; i++){
+          // If changed, write the changes to the text area
           if (changed[i])
             editorInstances[i].getTextArea().value = editorInstances[i].getValue();
+          // If not changed, remove text area's name so it's not submitted
+          else 
+            $(editorInstances[i].getTextArea()).removeAttr('name');
+        }
+        // Empty changed so we can leave page
         changed = {}
         return true;
      });
@@ -458,11 +490,32 @@
         update();
       });
 
-      $('.remove').click(function(){
+      $('.insertPlural').click(function(){
         var editor = $(this).closest('td').data('editor');
-        editorInstances[editor].setValue("");
+        var locale = $(this).closest('td').data('locale');
+        var cases;
+        switch (locale){
+          case 'pl':
+            cases = ["one","few","many","other"]; break;
+          case 'cs':; case 'sk':
+            cases = ["one","few","other"]; break;
+          case 'de':; case 'en':; case 'fr':; case 'it':; case 'nl':; case 'es':
+            cases = ["one","other"]; break;
+        }
+        editorInstances[editor].focus();
+        editorInstances[editor].replaceSelection("\n{VARIABLE, plural,\n  " + cases.join(" {}\n  ") + " {}\n}\n", "around");
         update();
+        return false;
       })
+
+      $('.insertSelect').click(function(){
+        var editor = $(this).closest('td').data('editor');
+        editorInstances[editor].focus();
+        editorInstances[editor].replaceSelection("\n");
+        editorInstances[editor].replaceSelection("{VARIABLE, select,\n  case1 {}\n  case2 {}\n  other {}\n}\n","around");
+        update();
+        return false;
+      });
 
       window.onbeforeunload = function() {
           return needsSave() ? 'Sie haben nicht gespeicherte Änderungen!' : null;
@@ -474,7 +527,19 @@
 
       $('.hideThis').click(function(){
         $(this).closest('tr').hide();
-      })
+        return false;
+      });
+
+      $('#showAll').click(function(){
+        $('tr').show();
+        return false;
+      });
+
+      $('#close').click(function(){
+        window.close();
+        return false;
+      });
+
     })
   </script>    
 </body>
