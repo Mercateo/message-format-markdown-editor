@@ -120,7 +120,7 @@
 
   <style>
     body {
-      min-width:<?=(1+count($locales))*500?>px;
+      min-width:<?=(1+count($locales))*400?>px;
     }
     th {
       background-color: #666;
