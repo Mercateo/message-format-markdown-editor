@@ -34,6 +34,13 @@
     body {
       min-width:1600px;
     }
+    #fixedHeader {
+      table-layout:fixed;
+      position:fixed;
+      top:0px;
+      z-index:10;
+      min-width:1600px;
+    }
     th {
       background-color: #666;
       box-shadow: 0px 0px 20px #999;
@@ -108,16 +115,67 @@
       border-color: #adadad;
     }
   </style>
+
 </head>
 <body>
-  <form action="/" method="POST">
-    <table class='table fixedHeader' style="table-layout:fixed;position:fixed;top:0px;z-index:101;min-width:2000px;"><thead>
+  <form method="POST">
+    <div class="modal fade" id='filterModal'>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Filter einstellen</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="locales">Sprachen</label><div class='row'>
+                              <div class='col-xs-2'><input type='checkbox' name='locales' value='cs' > cs</div>
+                              <div class='col-xs-2'><input type='checkbox' name='locales' value='de' checked> de</div>
+                              <div class='col-xs-2'><input type='checkbox' name='locales' value='en' checked> en</div>
+                              <div class='col-xs-2'><input type='checkbox' name='locales' value='es' > es</div>
+                              <div class='col-xs-2'><input type='checkbox' name='locales' value='fr' checked> fr</div>
+                              <div class='col-xs-2'><input type='checkbox' name='locales' value='hu' > hu</div>
+                              <div class='col-xs-2'><input type='checkbox' name='locales' value='it' > it</div>
+                              <div class='col-xs-2'><input type='checkbox' name='locales' value='nl' > nl</div>
+                              <div class='col-xs-2'><input type='checkbox' name='locales' value='pl' > pl</div>
+                              <div class='col-xs-2'><input type='checkbox' name='locales' value='sk' > sk</div>
+                          </div>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Base names</label>
+              <select multiple class="form-control" name='filter[baseNames]'>
+                                  <option value='basket-strings' selected>basket-strings</option>
+                                  <option value='basket-core' >basket-core</option>
+                                  <option value='b4s3 n4m3' >b4s3 n4m3</option>
+                              </select>
+            </div>
+            <div class="form-group">
+              <label for="valueSearch">Suche im Wert</label>
+              <input type="text" name='filter[value]' class="form-control" id="valueSearch" value='test'>
+              <p class="help-block">Exakte Suche. % für Wildcard verwenden.</p>
+
+            </div>
+            <div class="form-group">
+              <label for="keySearch">Suche im Schlüssel</label>
+              <input type="text" name='filter[key]' class="form-control" id="keySearch" value=''>
+              <p class="help-block">Exakte Suche. % für Wildcard verwenden.</p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+            <input type="submit" id='filterSubmit' class="btn btn-primary"></button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <input type='hidden' name='page' value='0'>
+    <table class='table' id='fixedHeader'><thead>
       <tr>
         <th class='text-center' style='border-bottom:none;'>
           <div style='float:left;'>
-            <input type='submit' class='btn btn-default' value='Speichern'></input>
-            <button class='btn btn-default' id='close'>Schließen</button>
+            <input type='submit' id='save' class='btn' value='Speichern' data-default-style='btn-default' data-highlight-style='btn-warning'></input>
           </div>
+          <button class='btn btn-default' id='filter'>Filter</button>
           <div style='float:right;'>
             <button class='btn btn-default' id='showAll'>Alle einblenden</button>
             <div class="btn-group" id='toggleAll'> 
@@ -131,7 +189,7 @@
               DE 
             </span>
             <div class="progress" style='margin:7px;'>
-              <div class="progress-bar progress-bar-warning de" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%; min-width: 2em;">
+              <div class="progress-bar" data-loading-style='progress-bar-info' data-finished-style='progress-bar-success' data-locale='de' style="width:100%; min-width: 2em;">
             </div>
           </th>
                   <th class='text-center' style='border-bottom:none'>
@@ -139,7 +197,7 @@
               EN 
             </span>
             <div class="progress" style='margin:7px;'>
-              <div class="progress-bar progress-bar-warning en" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:82%; min-width: 2em;">
+              <div class="progress-bar" data-loading-style='progress-bar-info' data-finished-style='progress-bar-success' data-locale='en' style="width:82%; min-width: 2em;">
             </div>
           </th>
                   <th class='text-center' style='border-bottom:none'>
@@ -147,7 +205,7 @@
               FR 
             </span>
             <div class="progress" style='margin:7px;'>
-              <div class="progress-bar progress-bar-warning fr" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:96%; min-width: 2em;">
+              <div class="progress-bar" data-loading-style='progress-bar-info' data-finished-style='progress-bar-success' data-locale='fr' style="width:96%; min-width: 2em;">
             </div>
           </th>
               </tr>
@@ -173,25 +231,22 @@
           </td>
                       <td data-editor='0' data-locale='de'>
               <div class='limit editor'>
-          	    <textarea name ='basket.cluster_badge_description[de]' class='de' style='width:100%;height:100%'>Ein Cluster enthält alle Artikel, die bestimmte Anforderungen erfüllen (z. B. Kopierpapier, DIN A4, 80 g/m², {COLOR}).
-
-
-"Alt-T" öffnet die Vorschau</textarea>    
+          	    <textarea name ='updatedValue[basket-strings+++basket.cluster_badge_description+++de]' style='width:100%;height:100%'>Ein Cluster enthält alle Artikel, die bestimmte Anforderungen erfüllen (z. B. Kopierpapier, DIN A4, 80 g/m², {COLOR}).</textarea>
                 <div class='actionButtons'>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig" data-placement="right">
+                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig">
                       <i class='fa fa-undo'></i>
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen">
                       P
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen">
                       S
                     </button> 
                   </div>
@@ -207,32 +262,32 @@
             </td>
                       <td data-editor='1' data-locale='en'>
               <div class='limit editor'>
-          	    <textarea name ='basket.cluster_badge_description[en]' class='en' style='width:100%;height:100%'>A Cluster contains all items that fulfil certain requirements (e. g. copy paper, DIN A4, 80 g/m², 
+          	    <textarea name ='updatedValue[basket-strings+++basket.cluster_badge_description+++en]' style='width:100%;height:100%'>A Cluster contains all items that fulfil certain requirements (e. g. copy paper, DIN A4, 80 g/m², 
 {COLOR, select,
   weiß {white}
   other {black}
-}).</textarea>    
+}).</textarea>
                 <div class='actionButtons'>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig" data-placement="right">
+                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig">
                       <i class='fa fa-undo'></i>
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen">
                       P
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen">
                       S
                     </button> 
                   </div>
                   <br>
                                                         <div class='btn-group' data-toggle='buttons'>
-                      <button class='btn btn-sm btn-default copyGerman' data-toggle="tooltip" title="Deutsch&nbsp;übernehmen" data-placement="right">
+                      <button class='btn btn-sm btn-default copyReference' data-toggle="tooltip" title="Deutsch&nbsp;übernehmen">
                         <i class='fa fa-copy'></i>
                       </label> 
                     </div>
@@ -248,32 +303,32 @@
             </td>
                       <td data-editor='2' data-locale='fr'>
               <div class='limit editor'>
-          	    <textarea name ='basket.cluster_badge_description[fr]' class='fr' style='width:100%;height:100%'>Un cluster contient tous les produits répondant à des besoins spécifiques (papier pour imprimante, format A4, 80g/m2, 
+          	    <textarea name ='updatedValue[basket-strings+++basket.cluster_badge_description+++fr]' style='width:100%;height:100%'>Un cluster contient tous les produits répondant à des besoins spécifiques (papier pour imprimante, format A4, 80g/m2, 
 {COLOR, select,
   weiß {blanc}
   other {noir}
-}).</textarea>    
+}).</textarea>
                 <div class='actionButtons'>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig" data-placement="right">
+                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig">
                       <i class='fa fa-undo'></i>
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen">
                       P
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen">
                       S
                     </button> 
                   </div>
                   <br>
                                                         <div class='btn-group' data-toggle='buttons'>
-                      <button class='btn btn-sm btn-default copyGerman' data-toggle="tooltip" title="Deutsch&nbsp;übernehmen" data-placement="right">
+                      <button class='btn btn-sm btn-default copyReference' data-toggle="tooltip" title="Deutsch&nbsp;übernehmen">
                         <i class='fa fa-copy'></i>
                       </label> 
                     </div>
@@ -312,22 +367,22 @@ DSE_LINK</pre>
           </td>
                       <td data-editor='3' data-locale='de'>
               <div class='limit editor'>
-          	    <textarea name ='basket.commit.general_terms_and_privacy[de]' class='de' style='width:100%;height:100%'>Ja, ich bestätige die [AGB]({AGB_URL}) und die [Datenschutzerklärung]({DSE_LINK}) der Mercateo AG.</textarea>    
+          	    <textarea name ='updatedValue[basket-strings+++basket.commit.general_terms_and_privacy+++de]' style='width:100%;height:100%'>Ja, ich bestätige die [AGB]({AGB_URL}) und die [Datenschutzerklärung]({DSE_LINK}) der Mercateo AG.</textarea>
                 <div class='actionButtons'>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig" data-placement="right">
+                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig">
                       <i class='fa fa-undo'></i>
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen">
                       P
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen">
                       S
                     </button> 
                   </div>
@@ -343,28 +398,28 @@ DSE_LINK</pre>
             </td>
                       <td data-editor='4' data-locale='en'>
               <div class='limit editor'>
-          	    <textarea name ='basket.commit.general_terms_and_privacy[en]' class='en' style='width:100%;height:100%'>Yes, I confirm the [General Terms and Conditions]({AGB_URL}) and the [data protection notice]({DSE_LINK}) of Mercateo</textarea>    
+          	    <textarea name ='updatedValue[basket-strings+++basket.commit.general_terms_and_privacy+++en]' style='width:100%;height:100%'>Yes, I confirm the [General Terms and Conditions]({AGB_URL}) and the [data protection notice]({DSE_LINK}) of Mercateo</textarea>
                 <div class='actionButtons'>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig" data-placement="right">
+                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig">
                       <i class='fa fa-undo'></i>
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen">
                       P
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen">
                       S
                     </button> 
                   </div>
                   <br>
                                                         <div class='btn-group' data-toggle='buttons'>
-                      <button class='btn btn-sm btn-default copyGerman' data-toggle="tooltip" title="Deutsch&nbsp;übernehmen" data-placement="right">
+                      <button class='btn btn-sm btn-default copyReference' data-toggle="tooltip" title="Deutsch&nbsp;übernehmen">
                         <i class='fa fa-copy'></i>
                       </label> 
                     </div>
@@ -380,28 +435,28 @@ DSE_LINK</pre>
             </td>
                       <td data-editor='5' data-locale='fr'>
               <div class='limit editor'>
-          	    <textarea name ='basket.commit.general_terms_and_privacy[fr]' class='fr' style='width:100%;height:100%'>Oui, j'accepte les [conditions générales de vente]({AGB_URL}) et la [déclaration de confidentialité]({DSE_LINK}) de Mercateo France SAS</textarea>    
+          	    <textarea name ='updatedValue[basket-strings+++basket.commit.general_terms_and_privacy+++fr]' style='width:100%;height:100%'>Oui, j'accepte les [conditions générales de vente]({AGB_URL}) et la [déclaration de confidentialité]({DSE_LINK}) de Mercateo France SAS</textarea>
                 <div class='actionButtons'>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig" data-placement="right">
+                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig">
                       <i class='fa fa-undo'></i>
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen">
                       P
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen">
                       S
                     </button> 
                   </div>
                   <br>
                                                         <div class='btn-group' data-toggle='buttons'>
-                      <button class='btn btn-sm btn-default copyGerman' data-toggle="tooltip" title="Deutsch&nbsp;übernehmen" data-placement="right">
+                      <button class='btn btn-sm btn-default copyReference' data-toggle="tooltip" title="Deutsch&nbsp;übernehmen">
                         <i class='fa fa-copy'></i>
                       </label> 
                     </div>
@@ -435,22 +490,22 @@ DSE_LINK</pre>
           </td>
                       <td data-editor='6' data-locale='de'>
               <div class='limit editor'>
-          	    <textarea name ='placedorder.print.hint.printing_guide[de]' class='de' style='width:100%;height:100%'>Sie können diese Seite ausdrucken, indem Sie die Druckfunktion Ihres Browsers verwenden ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+          	    <textarea name ='updatedValue[basket-strings+++placedorder.print.hint.printing_guide+++de]' style='width:100%;height:100%'>Sie können diese Seite ausdrucken, indem Sie die Druckfunktion Ihres Browsers verwenden ({OS, select, mac {CMD} other {STRG}}+P).</textarea>
                 <div class='actionButtons'>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig" data-placement="right">
+                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig">
                       <i class='fa fa-undo'></i>
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen">
                       P
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen">
                       S
                     </button> 
                   </div>
@@ -466,28 +521,28 @@ DSE_LINK</pre>
             </td>
                       <td data-editor='7' data-locale='en'>
               <div class='limit editor'>
-          	    <textarea name ='placedorder.print.hint.printing_guide[en]' class='en' style='width:100%;height:100%'>You can print out this page by using the printing function of your browser ({OS, select, mac {CMD} other {STRG}}+P).</textarea>    
+          	    <textarea name ='updatedValue[basket-strings+++placedorder.print.hint.printing_guide+++en]' style='width:100%;height:100%'>You can print out this page by using the printing function of your browser ({OS, select, mac {CMD} other {STRG}}+P).</textarea>
                 <div class='actionButtons'>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig" data-placement="right">
+                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig">
                       <i class='fa fa-undo'></i>
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen">
                       P
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen">
                       S
                     </button> 
                   </div>
                   <br>
                                                         <div class='btn-group' data-toggle='buttons'>
-                      <button class='btn btn-sm btn-default copyGerman' data-toggle="tooltip" title="Deutsch&nbsp;übernehmen" data-placement="right">
+                      <button class='btn btn-sm btn-default copyReference' data-toggle="tooltip" title="Deutsch&nbsp;übernehmen">
                         <i class='fa fa-copy'></i>
                       </label> 
                     </div>
@@ -503,28 +558,28 @@ DSE_LINK</pre>
             </td>
                       <td data-editor='8' data-locale='fr'>
               <div class='limit editor'>
-          	    <textarea name ='placedorder.print.hint.printing_guide[fr]' class='fr' style='width:100%;height:100%'></textarea>    
+          	    <textarea name ='updatedValue[basket-strings+++placedorder.print.hint.printing_guide+++fr]' style='width:100%;height:100%'></textarea>
                 <div class='actionButtons'>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig" data-placement="right">
+                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig">
                       <i class='fa fa-undo'></i>
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen">
                       P
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen">
                       S
                     </button> 
                   </div>
                   <br>
                                                         <div class='btn-group' data-toggle='buttons'>
-                      <button class='btn btn-sm btn-default copyGerman' data-toggle="tooltip" title="Deutsch&nbsp;übernehmen" data-placement="right">
+                      <button class='btn btn-sm btn-default copyReference' data-toggle="tooltip" title="Deutsch&nbsp;übernehmen">
                         <i class='fa fa-copy'></i>
                       </label> 
                     </div>
@@ -552,32 +607,28 @@ DSE_LINK</pre>
                   <a class="btn btn-xs btn-default nohover test">Test</a>
                 </div>
               </div>
-              <pre class='well well-sm comment'>AGB_URL
-DSE_LINK
-DSE_LINK
-DSE_LINK
-DSE_LINK
-DSE_LINK</pre>
+              <pre class='well well-sm comment'>-
+</pre>
             </div>
           </td>
                       <td data-editor='9' data-locale='de'>
               <div class='limit editor'>
-          	    <textarea name ='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[de]' class='de' style='width:100%;height:100%'>Lieferzeit&auml;nderung! Die urspr&uuml;ngliche Lieferzeit des gespeicherten Artikels war</textarea>    
+          	    <textarea name ='updatedValue[basket-strings+++load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was+++de]' style='width:100%;height:100%'>Lieferzeitänderung! Die urspr&uuml;ngliche Lieferzeit des gespeicherten Artikels war</textarea>
                 <div class='actionButtons'>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig" data-placement="right">
+                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig">
                       <i class='fa fa-undo'></i>
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen">
                       P
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen">
                       S
                     </button> 
                   </div>
@@ -593,28 +644,28 @@ DSE_LINK</pre>
             </td>
                       <td data-editor='10' data-locale='en'>
               <div class='limit editor'>
-          	    <textarea name ='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[en]' class='en' style='width:100%;height:100%'></textarea>    
+          	    <textarea name ='updatedValue[basket-strings+++load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was+++en]' style='width:100%;height:100%'></textarea>
                 <div class='actionButtons'>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig" data-placement="right">
+                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig">
                       <i class='fa fa-undo'></i>
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen">
                       P
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen">
                       S
                     </button> 
                   </div>
                   <br>
                                                         <div class='btn-group' data-toggle='buttons'>
-                      <button class='btn btn-sm btn-default copyGerman' data-toggle="tooltip" title="Deutsch&nbsp;übernehmen" data-placement="right">
+                      <button class='btn btn-sm btn-default copyReference' data-toggle="tooltip" title="Deutsch&nbsp;übernehmen">
                         <i class='fa fa-copy'></i>
                       </label> 
                     </div>
@@ -629,28 +680,28 @@ DSE_LINK</pre>
             </td>
                       <td data-editor='11' data-locale='fr'>
               <div class='limit editor'>
-          	    <textarea name ='load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was[fr]' class='fr' style='width:100%;height:100%'></textarea>    
+          	    <textarea name ='updatedValue[basket-strings+++load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was+++fr]' style='width:100%;height:100%'></textarea>
                 <div class='actionButtons'>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig" data-placement="right">
+                    <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig">
                       <i class='fa fa-undo'></i>
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertPlural ' data-toggle="tooltip" title="Plural Syntax einfügen">
                       P
                     </button> 
                   </div>
                   <br>
                   <div class='btn-group' data-toggle='buttons'>
-                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen" data-placement="right">
+                    <button class='btn btn-sm btn-default insertSelect' data-toggle="tooltip" title="Select Syntax einfügen">
                       S
                     </button> 
                   </div>
                   <br>
                                                         <div class='btn-group' data-toggle='buttons'>
-                      <button class='btn btn-sm btn-default copyGerman' data-toggle="tooltip" title="Deutsch&nbsp;übernehmen" data-placement="right">
+                      <button class='btn btn-sm btn-default copyReference' data-toggle="tooltip" title="Deutsch&nbsp;übernehmen">
                         <i class='fa fa-copy'></i>
                       </label> 
                     </div>
@@ -665,38 +716,28 @@ DSE_LINK</pre>
             </td>
                   </tr>
           </tbody></table>
-    <div class='text-center'>
-      <ul class="pagination pagination-sm">
-        <li class=''>
-          <a href="/9" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>
-                              <li><a href="/9">5</a></li>
-                                        <li><a href="/9">6</a></li>
-                                        <li><a href="/9">7</a></li>
-                                        <li><a href="/9">8</a></li>
-                                        <li><a href="/9">9</a></li>
-                                        <li class='active'><a href="#">10</a>
-                                        <li><a href="/9">11</a></li>
-                                        <li><a href="/9">12</a></li>
-                                        <li><a href="/9">13</a></li>
-                                        <li><a href="/9">14</a></li>
-                          <li class=''>
-          <a href="/11" aria-label="Next">
+  </form>
+  <div class='text-center nav'>
+    <p>Einträge 1 bis 20 von 50</p>
+    <ul class="pagination pagination-sm">
+              <li class='disabled'> <span aria-hidden="true">&laquo;</span></li>
+                              <li class='active'><a href="#">1</a>
+                                <li><a href="?page=1">2</a></li>
+                                <li><a href="?page=2">3</a></li>
+                            <li>
+          <a href="?page=1" aria-label="Previous">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>
-      </ul>
-    </div>
-  </form>
+          </ul>
+  </div>
 	<script type="text/javascript">
-    var locales = ["de","en","fr"];
-    var editorInstances;
-    var changed = {}
     $(function(){
 
-      editorInstances = $('textarea').map(function(index,ta){
+      var changed = {}
+
+      // Initialising the CodeMirror editors from the text areas
+      var editorInstances = $('textarea').map(function(index,ta){
         var ta = CodeMirror.fromTextArea(ta, {
           mode: "messageformat.js",
           lineNumbers: true,
@@ -707,16 +748,16 @@ DSE_LINK</pre>
           autoCloseBrackets: true,
           matchBrackets: true,
           extraKeys: {
-            "Tab": false,
             "Alt-T": function(cm) {
               toggleTestForButton($(cm.getTextArea()).closest('tr').find('.btn-toggle'));
             }
           },
 
         });
+        // On changes we need to figure out if the content actually changed, then set the edited flag 
+        // update the save button and progress bars
         ta.on('changes',function(ta){
           var td = $(ta.getTextArea()).closest('td');
-          var id = td.data('editor');
           if (ta.getValue() == ta.getTextArea().value){
             ta.markClean();
             td.find('.fa-edit').hide();
@@ -724,23 +765,18 @@ DSE_LINK</pre>
           else {
             td.find('.fa-edit').show();
           }
-          changed[id] = !ta.isClean()
-          $('[type=submit]').removeClass('btn-default').removeClass('btn-warning')
-          $('[type=submit]').addClass(needsSave() ? 'btn-warning' : 'btn-default')
+          changed[td.data('editor')] = !ta.isClean()
+          updateProgressBarsAndSaveButton();
         })
+
         return ta;
       });
 
-      function needsSave(){
-        var ns = false;
-        for (var key in changed) {
-          ns = ns || changed[key];
-        }
-        return ns;
-      }
 
+      // Initialising tooltips
       $('[data-toggle="tooltip"]').tooltip({container: "body"});
 
+      // This button toggles all test/code buttons
       $('#toggleAll').click(function(){
         $(this).find('.btn').toggleClass('active');
         // These toggles are set differently
@@ -748,30 +784,31 @@ DSE_LINK</pre>
         $('.btn-toggle').filter(function(i, e){ return $(e).find('.'+opp).hasClass('active'); }).each(function(i,e){ toggleTestForButton($(e)); });
       })
 
+      // When clicked anywhere, the toggle toggles
       $('.btn-toggle').click(function() {
         toggleTestForButton($(this));
       });
 
+      // Toggles a single pair of buttons
       function toggleTestForButton(btnToggle){
+        // Switching styles
         btnToggle.find('.btn').toggleClass('active');  
+        // Locating the row and comment
         var row = btnToggle.closest('tr');
-        var editors = row.find('.editor');
-        var previews = row.find('.preview');
-        if (btnToggle.find('.active').hasClass('test')){
-          for (var i = 0; i < 3; i++)
-            renderPreview(editorInstances[row.data('editors')+i].getValue(),previews[i],row.find('.comment').html(), locales[i]);
-          $(editors).hide();
-          $(previews).show();
-        }
-        else {
-          $(editors).show();
-          $(previews).hide();
-        }
+        var comment = row.find('.comment').html();
+        // If we switched to test, generate the previews
+        if (btnToggle.find('.active').hasClass('test'))
+          // For each cell in the row ...
+          row.find('td').not(':first').each(function(index,td){
+            // ... generate the preview from the editor's content, into the preview, using the comment and the cell's locale
+            renderPreview(editorInstances[$(td).data('editor')].getValue(),$(td).find('.preview'),comment,$(td).data('locale'));
+          });
+        row.find('.editor, .preview').toggle();
       }
 
+      // Renders a preview of 'from' into the object 'to', with comment 'comment' and locale 'locale'
       var renderPreview = function(from,to,comment, locale){
         try {
-
           var whitespace = from.replace(/\n\n\n/g,'<br/></br>').replace(/\n\n/g,'<br/>').replace(/\s+/g,' ');
           var renderer = new marked.Renderer();
           renderer.paragraph = function(string){return string.replace(/&#/g,'&\\#')+"<br/>\n"};
@@ -786,42 +823,36 @@ DSE_LINK</pre>
         }
       }
 
-      var otherProgress = {"de":[50,50],"en":[41,50],"fr":[48,50]};
-      for (var i = 0; i < locales.length; i++){
-        var total = 0, finished = 0;
-        for (var j = i; j < editorInstances.length; j += locales.length){
-          total += 1;
-          // If contains text, consider done
-          if (!editorInstances[j].getValue().match(/^\s*$/))
-            finished += 1;
-        }
-        otherProgress[locales[i]][0] -= finished;
-        otherProgress[locales[i]][1] -= total;
-      }
+      // Progress bar logic:
+      // Array storing the global progress for each locale
+      var progress = {"de":50,"en":41,"fr":48};
+      // Total amount of keys in selection
+      var TOTAL_ENTRIES = 50;
+      // These editors were initally empty
+      var initiallyEmpty = editorInstances.map(function(i,e){ return /^\s*$/.test(e.getValue()); });
 
-      function update(){
-        for (var i = 0; i < locales.length; i++){
-          var total = otherProgress[locales[i]][1], finished = otherProgress[locales[i]][0];
-          for (var j = i; j < editorInstances.length; j += locales.length){
-            total += 1;
-            // If contains text, consider done
-            if (!editorInstances[j].getValue().match(/^\s*$/))
-              finished += 1;
-          }
-          var pb = $('.progress-bar.'+locales[i]);
-          pb.removeClass('progress-bar-success');
-          pb.removeClass('progress-bar-warning');
-          if (total == finished)
-            pb.addClass('progress-bar-success');
-          else
-            pb.addClass('progress-bar-warning');
-          pb.html(finished+'/'+total);
-          pb.css('width',finished/total*100+'%');
+      function updateProgressBarsAndSaveButton(){
+        $('.progress-bar').each(function(index,pb){
+          pb = $(pb);
+          var done = progress[pb.data('locale')];
+          // Only if an editor was initially empty and has changed does this count as an additional completion
+          for (var i = index; i < editorInstances.length; i += 3)
+            if (initiallyEmpty[i] && !!changed[i])
+              done += 1;
+          pb.removeClass(pb.data('loading-style')).removeClass(pb.data('finished-style'));
+          pb.addClass(pb.data((done == TOTAL_ENTRIES) ? 'finished-style' : 'loading-style'));
+          pb.html(done+"/"+TOTAL_ENTRIES);
+          pb.css('width',done/TOTAL_ENTRIES*100+'%')
+        });
+        // Update the submit button
+        var needsSave = false;
+        for (var key in changed) {
+          needsSave = needsSave || changed[key];
         }
+        var sb = $('#save');
+        sb.addClass(sb.data('default-style')+" "+sb.data('highlight-style')).removeClass(needsSave ? sb.data('default-style') : sb.data('highlight-style'));
       }
-      update();
-      for (var i = 0; i < editorInstances.length; i++)
-        editorInstances[i].on("blur",update);
+      updateProgressBarsAndSaveButton();
 
       $('form').submit(function() {
         for (var i = 0; i < editorInstances.length; i++){
@@ -833,26 +864,33 @@ DSE_LINK</pre>
             $(editorInstances[i].getTextArea()).removeAttr('name');
         }
         // Empty changed so we can leave page
-        changed = {}
+        var sb = $('#save');
+        sb.addClass(sb.data('default-style')).removeClass(sb.data('highlight-style'));
         return true;
      });
 
-      $('.copyGerman').click(function(){
+      // Copy source text into this editor
+      $('.copyReference').click(function(){
         var editor = $(this).closest('td').data('editor');
-        var germanEditor = Math.floor(editor/3)*3;
-        editorInstances[editor].setValue(editorInstances[germanEditor].getValue());
+        var referenceEditor = $(this).closest('tr').data('editors');
+        editorInstances[editor].setValue(editorInstances[referenceEditor].getValue());
+        return false;
       });
 
+      // Undo
       $('.undo').click(function(){
         var editor = $(this).closest('td').data('editor');
         editorInstances[editor].undo();
-        update();
+        updateProgressBarsAndSaveButton();
+        return false;
       });
 
+      // Insert a plural construct into this editor
       $('.insertPlural').click(function(){
         var editor = $(this).closest('td').data('editor');
         var locale = $(this).closest('td').data('locale');
         var cases;
+        // Different plural cases for different locales
         switch (locale){
           case 'pl':
             cases = ["one","few","many","other"]; break;
@@ -863,39 +901,53 @@ DSE_LINK</pre>
         }
         editorInstances[editor].focus();
         editorInstances[editor].replaceSelection("\n{VARIABLE, plural,\n  " + cases.join(" {}\n  ") + " {}\n}\n", "around");
-        update();
         return false;
-      })
+      });
 
+      // Insert select construct into this editor
       $('.insertSelect').click(function(){
         var editor = $(this).closest('td').data('editor');
         editorInstances[editor].focus();
-        editorInstances[editor].replaceSelection("\n");
-        editorInstances[editor].replaceSelection("{VARIABLE, select,\n  case1 {}\n  case2 {}\n  other {}\n}\n","around");
-        update();
+        editorInstances[editor].replaceSelection("\n{VARIABLE, select,\n  case1 {}\n  case2 {}\n  other {}\n}\n","around");
         return false;
       });
 
+      // Warning before leaving without saving
       window.onbeforeunload = function() {
-          return needsSave() ? 'Sie haben nicht gespeicherte Änderungen!' : null;
+          return $('#save').hasClass($('#save').data('highlight-style')) ? 'Sie haben nicht gespeicherte Änderungen!' : null;
       }
 
+      // Scrolling header in x-direction
       $(window).scroll(function(){
-        $('.fixedHeader').css('left',-window.pageXOffset)
+        $('#fixedHeader').css('left',-window.pageXOffset)
       });
 
+      // Hiding a row
       $('.hideThis').click(function(){
         $(this).closest('tr').hide();
         return false;
       });
 
+      // Unhiding all rows
       $('#showAll').click(function(){
         $('tr').show();
         return false;
       });
 
-      $('#close').click(function(){
-        window.close();
+      // Smart nav links
+      $('.nav').find('a').click(function(){
+        if ($('#save').hasClass($('#save').data('highlight-style'))){
+          // We need to save, so send a POST to change pages!
+          $('[name=page]').val($(this).html());
+          $('form').submit();
+          return false;
+        }
+      });
+
+      $('#filter').click(function(){
+        $('#filterSubmit').val($('#save').hasClass($('#save').data('highlight-style')) ? 'Speichern und Suchen' : 'Suchen')
+        $('#filterModal').modal();
+        $('select').focus();
         return false;
       });
 
