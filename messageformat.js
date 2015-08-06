@@ -34,31 +34,40 @@ CodeMirror.defineMode("messageformat.js", function(config, parserConfig) {
       s += " " + LINK;
     if (state.href)
       s += " " + ITALICS;
+    if (state.error)
+      s += " " + ERROR;
     return s;
   }
 
   var identifierRegexp = /^[0-9a-zA-Z$_][^ \t\n\r,.+={}]*/;
 
   function literalModeToken(stream, state) {
+    // Highlighting some markdown chars
+    if (stream.sol()){
+      if (stream.match(/^\s*([>=-]+|(\d\.))/,true))
+        return ATOM;
+    }
+
     // Only highlight the # as a variable within a block
     if(stream.eat('#')) {
       return state.stack.length ? VARIABLE : globals(state);
     }
     // Escaped special characters
-    if(stream.match(/^\\[{}#\\]/)) {
+    if(stream.match(/^\\[{}#\\*_\]\[]/)) {
       return ATOM;
     }
     // Unicode
-    if(stream.match(/^\\u([0-9a-fA-F]{0,4})/)) {
+    var unicodeMatch = stream.match(/^\\u([0-9a-fA-F]{0,4})/);
+    if(unicodeMatch) {
       return unicodeMatch[1].length == 4 ? ATOM : ERROR2;
     }
+    
     if(stream.eat("[")){
       state.link = true;
       return BRACKET;
     }
     if (stream.eat("]")){
-      if (stream.peek() == '('){
-        stream.eat("(");
+      if (stream.eat("(")){
         state.link = false;
         state.href = true;
         return BRACKET;
@@ -76,16 +85,16 @@ CodeMirror.defineMode("messageformat.js", function(config, parserConfig) {
       else 
         return globals(state);
     }
-    if(stream.eat("*")) {
-      if (stream.peek() == '*'){
-        stream.eat("*")
-        state.bold = !state.bold
-      }
-      else {
-        state.italics = !state.italics
-      }
+    if (stream.peek() == "*" || stream.peek() == "_"){
+      var c = stream.peek();
+      stream.eat(c);
+      if (stream.eat(c))
+        state.bold = !state.bold;
+      else
+        state.italics = !state.italics;
       return BRACKET;
     }
+
     // Entering a code block
     if(stream.eat("{")) {
       state.stack.push({type: CODE_BLOCK});
@@ -101,11 +110,10 @@ CodeMirror.defineMode("messageformat.js", function(config, parserConfig) {
         return ERROR;
     }
     
-
     var inString = true;
     while(inString) {
       var spaceEaten = stream.eat(" ");
-      inString = stream.eatWhile(/[^ \t\\{\*\[\]\)}#]+/);
+      inString = stream.eatWhile(/[^ \t\\{\*_\[\]\)}#]+/);
       if(!inString && spaceEaten) {
         stream.backUp(1);
       }
@@ -256,6 +264,11 @@ CodeMirror.defineMode("messageformat.js", function(config, parserConfig) {
         bold: false,
         italics: false
       };
+    },
+
+    blankLine: function(state){
+      if (state.italics || state.bold || state.link || state.href)
+        state.error = true;
     },
 
     token: function(stream, state) {

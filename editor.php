@@ -5,10 +5,21 @@
     'basket-core',
     'b4s3 n4m3'
   ];
-  $ALL_LOCALES = ['cs','de','en','es','fr','hu','it','nl','pl','sk'];
+  $ALL_LOCALES = [
+    ['Tschechisch','cs'],
+    ['Deutsch','de'],
+    ['Englisch','en'],
+    ['Spanisch','es'],
+    ['Französisch','fr'],
+    ['Ungarisch','hu'],
+    ['Italienisch','it'],
+    ['Niederländisch','nl'],
+    ['Polnisch','pl'],
+    ['Slowakisch','sk']
+  ];
 
   // REQUEST:
-  $locales = ['de','en', 'fr'];
+  $locales = ['de','en','fr'];
   $page = 0;
   $filter = [
     'baseNames' => ['basket-strings'],
@@ -174,6 +185,10 @@
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.3/js/bootstrap-select.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.3/css/bootstrap-select.min.css" rel="stylesheet">
+
+
 
   <style>
     body {
@@ -273,15 +288,16 @@
           </div>
           <div class="modal-body">
             <div class="form-group">
-              <label for="locales">Sprachen</label><div class='row'>
-              <? foreach ($ALL_LOCALES as $locale): ?>
-                <div class='col-xs-2'><input type='checkbox' name='locales' value='<?=$locale?>' <?=in_array($locale, $locales) ? "checked" : ""?>> <?=$locale?></div>
-              <? endforeach; ?>
-            </div>
+              <label for="locales">Sprachen</label>
+              <select multiple class="form-control selectpicker" title='Keine' name='locales' data-selected-text-format="count > 5" data-live-search="true" data-max-options="5">
+                <? foreach ($ALL_LOCALES as $locale): ?>
+                  <option value='<?=$locale[1]?>' data-subtext="<?=$locale[1]?>" <?=in_array($locale[1], $locales) ? "selected" : ""?>><?=$locale[0]?></option>
+                <? endforeach; ?>
+              </select>
             </div>
             <div class="form-group">
               <label for="exampleInputEmail1">Base names</label>
-              <select multiple class="form-control" name='filter[baseNames]'>
+              <select multiple class="form-control selectpicker" title='Alle' name='filter[baseNames]' data-selected-text-format="count > 5" data-live-search="true">
                 <? foreach ($BASENAMES as $baseName): ?>
                   <option value='<?=$baseName?>' <?= ($filter['baseNames'] == null || $filter['baseNames'] === "" || in_array($baseName, $filter['baseNames'])) ? "selected" : ""?>><?=$baseName?></option>
                 <? endforeach; ?>
@@ -290,18 +306,19 @@
             <div class="form-group">
               <label for="valueSearch">Suche im Wert</label>
               <input type="text" name='filter[value]' class="form-control" id="valueSearch" value='<?= ($filter['value'] == null) ? "" : $filter['value']?>'>
-              <p class="help-block">Exakte Suche. % für Wildcard verwenden.</p>
+              <p class="help-block"><a target='_blank' href='http://www.strassenprogrammierer.de/regular-expression-regex-praxis_tipp_597.html'>Reguläre Ausdrücke</a> unterstützt (z.b. <code>^$</code> für leere Strings)</p>
 
             </div>
             <div class="form-group">
               <label for="keySearch">Suche im Schlüssel</label>
               <input type="text" name='filter[key]' class="form-control" id="keySearch" value='<?= ($filter['key'] == null) ? "" : $filter['key']?>'>
-              <p class="help-block">Exakte Suche. % für Wildcard verwenden.</p>
+              <p class="help-block"><a target='_blank' href='http://www.strassenprogrammierer.de/regular-expression-regex-praxis_tipp_597.html'>Reguläre Ausdrücke</a> unterstützt (z.b. <code>^$</code> für leere Strings)</p>
             </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-            <input type="submit" id='filterSubmit' class="btn btn-primary"></button>
+            <input type="submit" value='Suchen' id='filterSubmit' class="btn btn-primary"></button>
+            <p id='saveWarning' class="help-block">Änderungen werden vor dem Suchen automatisch gespeichert.</p>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
@@ -311,7 +328,7 @@
       <tr>
         <th class='text-center' style='border-bottom:none;'>
           <div style='float:left;'>
-            <input type='submit' id='save' class='btn' value='Speichern' data-default-style='btn-default' data-highlight-style='btn-warning'></input>
+            <input type='submit' id='save' class='btn' value='Speichern' data-default-style='btn-default' data-highlight-style='btn-primary'></input>
           </div>
           <button class='btn btn-default' id='filter'>Filter</button>
           <div style='float:right;'>
@@ -403,11 +420,11 @@
                     <br>
                   <? endif; ?>
                 </div>
-                <div style='position:absolute; left:0px; bottom: 0px; z-index:5; color: #999;'>
-                  <i class='fa fa-edit' style='padding:10px 8px; display:none' data-toggle="tooltip" title="Geändert" data-placement="top"></i>
-                  <br>
+                <div style='position:absolute; left:0px; bottom: 0px; z-index:5;'>
                   <? if (isset($entry['translations'][$locale])) :?>
-                    <i class='fa fa-info-circle' style='padding:10px 8px;' data-toggle="tooltip" title="Letze Änderung am <?=$entry['translations'][$locale]['lastChanged']?> von <?=$entry['translations'][$locale]['lastAuthor']?>" data-placement="top"></i>
+                    <i class='fa fa-edit' style='padding:10px 8px; color: #BBB;' data-color='#BBB' data-changed-color='#2e6da4' data-toggle="tooltip" title="Letze Änderung:<br/><?=$entry['translations'][$locale]['lastChanged']?><br/><?=$entry['translations'][$locale]['lastAuthor']?>" data-html='true'></i>
+                  <? else: ?>
+                    <i class='fa fa-edit' style='padding:10px 8px; color: #f7f7f7;' data-color='#f7f7f7' data-changed-color='#2e6da4'></i>
                   <? endif;?>
                 </div>
               </div>
@@ -477,21 +494,19 @@
           var td = $(ta.getTextArea()).closest('td');
           if (ta.getValue() == ta.getTextArea().value){
             ta.markClean();
-            td.find('.fa-edit').hide();
+            td.find('.fa-edit').css('color',td.find('.fa-edit').data('color'));
           }
           else {
-            td.find('.fa-edit').show();
+            td.find('.fa-edit').css('color',td.find('.fa-edit').data('changed-color'));
           }
           changed[td.data('editor')] = !ta.isClean()
           updateProgressBarsAndSaveButton();
         })
-
         return ta;
       });
-
-
+      
       // Initialising tooltips
-      $('[data-toggle="tooltip"]').tooltip({container: "body"});
+      $('[data-toggle="tooltip"]').tooltip({container: "body", placement:"left"});
 
       // This button toggles all test/code buttons
       $('#toggleAll').click(function(){
@@ -524,20 +539,55 @@
       }
 
       // Renders a preview of 'from' into the object 'to', with comment 'comment' and locale 'locale'
-      var renderPreview = function(from,to,comment, locale){
+      var renderPreview = function(from,to,comment,locale){
         try {
-          var whitespace = from.replace(/\n\n\n/g,'<br/></br>').replace(/\n\n/g,'<br/>').replace(/\s+/g,' ');
-          var renderer = new marked.Renderer();
-          renderer.paragraph = function(string){return string.replace(/&#/g,'&\\#')+"<br/>\n"};
-          var md = marked(whitespace,{renderer: renderer});
-          // remove trailing <br/> 
-          md = md.substring(0,md.length-6);
-          var samples = generateSamples(locale,md,comment);
-          $(to).html((samples.length == 0 || samples[0].match(/^\s*$/)) ? "" : "<div class='well well-sm'>"+samples.join("</div><div class='well well-sm'>")+"</div>");
+          var messageFormat = mercup2messageFormat(from);
+          try {
+            if (messageFormat.match(/^\s*$/))
+              $(to).html('<div class="panel panel-warning"><div class="panel-heading">Kein String</div></div>');
+            else {
+              var combinations = samplesFor(locale,messageFormat,comment);
+              $(to).html("");
+              var compiled = (new MessageFormat(locale)).compile(messageFormat);
+              for (var i = 0; i < combinations.length; i++)
+                $(to).append("<div class='well well-sm'>" + compiled(combinations[i]) + "</div>");
+            }            
+          }
+          catch (err){
+            $(to).html('<div class="panel panel-danger"><div class="panel-heading">MessageFormat Fehler</div><div class="panel-body">'+err.message+'<br>Line: '+err.line+'</div></div>')
+          }
         }
         catch (err){
-          $(to).html('<div class="panel panel-danger"><div class="panel-heading">Fehler</div><div class="panel-body">'+err.message+'</div></div>')
+          $(to).html('<div class="panel panel-danger"><div class="panel-heading">Markdown Fehler</div><div class="panel-body">'+err.message+'</div></div>')
         }
+      }
+
+      var mercup2messageFormat = function(string,options,callback){
+        // Replacing newlines by br's if they are the third or more newline in sequence. Because markdown
+        // will collapse any amount of newlines into a single line break, this allows us to use (n+1) newlines
+        // to get n br's in the output
+        string = string.replace(/\n{2,}/g,function(ns){ return '\n\n'+Array(ns.length-1).join("<br/>\n"); });
+        // Escaping mf special characters
+        // { => \{, \{ => \\\{, \\ => \\\\, ...
+        string = string.replace(/([{}#\\])/g,'\\$1');
+        options = options || {};
+        // Custom marked renderer to suppress enclosing <p>...</p>
+        if (!!options.renderer){
+          console.log("WARNING: A custom renderer might produce unwanted whitespace or invalid MessageFormat elements");
+        }
+        else{
+          options.renderer = new marked.Renderer();
+          options.renderer.paragraph = function(string){ 
+            return string+'<br/>\n'; 
+          };
+        }
+        // We don't want Github flavour because we want to ignore line breaks in paragraphs
+        if (options.gfm){
+          console.log("WARNING: GitHub Flavour will be disabled to deal with newlines correctly")
+        }
+        options.gfm = false;
+        // We also have to remove a potential trailing <br/>
+        return marked(string,options,callback).split(/<br\/?>\s*$/)[0];
       }
 
       // Progress bar logic:
@@ -662,12 +712,17 @@
       });
 
       $('#filter').click(function(){
-        $('#filterSubmit').val($('#save').hasClass($('#save').data('highlight-style')) ? 'Speichern und Suchen' : 'Suchen')
+        if ($('#save').hasClass($('#save').data('highlight-style')))
+          $('#saveWarning').show();
+        else
+          $('#saveWarning').hide();
         $('#filterModal').modal();
-        $('select').focus();
         return false;
       });
 
+      $('.selectpicker').selectpicker({
+        showSubtext: true
+      });
     })
   </script>    
 </body>

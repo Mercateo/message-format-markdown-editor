@@ -5,30 +5,31 @@
 // available] and the method of generating all the combinations (method: "smart" | "exponential", 
 // default "smart").
 // Returns an array of strings
-var generateSamples = function(locale, mf, comment, options){
+var samplesFor = function(locale, mf, comment, options){
   // Default options
   comment = comment || '';
   options = options || {};
   options.simpleRules = options.simpleRules || [
-    [/URL|LINK/i, function(string){ return '#'}],
-    [/NUM/i, function(string){ return Math.floor(Math.random()*20)}],
-    [/NAME/i, function(string){ return 'Mustermann'}]
+    [/URL|LINK/i, function(string){ return '#';}],
+    [/NUM/i, function(string){ return Math.floor(Math.random()*20);}],
+    [/NAME/i, function(string){ return 'Mustermann';}]
   ];
   options.selectRules = options.selectRules || [
-    [/GENDER/i, function(string){ return 'male|female'}]
+    [/GENDER/i, function(string){ return 'male|female';}]
   ];
 
   // Returns the default value for a variable. The user can supply their own rules in an array
   // containing [regex, callback] pairs, where if the regex is matched, the callback is used to 
   // generate the default. If the user hasn't supplied their own rules, there are some 
   // predefined rules that will be used.
-  function defaultValueFor(string, rules){
+  function defaultValueFor(variable, rules){
     for (var i = 0; i < rules.length; i++){
-      if (rules[i][0].test(string)){
-        return rules[i][1](string);
+      if (rules[i][0].test(variable)){
+        return rules[i][1](variable);
       }
     }
-    return string;
+    // If there's no match, the variable's name will be used
+    return variable;
   }
 
   options.method =  options.method || 'smart';
@@ -74,112 +75,110 @@ var generateSamples = function(locale, mf, comment, options){
   for (var i = 0; i < comment.length; i++)
     examples[comment[i][0]] = comment[i][1];
 
-  // Finds all the simple variables (variables that aren't appearing in a control structure)
-  var simpleVars = mf.match(/\{\s*([^\s,\}]+)\s*\}/g);
-  // Regex ~ { WORD }                                  stripping bracket and whitespace
-  simpleVars = (simpleVars) ? simpleVars.map(function(x){return x.match(/[^\{,\s\}]+/)[0];}).unique() : [];
-
-  // This loop generates the one combination of variables which are used in none of the constructs
-  // ('simple variables')
   var combinations = [{}];
-  for (var i = 0; i < simpleVars.length; i++){
-    // If the comment specified a sample value, use that, otherwise generate it using this function
-    var cases = (examples[simpleVars[i]] || defaultValueFor(simpleVars[i],options.simpleRules)).split('|');
-    addCasesToCombinations(simpleVars[i],cases)
+
+  var rawVariables = [];
+
+  function findVariables(ast){
+    switch (ast.type) {
+      case 'messageFormatPattern':; case 'messageFormatPatternRight':
+        for (var i = 0; i < ast.statements.length; i++)
+          findVariables(ast.statements[i]);
+        return;
+      case 'messageFormatElement':
+        // Simple var
+        if (ast.output)
+          rawVariables.push({
+            type: 'simple',
+            name:ast.argumentIndex,
+            cases: []
+          });
+        // Plural or select
+        else {
+          rawVariables.push({
+            name: ast.argumentIndex,
+            type: (ast.elementFormat.key == 'plural') ? "number" : "string",
+            cases: ast.elementFormat.val.pluralForms.map(function(e,i){ 
+              findVariables(e.val); return e.key; 
+            })
+          })
+        }
+      return;
+    }
   }
 
+  findVariables((new MessageFormat('de')).parse(mf).program);
 
-  // Finds all the variables that have been used within a 'plural' control structure, along with
-  // the constant cases used within that structure, i.e. [['NUM_ITEMS',0],...]
-  var matches = mf.match(/\{\s*([^\s,]+)\s*,\s*plural\s*|=[0-9]+/g);
-  // Matches both the variable in { VAR, plural, ... } and constant cases like '=0'
-  var pluralVars = [];
-  if (matches !== null){
-    for (var i = 0; i < matches.length; i++){
-      // If constant, add to last variable's array
-      if (matches[i].match(/=[0-9]+/))
-        pluralVars[pluralVars.length-1].push(parseInt(matches[i].substring(1)));
-      // Otherwise add new array to the array
-      else
-        pluralVars.push([matches[i].match(/[^\{ ,]+/)[0]]);
+  if (rawVariables.length == 0)
+    return combinations;
+
+  // Sorting the variables to weed out duplicates
+  rawVariables = rawVariables.sort(function(var1,var2){
+    return (var1.name == var2.name) ? var1.type < var2.type : var1.name < var2.name;
+  });
+  
+  // Iterating through sorted variables, merging duplicate variables' cases
+  var variables = [rawVariables[0]];
+  for (var i = 1; i < rawVariables.length; i++){
+    var a = rawVariables[i], b = variables[variables.length-1]
+    // Duplicate variable, merge cases
+    if (a.name == b.name){
+      // Different types, error
+      if (a.type != b.type && a.type != 'simple' && b.type != 'simple')
+        throw new Error(a.name+" used as both a string and a number");
+      // Append cases
+      b.cases = b.cases.append(a.cases)
+      // If previous variable was simple, it takes on added variables type
+      if (b.type == 'simple')
+        b.type = a.type;
     }
-    // Remove duplicate values but keep potentially distinct constants
-    pluralVars = pluralVars.sort();
-    var n = [pluralVars[0]]
-    for (var i = 1; i < pluralVars.length; i++){
-      // Same variable
-      if (pluralVars[i-1][0] === pluralVars[i][0]){
-        // Add constants to the other variable
-        n[n.length-1] = n[n.length-1].concat(pluralVars[i].slice(1)).unique();
+    else
+      variables.push(a);
+  }
+
+  variables.forEach(function(e){
+    if (e.type == 'number') {
+      // Filter out non-constants
+      e.cases = e.cases.filter(isNumeric).unique();
+      // Add a random number from every predefined case
+      // (Everything mod 20, so we can use 20 as 0 as a continuous plural interval)
+      var intervals;
+      switch (locale) {
+        case 'cs':; case 'sk':; case 'pl':
+          intervals = [[1,1],[2,4],[5,20]]; break;
+        case 'de':; case 'en':; case 'es':; case 'it':; case 'nl': 
+          intervals = [[1,1],[2,20]]; break;
+        case 'fr': 
+          intervals = [[0,1],[2,19]]; break;
+        case 'hu': 
+          intervals = [[1,20]]; break;
       }
-      else
-        n.push(pluralVars[i]);
-    }
-    pluralVars = n;
-  }
-
-  // This loop extends and replicates the single combination from above such that for every 
-  // 'plural variable' there is at least one combination in which it takes each of the values
-  // necessary for the current local (one+other in English, one+few+many+other in Polish, etc.)
-  // For every plural variable ...
-  for (var i = 0; i < pluralVars.length; i++){
-    // ... generate the necessary cases by combining the specified constants and this language.
-    // 'numbers' is an array of constants that are defined in the control structure (like '=0') 
-    // and which can therefore not be randomly chosen as a representative of one of the groups
-    // (one/few/many/...)
-    var numbers = pluralVars[i].slice(1);
-    // Everything mod 20, so we can use 20 as 0 in a continuous plural interval
-    var groups;
-    switch (locale) {
-      case 'cs':; case 'sk':; case 'pl':
-        groups = [[1,1],[2,4],[5,20]]; break;
-      case 'de':; case 'en':; case 'es':; case 'it':; case 'nl': 
-        groups = [[1,1],[2,20]]; break;
-      case 'fr': 
-        groups = [[0,1],[2,19]]; break;
-      case 'hu': 
-        groups = [[1,20]]; break;
-    }
-
-    // Take the constants out of the intervals
-    for (var j = 0; j < groups.length; j++){
-      var reducedGroup = [];
-      for (var k = groups[j][0]; k <= groups[j][1]; k++){
-        // Only add a number to the reduced group if it's not one of the constants      
-        if (!!$.inArray(k % 20,numbers))
-          reducedGroup.push(k % 20);
+      for (var i = 0; i < intervals.length; i++){
+        var reducedInterval = [];
+        for (var j = intervals[i][0]; j <= intervals[i][1]; j++){
+          // Only add a number to the reduced interval if it's not a case already   
+          if (!!$.inArray(j % 20,e.cases))
+            reducedInterval.push(j % 20);
+        }
+        // If the remaining interval is empty it means all its cases are already covered, if not, pick a
+        // random number and add it to the list as this interval's representative
+        if (reducedInterval.length > 0)
+          e.cases.push(reducedInterval[Math.floor(Math.random()*reducedInterval.length)]);
       }
-      // If the remaining group is empty it means all its cases are already covered, if not, pick a
-      // random number and add it to the list as this group's representative
-      if (reducedGroup.length > 0)
-        numbers.push(reducedGroup[Math.floor(Math.random()*reducedGroup.length)]);
     }
+    else {
+      // If an example exists, replace cases by example
+      if (examples[e.name])
+        e.cases = examples[e.name].split('|');
+      // If still no cases, use default
+      if (e.cases.length == 0)
+        e.cases = defaultValueFor(e.name,options.stringRules).split('|');
+    }
+    addCasesToCombinations(e.name,e.cases);
+  });
 
-    addCasesToCombinations(pluralVars[i][0],numbers);
-  }
-
-
-  // Finds all the variables that have been used within a 'select' control structure
-  var selectVars = mf.match(/\{\s*([^\s,]+)\s*,\s*select/g);
-  // Matches the variable in { VAR, select, ...}
-  selectVars = (selectVars) ? selectVars.map(function(x){return x.match(/[^\{,\s\}]+/)[0];}) : [];
-
-  // This loop extends the combinations with values from the select variables, such that each of 
-  // the specified value occurs in at least one combination
-  for (var i = 0; i < selectVars.length; i++){
-    // The cases are either from the example, or from the rules
-    var cases = (examples[selectVars[i]] || defaultValueFor(selectVars[i],options.selectRules))
-      .split('|');
-    addCasesToCombinations(selectVars[i],cases);
-  }
-
-  // From each combination, generate one sample
-  var samples = [];
-  var compiled = (new MessageFormat(locale)).compile(mf);
-  for (var i = 0; i < combinations.length; i++)
-    samples.push(compiled(combinations[i]));
-
-  return samples;
+  console.log(combinations);
+  return combinations;
 }
 
 // Source: http://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
@@ -199,3 +198,8 @@ Array.prototype.shuffled = function() {
 Array.prototype.unique = function() {
   return this.filter(function(value, index, self){ return self.indexOf(value) === index; });
 };
+
+// Source: http://stackoverflow.com/questions/9716468/is-there-any-function-like-isnumeric-in-javascript-to-validate-numbers
+var isNumeric = function(num){
+  return Number(parseFloat(num)) == num;
+}
