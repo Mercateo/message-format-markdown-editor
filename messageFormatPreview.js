@@ -1,43 +1,39 @@
-// Generates samples for a MessageFormat string. The arguments are the string, the locale, which
-// will be used to generate all the cases, an optional comment which can contain sample values for
-// variables, for singular/plural, and options, which can contain rules for default variable 
-// values for both simple variables (simpleRules) and select variables (selectRules) [defaults 
-// available] and the method of generating all the combinations (method: "smart" | "exponential", 
-// default "smart").
-// Returns an array of strings
+/**
+ * Generates combinations such that every variable is bound to every possible case at least once
+ * @param {string} locale - The two-letter locale is used to cover all plural cases
+ * @param {string} mf - The MessageFormat string for which the combinations should be generated
+ * @param {string} comment [''] - The comment containing variable samples of the form 'VARIABLE: [sample]'
+ * @param {string} options.method ['smart'] - The method to produce the combinations ('smart' | 'exponential')
+ * @param {Object[]} options.defaultRules [...] - Rules used to produce default variable values based on variable names
+ * @param {RegExp} options.defaultRules[].regexp - A RegExp that the variable name is tested against
+ * @param {function(string) => string} options.defaultRules[].generator - The function used to produce the value
+ * @returns {Object[]} - List of combinations that can be used to evaluate this MF-string
+ */
 var samplesFor = function(locale, mf, comment, options){
   // Default options
   comment = comment || '';
   options = options || {};
-  options.simpleRules = options.simpleRules || [
-    [/URL|LINK/i, function(string){ return '#';}],
-    [/NUM/i, function(string){ return Math.floor(Math.random()*20);}],
-    [/NAME/i, function(string){ return 'Mustermann';}]
+  options.defaultRules = options.defaultRules || [
+    {regexp: /URL|LINK/i, generator: function(string){ return '#';}},
+    {regexp: /NUM/i,      generator: function(string){ return Math.floor(Math.random()*20);}},
+    {regexp: /NAME/i,     generator: function(string){ return 'Mustermann';}},
+    {regexp: /GENDER/i,   generator: function(string){ return 'male|female';}}
   ];
-  options.selectRules = options.selectRules || [
-    [/GENDER/i, function(string){ return 'male|female';}]
-  ];
+  var addCasesToCombinations = (options.method === 'exponential') ? exponentialCombine : smartCombine
 
-  // Returns the default value for a variable. The user can supply their own rules in an array
-  // containing [regex, callback] pairs, where if the regex is matched, the callback is used to 
-  // generate the default. If the user hasn't supplied their own rules, there are some 
-  // predefined rules that will be used.
-  function defaultValueFor(variable, rules){
-    for (var i = 0; i < rules.length; i++){
-      if (rules[i][0].test(variable)){
-        return rules[i][1](variable);
+  function defaultValueFor(variable){
+    for (var rule in options.defaultRules.length){
+      if (rule.regexp.test(variable)){
+        return rule.generator(variable);
       }
     }
     // If there's no match, the variable's name will be used
-    return variable;
+    return variable.toUpperCase();
   }
 
-  options.method =  options.method || 'smart';
-
-  // Determining algorithm for generating combinations
-  var smartAlgo = function(variable, cases) {
+  function smartCombine(variable, cases) {
     cases = cases.shuffled()
-    // For all cases or existing combinations, whatever is biggest, ...
+    // For all cases or existing combinations, whatever is biggest
     for (var j = 0; j < Math.max(cases.length,combinations.length); j++){
       // (If we've run out of combinations, we duplicate a random one)
       if (j >= combinations.length)
@@ -51,95 +47,88 @@ var samplesFor = function(locale, mf, comment, options){
       combinations[j][variable] = cases[j % cases.length];
     }
   }
-  var exponentialAlgo = function(variable,cases) {
-    // For every combination...
+  function exponentialCombine(variable,cases) {
     var n = combinations.map(function(combination){
-      // ... generate a new one for every case
       return cases.map(function(_case){
         var c = JSON.parse(JSON.stringify(combination))
         c[variable] = _case
-        return c
-      })
-    })
-    // flatten and return
+        return c;
+      });
+    });
     return [].concat.apply([], n);
   }
-  var addCasesToCombinations = (options.method === 'exponential') ? exponentialAlgo : smartAlgo
 
-  // Extracts examples from the comment
-  // Matches and extracts (VAR_NAME): some comment [(EXAMPLE)]
-  comment = (comment.match(/[A-Za-z\_\-1-9]+:[^\[]+\[[^\]]*]/g) || []).map(function (line) {
-    return line.replace(/^\s*([A-Za-z\_\-1-9]+):[^\[]*\[\s*([^\]]+)\]\s*$/,'$1~|$2').split('~|');
-  })
-  var examples = {}
-  for (var i = 0; i < comment.length; i++)
-    examples[comment[i][0]] = comment[i][1];
+  // Matches and extracts 'VAR_NAME: some comment [EXAMPLE]'s from comment
+  var examples = {};
+  (comment.match(/^\w+:.*?\[.*?\]/g) || []).forEach(function addMatchToExamples(match){
+    examples[match.match(/\w+/)[0]] = match.match(/\[.*?\]/)[0].slice(1,-1);
+    console.log(examples)
+  });
 
   var combinations = [{}];
 
   var rawVariables = [];
+  
+  findVariables((new MessageFormat('de')).parse(mf).program);
 
   function findVariables(ast){
     switch (ast.type) {
       case 'messageFormatPattern':; case 'messageFormatPatternRight':
         for (var i = 0; i < ast.statements.length; i++)
           findVariables(ast.statements[i]);
-        return;
+        break;
       case 'messageFormatElement':
         // Simple var
         if (ast.output)
           rawVariables.push({
             type: 'simple',
-            name:ast.argumentIndex,
+            name: ast.argumentIndex,
             cases: []
           });
         // Plural or select
         else {
           rawVariables.push({
-            name: ast.argumentIndex,
-            type: (ast.elementFormat.key == 'plural') ? "number" : "string",
-            cases: ast.elementFormat.val.pluralForms.map(function(e,i){ 
-              findVariables(e.val); return e.key; 
-            })
-          })
+            name:   ast.argumentIndex,
+            type:   (ast.elementFormat.key === 'plural') ? "number" : "string",
+            cases:  ast.elementFormat.val.pluralForms.map(function findMoreAndReturnKey(e,i){ 
+                      findVariables(e.val); 
+                      return e.key; 
+                    })
+          });
         }
-      return;
+      break;
     }
   }
 
-  findVariables((new MessageFormat('de')).parse(mf).program);
 
-  if (rawVariables.length == 0)
+  if (rawVariables.length === 0)
     return combinations;
 
-  // Sorting the variables to weed out duplicates
-  rawVariables = rawVariables.sort(function(var1,var2){
-    return (var1.name == var2.name) ? var1.type < var2.type : var1.name < var2.name;
+  rawVariables = rawVariables.sort(function lexNameType(v1,v2){
+    return (v1.name === v2.name) ? v1.type < v2.type : v1.name < v2.name;
   });
   
   // Iterating through sorted variables, merging duplicate variables' cases
   var variables = [rawVariables[0]];
   for (var i = 1; i < rawVariables.length; i++){
-    var a = rawVariables[i], b = variables[variables.length-1]
+    var existing = variables[variables.length-1]
+    var next = rawVariables[i];
     // Duplicate variable, merge cases
-    if (a.name == b.name){
+    if (existing.name === next.name){
       // Different types, error
-      if (a.type != b.type && a.type != 'simple' && b.type != 'simple')
+      if (existing.type !== next.type && existing.type !== 'simple' && next.type !== 'simple')
         throw new Error(a.name+" used as both a string and a number");
-      // Append cases
-      b.cases = b.cases.append(a.cases)
-      // If previous variable was simple, it takes on added variables type
-      if (b.type == 'simple')
-        b.type = a.type;
+      existing.cases = existing.cases.append(next.cases)
+      if (existing.type === 'simple')
+        existing.type = next.type;
     }
     else
-      variables.push(a);
+      variables.push(next);
   }
 
-  variables.forEach(function(e){
-    if (e.type == 'number') {
-      // Filter out non-constants
-      e.cases = e.cases.filter(isNumeric).unique();
+  variables.forEach(function(variable){
+    if (variable.type === 'number') {
+      variable.cases = variable.cases.filter(isNumeric).unique();
       // Add a random number from every predefined case
       // (Everything mod 20, so we can use 20 as 0 as a continuous plural interval)
       var intervals;
@@ -157,27 +146,24 @@ var samplesFor = function(locale, mf, comment, options){
         var reducedInterval = [];
         for (var j = intervals[i][0]; j <= intervals[i][1]; j++){
           // Only add a number to the reduced interval if it's not a case already   
-          if (!!$.inArray(j % 20,e.cases))
+          if (!!$.inArray(j % 20,variable.cases))
             reducedInterval.push(j % 20);
         }
         // If the remaining interval is empty it means all its cases are already covered, if not, pick a
         // random number and add it to the list as this interval's representative
         if (reducedInterval.length > 0)
-          e.cases.push(reducedInterval[Math.floor(Math.random()*reducedInterval.length)]);
+          variable.cases.push(reducedInterval[Math.floor(Math.random()*reducedInterval.length)]);
       }
     }
-    else {
-      // If an example exists, replace cases by example
-      if (examples[e.name])
-        e.cases = examples[e.name].split('|');
-      // If still no cases, use default
-      if (e.cases.length == 0)
-        e.cases = defaultValueFor(e.name,options.stringRules).split('|');
+    else /* type == 'string' || 'simple' */ {
+      if (examples[variable.name])
+        variable.cases = examples[variable.name].split('|');
+      if (variable.cases.length === 0)
+        variable.cases = defaultValueFor(variable.name).split('|');
     }
-    addCasesToCombinations(e.name,e.cases);
+    addCasesToCombinations(variable.name,variable.cases);
   });
 
-  console.log(combinations);
   return combinations;
 }
 
