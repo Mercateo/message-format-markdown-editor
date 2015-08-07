@@ -12,11 +12,7 @@
 	<link href="bower_components/codemirror/lib/codemirror.css" rel="stylesheet">
   <script src="bower_components/codemirror/addon/edit/matchbrackets.js"></script>
   <script src="bower_components/codemirror/addon/edit/closebrackets.js"></script>
-  <script src="messageformat.js"></script>
-  <script src="bower_components/codemirror/addon/lint/lint.js"></script>
-  <link href="bower_components/codemirror/addon/lint/lint.css" rel="stylesheet">
-  <script src="bower_components/codemirror.messageformat/forgiving-messageformat-parser.js"></script>
-  <script src="messageformat-lint.js"></script>
+  <script src="mercup-mode.js"></script>
 
   <style>
   table {
@@ -95,7 +91,7 @@ In the words of Abraham Lincoln:
 		});
 		var editorInstances = $('textarea').map(function(index,ta){
 	        var ta = CodeMirror.fromTextArea(ta, {
-	          mode: "messageformat.js",
+	          mode: "mercup.js",
 	          lineNumbers: true,
 	          styleActiveLine: true,
 	          lint: true,

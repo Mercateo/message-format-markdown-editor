@@ -140,14 +140,14 @@
       ]
     ],
     [
-      "key" => "load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was",
-      "baseName" => "basket-strings",
-      "comment" => null,
+      "key" => "editor.test-string.messageformat.nomarkdown",
+      "baseName" => "editor-test",
+      "comment" => "FEATURES_URL: [http://mercateo.de/features]\nVARIABLE:   Diese Variable ist zum einbinden [Variable]\nUSER_GENDER:  [male|female]",
       "translations" => [
         "de" => [
-          "text" => "Lieferzeitänderung! Die urspr&uuml;ngliche Lieferzeit des gespeicherten Artikels war",
+          "text" => "Hallo\n{USER_GENDER, select,\n  male  {lieber User!}\n  other {liebe Userin!}\n}\n\nDies hier  ist ein ziemlich komplexer\nSatz. Ich versuche hier mal *alle* [Features]({FEATURES_URL})\nzu testen.\n\nWie viele Features haben wir? Ich glaube es  \n{FEATURES_COUNT, plural,\n    =0      {sind gar keine Features...}\n    one   {ist nur ein einziges.}\n    other {sind # insgesamt!}\n}\n\nDas ist ja schon mal ganz cool. Hier binden wir noch eine {VARIABLE} und noch eine {ANDERE_VARIABLE} ein.",
           "lastAuthor" => "Robert Bastian",
-          "lastChanged" => "16.05.13"
+          "lastChanged" => "07.08.15"
         ]
       ]
     ]
