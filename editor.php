@@ -161,7 +161,7 @@
   <!--Messageformat-->
 	<script src='bower_components/messageformat/messageformat.js'></script>
   <script src='messageFormatPreview.js'></script>
-  <? // Include the messageformat rules for all selected locales, ignore country specifics though (en_IE)
+  <? // Include the messageformat rules for all selected locales, ignore country specifics however (en_IE)
   foreach ($locales as $locale): ?>
     <script src='bower_components/messageformat/locale/<?=substr($locale, 0, 2)?>.js'></script>
   <? endforeach; ?>
@@ -171,11 +171,7 @@
 	<link href="bower_components/codemirror/lib/codemirror.css" rel="stylesheet">
   <script src="bower_components/codemirror/addon/edit/matchbrackets.js"></script>
   <script src="bower_components/codemirror/addon/edit/closebrackets.js"></script>
-  <script src="messageformat.js"></script>
-  <script src="bower_components/codemirror/addon/lint/lint.js"></script>
-  <link href="bower_components/codemirror/addon/lint/lint.css" rel="stylesheet">
-  <script src="bower_components/codemirror.messageformat/forgiving-messageformat-parser.js"></script>
-  <script src="messageformat-lint.js"></script>
+  <script src="mercup-mode.js"></script>
   
   <!--Markdown-->
   <script src="bower_components/marked/marked.min.js"></script>
@@ -473,7 +469,7 @@
       // Initialising the CodeMirror editors from the text areas
       var editorInstances = $('textarea').map(function(index,ta){
         var ta = CodeMirror.fromTextArea(ta, {
-          mode: "messageformat.js",
+          mode: "mercup.js",
           lineNumbers: true,
           styleActiveLine: true,
           lint: true,
@@ -546,7 +542,7 @@
             if (messageFormat.match(/^\s*$/))
               $(to).html('<div class="panel panel-warning"><div class="panel-heading">Kein String</div></div>');
             else {
-              var combinations = samplesFor(locale,messageFormat,comment);
+              var combinations = samplesForString(locale,messageFormat,comment);
               $(to).html("");
               var compiled = (new MessageFormat(locale)).compile(messageFormat);
               for (var i = 0; i < combinations.length; i++)

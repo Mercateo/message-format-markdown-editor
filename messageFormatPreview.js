@@ -9,7 +9,7 @@
  * @param {function(string) => string} options.defaultRules[].generator - The function used to produce the value
  * @returns {Object[]} - List of combinations that can be used to evaluate this MF-string
  */
-var samplesFor = function(locale, mf, comment, options){
+var samplesForString = function(locale, mf, comment, options){
   // Default options
   comment = comment || '';
   options = options || {};
@@ -62,7 +62,6 @@ var samplesFor = function(locale, mf, comment, options){
   var examples = {};
   (comment.match(/^\w+:.*?\[.*?\]/g) || []).forEach(function addMatchToExamples(match){
     examples[match.match(/\w+/)[0]] = match.match(/\[.*?\]/)[0].slice(1,-1);
-    console.log(examples)
   });
 
   var combinations = [{}];

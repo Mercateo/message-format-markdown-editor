@@ -8,7 +8,7 @@
 })(function(CodeMirror) {
 "use strict";
 
-CodeMirror.defineMode("messageformat.js", function(config, parserConfig) {
+CodeMirror.defineMode("mercup.js", function(config, parserConfig) {
 
   var VARIABLE = 'def',
       ATOM = 'atom',
