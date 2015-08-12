@@ -160,8 +160,8 @@
 
   <!--Messageformat-->
 	<script src='bower_components/messageformat/messageformat.js'></script>
-  <script src='messageFormatPreview.js'></script>
-  <? // Include the messageformat rules for all selected locales, ignore country specifics however (en_IE)
+  <script src="mercup-tools.js"></script>
+  <? // Include the messageformat rules for all selected languages
   foreach ($locales as $locale): ?>
     <script src='bower_components/messageformat/locale/<?=substr($locale, 0, 2)?>.js'></script>
   <? endforeach; ?>
@@ -183,8 +183,6 @@
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.3/js/bootstrap-select.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.3/css/bootstrap-select.min.css" rel="stylesheet">
-
-
 
   <style>
     body {
@@ -292,7 +290,7 @@
               </select>
             </div>
             <div class="form-group">
-              <label for="exampleInputEmail1">Base names</label>
+              <label for='filter[baseNames]'>Base names</label>
               <select multiple class="form-control selectpicker" title='Alle' name='filter[baseNames]' data-selected-text-format="count > 5" data-live-search="true">
                 <? foreach ($BASENAMES as $baseName): ?>
                   <option value='<?=$baseName?>' <?= ($filter['baseNames'] == null || $filter['baseNames'] === "" || in_array($baseName, $filter['baseNames'])) ? "selected" : ""?>><?=$baseName?></option>
@@ -536,54 +534,27 @@
 
       // Renders a preview of 'from' into the object 'to', with comment 'comment' and locale 'locale'
       var renderPreview = function(from,to,comment,locale){
-        try {
-          var messageFormat = mercup2messageFormat(from);
+        if (from.match(/^\s*$/)){
+          $(to).html('<div class="panel panel-warning"><div class="panel-heading">Kein String</div></div>');          
+        }
+        else {
           try {
-            if (messageFormat.match(/^\s*$/))
-              $(to).html('<div class="panel panel-warning"><div class="panel-heading">Kein String</div></div>');
-            else {
+            var messageFormat = toMessageFormat(from);
+            try {
               var combinations = samplesForString(locale,messageFormat,comment);
               $(to).html("");
               var compiled = (new MessageFormat(locale)).compile(messageFormat);
               for (var i = 0; i < combinations.length; i++)
                 $(to).append("<div class='well well-sm'>" + compiled(combinations[i]) + "</div>");
-            }            
+            }
+            catch (err){
+              $(to).html('<div class="panel panel-danger"><div class="panel-heading">MessageFormat Fehler</div><div class="panel-body">'+err.message+'<br>Line: '+err.line+'</div></div>')
+            }
           }
           catch (err){
-            $(to).html('<div class="panel panel-danger"><div class="panel-heading">MessageFormat Fehler</div><div class="panel-body">'+err.message+'<br>Line: '+err.line+'</div></div>')
+            $(to).html('<div class="panel panel-danger"><div class="panel-heading">Markdown Fehler</div><div class="panel-body">'+err.message+'</div></div>')
           }
         }
-        catch (err){
-          $(to).html('<div class="panel panel-danger"><div class="panel-heading">Markdown Fehler</div><div class="panel-body">'+err.message+'</div></div>')
-        }
-      }
-
-      var mercup2messageFormat = function(string,options,callback){
-        // Replacing newlines by br's if they are the third or more newline in sequence. Because markdown
-        // will collapse any amount of newlines into a single line break, this allows us to use (n+1) newlines
-        // to get n br's in the output
-        string = string.replace(/\n{2,}/g,function(ns){ return '\n\n'+Array(ns.length-1).join("<br/>\n"); });
-        // Escaping mf special characters
-        // { => \{, \{ => \\\{, \\ => \\\\, ...
-        string = string.replace(/([{}#\\])/g,'\\$1');
-        options = options || {};
-        // Custom marked renderer to suppress enclosing <p>...</p>
-        if (!!options.renderer){
-          console.log("WARNING: A custom renderer might produce unwanted whitespace or invalid MessageFormat elements");
-        }
-        else{
-          options.renderer = new marked.Renderer();
-          options.renderer.paragraph = function(string){ 
-            return string+'<br/>\n'; 
-          };
-        }
-        // We don't want Github flavour because we want to ignore line breaks in paragraphs
-        if (options.gfm){
-          console.log("WARNING: GitHub Flavour will be disabled to deal with newlines correctly")
-        }
-        options.gfm = false;
-        // We also have to remove a potential trailing <br/>
-        return marked(string,options,callback).split(/<br\/?>\s*$/)[0];
       }
 
       // Progress bar logic:

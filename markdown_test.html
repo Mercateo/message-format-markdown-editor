@@ -5,37 +5,38 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
   <script src="bower_components/marked/marked.min.js"></script>
-  	<script src='bower_components/messageformat/messageformat.js'></script>
-	<script src='bower_components/messageformat/locale/de.js'></script>
+    <script src='bower_components/messageformat/messageformat.js'></script>
+  <script src='bower_components/messageformat/locale/de.js'></script>
+  <script src="mercup-tools.js"></script>
 
-	<script src="bower_components/codemirror/lib/codemirror.js"></script>
-	<link href="bower_components/codemirror/lib/codemirror.css" rel="stylesheet">
+  <script src="bower_components/codemirror/lib/codemirror.js"></script>
+  <link href="bower_components/codemirror/lib/codemirror.css" rel="stylesheet">
   <script src="bower_components/codemirror/addon/edit/matchbrackets.js"></script>
   <script src="bower_components/codemirror/addon/edit/closebrackets.js"></script>
   <script src="mercup-mode.js"></script>
 
   <style>
   table {
-  	width:100%;
-  	height: 1000px;
-  	table-layout: fixed;
+    width:100%;
+    height: 600px;
+    table-layout: fixed;
   }
   .CodeMirror {
-  	height: 100%;
+    height: 100%;
   }
   </style>
 </head>
 <body>
-	<table>
-		<tr>
-			<td><textarea id='source'>On July 2, an alien mothership entered 
+  <table>
+    <tr>
+      <td><textarea id='source'>On July 2, an alien mothership entered 
 Earth's 
-orbit and deployed	 several dozen saucer-shaped "destroyer" spacecraft, each 15 miles (24 km) wide.
+orbit and deployed   several dozen saucer-shaped "destroyer" spacecraft, each 15 miles (24 km) wide.
 
 
 On July 3, the Black Knights, a squadron of Marine Corps F/A-18 Hornets, participated in 
 {NUM_ASSAULTS, plural, 
-	one   {an assault} 
+  one   {an assault} 
     other {# assaults}
 }
 on a destroyer near the \{city\} of Los Angeles.
@@ -72,66 +73,36 @@ In the words of Abraham Lincoln:
 3. Item 3
 
 </textarea></td>
-			<td><textarea id='beforemd'></textarea></td>
-			<td><textarea id='aftermd'></textarea></td>
-			<td><textarea id='aftermf'></textarea></td>
-			<td><div id='preview'></div></td>
-		</tr>
-	</table>
-	<button class='btn btn-primary'>Los</button>
-	<script>
-	$(function(){
-		$('.btn').click(function(){
-			var string = editorInstances[0].getValue();
-			string = mercup2messageFormat(string);
-			editorInstances[2].setValue(string);
-			string = (new MessageFormat('de')).compile(string)({NUM_ASSAULTS: 7});
-			editorInstances[3].setValue(string);
-			$('#preview').html(string);
-		});
-		var editorInstances = $('textarea').map(function(index,ta){
-	        var ta = CodeMirror.fromTextArea(ta, {
-	          mode: "mercup.js",
-	          lineNumbers: true,
-	          styleActiveLine: true,
-	          lint: true,
-	          lineWrapping: true,
-	          viewportMargin: Infinity,
-	          autoCloseBrackets: true,
-	          matchBrackets: true
-	        });
-	        return ta;
-	      });
-      var mercup2messageFormat = function(string,options,callback){
-        // Replacing newlines by br's if they are the third or more newline in sequence. Because markdown
-        // will collapse any amount of newlines into a single line break, this allows us to use (n+1) newlines
-        // to get n br's in the output
-        string = string.replace(/\n{2,}/g,function(ns){ return '\n\n'+Array(ns.length-1).join("<br/>\n"); });
-        // Escaping mf special characters
-        // { => \{, \{ => \\\{, \\ => \\\\, ...
-        string = string.replace(/([{}#\\])/g,'\\$1');
-        editorInstances[1].setValue(string);
-        // Custom marked renderer to suppress enclosing <p>...</p>
-        options = options || {};
-        if (!!options.renderer){
-          console.log("WARNING: A custom renderer might produce unwanted whitespace or invalid MessageFormat elements");
-        }
-        else{
-          options.renderer = new marked.Renderer();
-          options.renderer.paragraph = function(string){ 
-            return string+'<br/>\n'; 
-          };
-        }
-        // We don't want Github flavour because we want to ignore line breaks in paragraphs
-        if (options.gfm){
-          console.log("WARNING: GitHub Flavour will be disabled to deal with newlines correctly")
-        }
-        options.gfm = false;
-        // We also have to remove a potential trailing <br/>
-        return marked(string,options,callback).split(/<br\/?>\s*$/)[0];
-      }
-	});
-
-	
-	  </script>
+      <td><textarea id='beforemd'></textarea></td>
+      <td><textarea id='aftermd'></textarea></td>
+      <td><textarea id='aftermf'></textarea></td>
+      <td><div id='preview'></div></td>
+    </tr>
+  </table>
+  <button class='btn btn-primary'>Los</button>
+  <script>
+    $(function(){
+      $('.btn').click(function(){
+        var string = editorInstances[0].getValue();
+        string = toMessageFormat(string,null,null,function(string){editorInstances[1].setValue(string);});
+        editorInstances[2].setValue(string);
+        string = (new MessageFormat('de')).compile(string)(samplesForString('de',string)[0]);
+        editorInstances[3].setValue(string);
+        $('#preview').html(string);
+      });
+      var editorInstances = $('textarea').map(function(index,ta){
+        var ta = CodeMirror.fromTextArea(ta, {
+          mode: "mercup.js",
+          lineNumbers: true,
+          styleActiveLine: true,
+          lint: true,
+          lineWrapping: true,
+          viewportMargin: Infinity,
+          autoCloseBrackets: true,
+          matchBrackets: true
+        });
+        return ta;
+      });
+    });
+  </script>
 </body>

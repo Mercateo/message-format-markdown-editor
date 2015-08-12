@@ -1,3 +1,38 @@
+/** 
+ * Converts a string written in 'Mercup' to a MessageFormat string, i.e. parses our custom markdown
+ * @param {string} string - The Mercup string
+ * @param {object} options - Option object that is passed to the marked.js parser
+ * @param {function} callback - Callback that is passed to the marked.js parser
+ * @returns {string} - String containing HTML and MessageFormat elements
+ */
+function toMessageFormat(string,options,callback){
+  // Replacing newlines by br's if they are the third or more newline in sequence. Because markdown
+  // will collapse any amount of newlines into a single line break, this allows us to use (n+1) newlines
+  // to get n br's in the output. Special care for single newlines before opening MF Syntax
+  string = string.replace(/\n{2,}/g,function(ns){ return '\n\n'+Array(ns.length-1).join("<br>\n"); }).replace(/\n\{/g," {");
+  // Escaping MF special characters
+  // { => \{, \{ => \\\{, \\ => \\\\, ...
+  string = string.replace(/([#\\])/g,'\\$1');
+  // Custom marked renderer to suppress enclosing <p>...</p>
+  options = options || {};
+  if (!!options.renderer){
+    console.log("WARNING: A custom renderer might produce unwanted whitespace or invalid MessageFormat elements");
+  }
+  else{
+    options.renderer = new marked.Renderer();
+    options.renderer.paragraph = function(string){ 
+      return string.replace(/\s+/g," ")+'<br>\n'; 
+    };
+  }
+  // We don't want Github flavour because we want to ignore line breaks in paragraphs
+  if (options.gfm){
+    console.log("WARNING: GitHub Flavour will be disabled to deal with newlines correctly")
+  }
+  options.gfm = false;
+  // We also have to remove a potential trailing <br>
+  return marked(string,options,callback).split(/<br>\s*$/)[0];
+}
+
 /**
  * Generates combinations such that every variable is bound to every possible case at least once
  * @param {string} locale - The two-letter locale is used to cover all plural cases
@@ -9,7 +44,7 @@
  * @param {function(string) => string} options.defaultRules[].generator - The function used to produce the value
  * @returns {Object[]} - List of combinations that can be used to evaluate this MF-string
  */
-var samplesForString = function(locale, mf, comment, options){
+function samplesForString(locale, mf, comment, options){
   // Default options
   comment = comment || '';
   options = options || {};
@@ -60,7 +95,7 @@ var samplesForString = function(locale, mf, comment, options){
 
   // Matches and extracts 'VAR_NAME: some comment [EXAMPLE]'s from comment
   var examples = {};
-  (comment.match(/^\w+:.*?\[.*?\]/g) || []).forEach(function addMatchToExamples(match){
+  (comment.match(/^\w+:.*?\[.*?\]/gm) || []).forEach(function addMatchToExamples(match){
     examples[match.match(/\w+/)[0]] = match.match(/\[.*?\]/)[0].slice(1,-1);
   });
 
