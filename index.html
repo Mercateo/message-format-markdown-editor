@@ -5,7 +5,7 @@
 
   <!--Messageformat-->
 	<script src='bower_components/messageformat/messageformat.js'></script>
-  <script src='messageFormatPreview.js'></script>
+  <script src="mercup-tools.js"></script>
       <script src='bower_components/messageformat/locale/de.js'></script>
       <script src='bower_components/messageformat/locale/en.js'></script>
       <script src='bower_components/messageformat/locale/fr.js'></script>
@@ -15,11 +15,7 @@
 	<link href="bower_components/codemirror/lib/codemirror.css" rel="stylesheet">
   <script src="bower_components/codemirror/addon/edit/matchbrackets.js"></script>
   <script src="bower_components/codemirror/addon/edit/closebrackets.js"></script>
-  <script src="messageformat.js"></script>
-  <script src="bower_components/codemirror/addon/lint/lint.js"></script>
-  <link href="bower_components/codemirror/addon/lint/lint.css" rel="stylesheet">
-  <script src="bower_components/codemirror.messageformat/forgiving-messageformat-parser.js"></script>
-  <script src="messageformat-lint.js"></script>
+  <script src="mercup-mode.js"></script>
   
   <!--Markdown-->
   <script src="bower_components/marked/marked.min.js"></script>
@@ -31,8 +27,6 @@
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.3/js/bootstrap-select.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.3/css/bootstrap-select.min.css" rel="stylesheet">
-
-
 
   <style>
     body {
@@ -147,7 +141,7 @@
                               </select>
             </div>
             <div class="form-group">
-              <label for="exampleInputEmail1">Base names</label>
+              <label for='filter[baseNames]'>Base names</label>
               <select multiple class="form-control selectpicker" title='Alle' name='filter[baseNames]' data-selected-text-format="count > 5" data-live-search="true">
                                   <option value='basket-strings' selected>basket-strings</option>
                                   <option value='basket-core' >basket-core</option>
@@ -585,9 +579,9 @@ DSE_LINK</pre>
               <tr data-editors='9'>
           <td>
             <div class='limit'>
-              <h4 style='word-wrap: break-word;'>load&shy_productrow&shy;&shy.changed&shy_deliveryTime&shy;&shy.original&shy_deliveryTime&shy_was</h4>
+              <h4 style='word-wrap: break-word;'>editor&shy.test-string&shy.messageformat&shy.nomarkdown</h4>
               <h4 style='float:left;margin:0px'>
-                <small>basket-strings</small>
+                <small>editor-test</small>
               </h4>
               <div style='float:right;'>
                 <button class='btn btn-xs btn-default hideThis'>Ausblenden</button>
@@ -596,13 +590,31 @@ DSE_LINK</pre>
                   <a class="btn btn-xs btn-default nohover test">Test</a>
                 </div>
               </div>
-              <pre class='well well-sm comment'>-
-</pre>
+              <pre class='well well-sm comment'>FEATURES_URL: [http://mercateo.de/features]
+VARIABLE:   Diese Variable ist zum einbinden [Variable]
+USER_GENDER:  [male|female]</pre>
             </div>
           </td>
                       <td data-editor='9' data-locale='de'>
               <div class='limit editor'>
-          	    <textarea name ='updatedValue[basket-strings+++load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was+++de]' style='width:100%;height:100%'>Lieferzeitänderung! Die urspr&uuml;ngliche Lieferzeit des gespeicherten Artikels war</textarea>
+          	    <textarea name ='updatedValue[editor-test+++editor.test-string.messageformat.nomarkdown+++de]' style='width:100%;height:100%'>Hallo
+{USER_GENDER, select,
+  male  {lieber User!}
+  other {liebe Userin!}
+}
+
+Dies hier  ist ein ziemlich komplexer
+Satz. Ich versuche hier mal *alle* [Features]({FEATURES_URL})
+zu testen.
+
+Wie viele Features haben wir? Ich glaube es  
+{FEATURES_COUNT, plural,
+    =0      {sind gar keine Features...}
+    one   {ist nur ein einziges.}
+    other {sind # insgesamt!}
+}
+
+Das ist ja schon mal ganz cool. Hier binden wir noch eine {VARIABLE} und noch eine {ANDERE_VARIABLE} ein.</textarea>
                 <div class='actionButtons'>
                   <div class='btn-group' data-toggle='buttons'>
                     <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig">
@@ -624,14 +636,14 @@ DSE_LINK</pre>
                   <br>
                                                     </div>
                 <div style='position:absolute; left:0px; bottom: 0px; z-index:5;'>
-                                      <i class='fa fa-edit' style='padding:10px 8px; color: #BBB;' data-color='#BBB' data-changed-color='#2e6da4' data-toggle="tooltip" title="Letze Änderung:<br/>16.05.13<br/>Robert Bastian" data-html='true'></i>
+                                      <i class='fa fa-edit' style='padding:10px 8px; color: #BBB;' data-color='#BBB' data-changed-color='#2e6da4' data-toggle="tooltip" title="Letze Änderung:<br/>07.08.15<br/>Robert Bastian" data-html='true'></i>
                                   </div>
               </div>
               <div class='limit preview' style='display:none;'></div>
             </td>
                       <td data-editor='10' data-locale='en'>
               <div class='limit editor'>
-          	    <textarea name ='updatedValue[basket-strings+++load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was+++en]' style='width:100%;height:100%'></textarea>
+          	    <textarea name ='updatedValue[editor-test+++editor.test-string.messageformat.nomarkdown+++en]' style='width:100%;height:100%'></textarea>
                 <div class='actionButtons'>
                   <div class='btn-group' data-toggle='buttons'>
                     <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig">
@@ -666,7 +678,7 @@ DSE_LINK</pre>
             </td>
                       <td data-editor='11' data-locale='fr'>
               <div class='limit editor'>
-          	    <textarea name ='updatedValue[basket-strings+++load_productrow&shy;.changed_deliveryTime&shy;.original_deliveryTime_was+++fr]' style='width:100%;height:100%'></textarea>
+          	    <textarea name ='updatedValue[editor-test+++editor.test-string.messageformat.nomarkdown+++fr]' style='width:100%;height:100%'></textarea>
                 <div class='actionButtons'>
                   <div class='btn-group' data-toggle='buttons'>
                     <button class='btn btn-sm btn-default undo' data-toggle="tooltip" title="Rückgängig">
@@ -724,7 +736,7 @@ DSE_LINK</pre>
       // Initialising the CodeMirror editors from the text areas
       var editorInstances = $('textarea').map(function(index,ta){
         var ta = CodeMirror.fromTextArea(ta, {
-          mode: "messageformat.js",
+          mode: "mercup.js",
           lineNumbers: true,
           styleActiveLine: true,
           lint: true,
@@ -791,54 +803,27 @@ DSE_LINK</pre>
 
       // Renders a preview of 'from' into the object 'to', with comment 'comment' and locale 'locale'
       var renderPreview = function(from,to,comment,locale){
-        try {
-          var messageFormat = mercup2messageFormat(from);
+        if (from.match(/^\s*$/)){
+          $(to).html('<div class="panel panel-warning"><div class="panel-heading">Kein String</div></div>');          
+        }
+        else {
           try {
-            if (messageFormat.match(/^\s*$/))
-              $(to).html('<div class="panel panel-warning"><div class="panel-heading">Kein String</div></div>');
-            else {
-              var combinations = samplesFor(locale,messageFormat,comment);
+            var messageFormat = toMessageFormat(from);
+            try {
+              var combinations = samplesForString(locale,messageFormat,comment);
               $(to).html("");
               var compiled = (new MessageFormat(locale)).compile(messageFormat);
               for (var i = 0; i < combinations.length; i++)
                 $(to).append("<div class='well well-sm'>" + compiled(combinations[i]) + "</div>");
-            }            
+            }
+            catch (err){
+              $(to).html('<div class="panel panel-danger"><div class="panel-heading">MessageFormat Fehler</div><div class="panel-body">'+err.message+'<br>Line: '+err.line+'</div></div>')
+            }
           }
           catch (err){
-            $(to).html('<div class="panel panel-danger"><div class="panel-heading">MessageFormat Fehler</div><div class="panel-body">'+err.message+'<br>Line: '+err.line+'</div></div>')
+            $(to).html('<div class="panel panel-danger"><div class="panel-heading">Markdown Fehler</div><div class="panel-body">'+err.message+'</div></div>')
           }
         }
-        catch (err){
-          $(to).html('<div class="panel panel-danger"><div class="panel-heading">Markdown Fehler</div><div class="panel-body">'+err.message+'</div></div>')
-        }
-      }
-
-      var mercup2messageFormat = function(string,options,callback){
-        // Replacing newlines by br's if they are the third or more newline in sequence. Because markdown
-        // will collapse any amount of newlines into a single line break, this allows us to use (n+1) newlines
-        // to get n br's in the output
-        string = string.replace(/\n{2,}/g,function(ns){ return '\n\n'+Array(ns.length-1).join("<br/>\n"); });
-        // Escaping mf special characters
-        // { => \{, \{ => \\\{, \\ => \\\\, ...
-        string = string.replace(/([{}#\\])/g,'\\$1');
-        options = options || {};
-        // Custom marked renderer to suppress enclosing <p>...</p>
-        if (!!options.renderer){
-          console.log("WARNING: A custom renderer might produce unwanted whitespace or invalid MessageFormat elements");
-        }
-        else{
-          options.renderer = new marked.Renderer();
-          options.renderer.paragraph = function(string){ 
-            return string+'<br/>\n'; 
-          };
-        }
-        // We don't want Github flavour because we want to ignore line breaks in paragraphs
-        if (options.gfm){
-          console.log("WARNING: GitHub Flavour will be disabled to deal with newlines correctly")
-        }
-        options.gfm = false;
-        // We also have to remove a potential trailing <br/>
-        return marked(string,options,callback).split(/<br\/?>\s*$/)[0];
       }
 
       // Progress bar logic:
