@@ -1,3 +1,5 @@
+**DEPRECATED** This project is unmantained and goes into archive with followup removal in 2 years.
+
 # message-format-markdown-editor
 An editor to create translations based on MessageFormat and Markdown. 
 
